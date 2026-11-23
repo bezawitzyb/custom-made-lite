@@ -674,26 +674,29 @@ function storiesHtml(key){
 }
 function planHtml(){
   const rows=[
-   ['Add to bag from the drawer, new vs control','cml_add_to_bag','Within 1 point of control','Down 1-2 points: simplify the Details step','Down 2+ points for 2 weeks'],
-   ['Adoption: orders with at least one changed detail','option_changed + cml_add_to_bag','15%+ by week 8','5-15%: found but not wanted; test copy and photos','Under 5%: the screen is not earning its place'],
-   ['Exit on the Details step','option_changed without summary_viewed','No higher than today\'s fit-step exit','1-1.5x the fit-step exit','Over 1.5x'],
-   ['Return rate, Custom Made vs stock, 30 days after delivery','order ID join','Within 3 points of stock','3-8 points over: review photos and the summary','8+ points over'],
-   ['Stylist pick kept without edits','recommendation_accepted, edits','50%+','25-50%: the rules need the tailors','Under 25%: drop the path'],
+   ['Orders per drawer open, new vs control (add to bag as the leading indicator)','cml_drawer_opened, cml_add_to_bag, order ID','Within 1 point of control','Down 1-2 points: simplify the Details step','Down 2+ points for 2 weeks, significant at 95%'],
+   ['Adoption: orders with at least one changed detail, read on weeks 5-8 after the novelty bump','option_changed + cml_add_to_bag','15%+ by week 8','5-15%: found but not wanted; test copy and photos','Under 5%: the screen is not earning its place'],
+   ['Exit on the Details step: drawer closed or session ended without reaching the summary','option_changed without summary_viewed','No higher than today\'s fit-step exit','1-1.5x the fit-step exit','Over 1.5x'],
+   ['Cancellations of Custom Made orders before they ship (the fastest read on the 1-2 week wait)','order status, made_to_order','Within 1 point of stock orders','1-3 points over: show the delivery date earlier','3+ points over'],
+   ['Return rate and reasons, Custom Made vs stock, 30 days after delivery; cut by size-finder use','order ID join, return reason','Within 3 points of stock; "not what I expected" no higher than stock','3-8 points over, or "not expected" rising: review photos and the summary','8+ points over'],
+   ['Write-off value per 100 drawer orders (a Custom Made return cannot be resold)','returns x cost','Covered by the extra orders the options bring','Not covered: Pricing tests a surcharge','Loss per order grows two months running'],
   ];
   const tbl=`<table class="tt pl"><tr><th>Metric</th><th>Worked</th><th>Change course</th><th>Pull it back</th></tr>${rows.map(([m,ev,...r])=>`<tr><td>${m}<br><span style="color:#9a9a95;font-family:ui-monospace,monospace;font-size:10px">${ev}</span></td>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</table>`;
   const li=a=>`<ul style="margin:4px 0 0;padding-left:16px">${a.map(x=>`<li style="margin:3px 0;line-height:1.4">${x}</li>`).join('')}</ul>`;
-  return `<div class="note"><b>Success metrics.</b> A/B test, new drawer against today\'s, 50/50, all EU markets, 8-10 weeks. The thresholds are first guesses; the Data baselines below reset them before launch.${tbl}</div>
-  <div class="note"><b>Kill switch.</b> Week 2: add to bag down 2 or more points against control, switch the flag off (US9). Returns need 30 days to read, so the first decision is on conversion and adoption; the return read follows.</div>
-  <div class="note"><b>Guardrails.</b> Service contacts about returns or delivery per 100 drawer orders · size-finder use (<code>size_finder_applied</code>) as a read on size doubt · store link clicks (<code>store_handoff_clicked</code>) · switches back to standard details (<code>rec_standard_details</code>) as the cost of the 1-2 week wait · Keep-path add to bag vs today\'s No path, so the three-way screen is not slowing the people who skip fit.</div>
+  return `<div class="note"><b>Success metrics.</b> A/B test, new drawer against today\'s, 50/50, all EU markets. Changes are read in percentage points, with the relative lift alongside. The thresholds are first guesses; the Data baselines below reset them before launch.${tbl}</div>
+  <div class="note"><b>Two decision points.</b> Week 8: conversion, adoption, exit and cancellations. Week 14: returns, because a Custom Made pair takes 1-2 weeks to arrive and 30 days to come back, so the first return read is 6-8 weeks after the order.</div>
+  <div class="note"><b>Kill switch.</b> Week 2: orders per drawer open down 2 or more points against control, significant at 95%, switch the flag off (US9). Data confirms before launch whether week 2 has the traffic to read a 2-point change; if not, the check moves to the first week that does. Cancellations are the early warning in between.</div>
+  <div class="note"><b>Guardrails.</b> Delivery promise kept (Custom Made shipped within 2 weeks) · service contacts per 100 drawer orders, tagged delivery, returns or "what is this option" · Keep-path orders vs today\'s No path, so the three-way screen is not slowing the people who skip fit · median time in the drawer and screens per order, by path, against control · switches back to standard details (<code>rec_standard_details</code>) as the cost of the wait · store link clicks (<code>store_handoff_clicked</code>).</div>
+  <div class="note"><b>Read everything by segment.</b> Mobile vs desktop, new vs returning customer, market, and path (keep, pick, stylist). Stylist-path order rate against pick-path order rate is the real read on the stylist; "pick kept without edits" (<code>recommendation_accepted</code>, 50%+) is the supporting one.</div>
   <div class="note"><b>Validate before building.</b>${li([
    '<b>Usability test</b>, 8-10 people, unmoderated: do they find the options, understand side adjusters from the picture alone, and trust the stylist\'s pick more than plain cards?',
    '<b>Tailoring team review</b> of the stylist rules. They are mine, from trend and tailoring sources; the tailors should own them (US14).',
-   '<b>Data baselines:</b> drawer traffic, fit-step skip rate, conversion and return rate. They replace the guesses above and say whether 8-10 weeks is enough.'])}</div>
+   '<b>Data baselines:</b> drawer traffic, fit-step skip rate, order rate, cancellation and return rate with reasons, and the sample size a 1-point read needs. They replace the guesses above and set the week-2 and week-8 dates.'])}</div>
   <div class="note"><b>Open questions by stakeholder.</b>${li([
    '<b>Production:</b> which fit and detail combinations can be made, and does the live 1-2 week Custom Made lead time hold at Lite\'s volume?',
    '<b>Legal and Customer Service:</b> do Lite pairs follow the Custom Made return rule shown in the prototype (30 days, unworn and unaltered), in every EU market?',
-   '<b>Pricing:</b> do options carry a surcharge? Held at €179 in the prototype.',
-   '<b>Data:</b> the baselines above, and is 8-10 weeks enough traffic for a return read?',
+   '<b>Pricing and Finance:</b> do options carry a surcharge, and what is the write-off cost of a returned Custom Made pair? Held at €179 in the prototype.',
+   '<b>Data:</b> the baselines above, and is 8-10 weeks enough traffic for a conversion read at 1 point?',
    '<b>Tailoring:</b> will you own the rule table, and which rules would you change first?',
    '<b>Brand and content:</b> is "Custom Made" the right label for Lite pairs, and who writes the per-market copy (US13)?'])}</div>
   <div class="note" style="color:#9a9a95">Assumptions not in the brief: delivery times and the return rule come from the live site; price fixed at €179; the live size guide applies to the new pairs.</div>`;
