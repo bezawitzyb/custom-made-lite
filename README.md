@@ -106,3 +106,6 @@ Added a Roadmap note (Now / Next / Later with gates) and a Future vision note: f
 
 ### Metrics simplified (Plan tab)
 Six metrics cut to three that decide: conversion (relative), adoption, and returns (with cancellations as the early read). Two guardrails: delivery promise kept, and the Keep path stays as fast as today's No path. Everything else (Details-step exit, service contacts, standard-details switches, stylist acceptance, store clicks, time in drawer, write-off value) moved to a Diagnostics line, read only when a decision metric moves.
+
+### Metrics in plain language (Plan tab)
+The three metrics are now three questions anyone can read: Do more people buy? Do people use the new options? Do more pairs come back? Each says what is tracked, and the thresholds are in everyday terms ("15 in every 100 orders", "10% fewer orders"). The statistics sit in one small "For the analysts" line.
