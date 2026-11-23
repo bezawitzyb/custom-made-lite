@@ -165,6 +165,7 @@ table.sum .chg{color:var(--accent);font-size:11px;font-weight:500;margin-left:6p
 aside.drawer,.dbody{min-width:0}
 .tr{display:grid;grid-template-columns:1fr 1.3fr;gap:2px 8px;padding:5px 0;border-top:1px solid #2e2e2e}.tr i{grid-column:1/-1;color:#9a9a95;font-style:normal;font-size:11px}.tt{width:100%;border-collapse:collapse;margin-top:6px;font-size:11px}.tt td,.tt th{text-align:left;padding:3px 4px;border-top:1px solid #2e2e2e;vertical-align:top}.tt th{color:#9a9a95;font-weight:500}
 .note{padding:6px 0;border-bottom:1px solid #2e2e2e;line-height:1.45}
+.tt.pl td:first-child{width:34%}.tt.pl td:last-child{color:#ffb4a2}.tt.pl td:nth-child(2){color:#49FFCB}
 .note b{color:#f3c98b;font-weight:500}
 .fab{position:fixed;left:16px;bottom:16px;z-index:29;background:var(--ink);color:#fff;border:0;border-radius:99px;padding:10px 16px;font-size:13px;box-shadow:0 4px 14px rgba(0,0,0,.2)}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
@@ -210,7 +211,7 @@ aside.drawer,.dbody{min-width:0}
 </main>
 <button class="fab" id="fab" type="button">Behind the scenes</button>
 <div class="bts" id="bts" role="region" aria-label="Behind the scenes">
-  <div class="bh"><button id="tabNotes" aria-pressed="true">Design notes</button><button id="tabStories" aria-pressed="false">Stories</button><button id="tabEvents" aria-pressed="false">Events <span id="evcount">0</span></button><button id="tabTree" aria-pressed="false">Stylist rules</button><button class="x" id="btsClose" aria-label="Close">&times;</button></div>
+  <div class="bh"><button id="tabNotes" aria-pressed="true">Design notes</button><button id="tabStories" aria-pressed="false">Stories</button><button id="tabEvents" aria-pressed="false">Events <span id="evcount">0</span></button><button id="tabTree" aria-pressed="false">Stylist rules</button><button id="tabPlan" aria-pressed="false">Plan</button><button class="x" id="btsClose" aria-label="Close">&times;</button></div>
   <div class="bb" id="btsBody"></div>
 </div>
 
@@ -671,6 +672,32 @@ function storiesHtml(key){
   if(showAllStories)return `<div class="note">All fourteen stories, in flow order. Must = v1 cannot ship without it; Should = ship in v1 if the sprint allows, otherwise next. Customer stories describe what the customer sees; events live in US11. Each acceptance criterion maps to a screen in this prototype or to an event in the Events tab, so QA can test against the prototype. Out of scope for v1: checkout, store booking, a surcharge, real Black and Navy photos. <button class="link" id="allStories" style="color:#fff">Show this screen only</button></div>`+STORIES.map(storyHtml).join('');
   return `<div class="note" style="color:#9a9a95">User stor${here.length>1?'ies':'y'} for this screen. Each acceptance criterion maps to what you see here or to an event in the Events tab. <button class="link" id="allStories" style="color:#fff">Show all 14</button></div>`+here.map(storyHtml).join('')+(also.length?`<div class="note" style="color:#9a9a95;font-size:11px;border-bottom:0">Also applies here: ${also.map(u=>u.id+' '+esc(u.t)).join(' · ')}. See Show all 14.</div>`:'');
 }
+function planHtml(){
+  const rows=[
+   ['Add to bag from the drawer, new vs control','cml_add_to_bag','Within 1 point of control','Down 1-2 points: simplify the Details step','Down 2+ points for 2 weeks'],
+   ['Adoption: orders with at least one changed detail','option_changed + cml_add_to_bag','15%+ by week 8','5-15%: found but not wanted; test copy and photos','Under 5%: the screen is not earning its place'],
+   ['Exit on the Details step','option_changed without summary_viewed','No higher than today\'s fit-step exit','1-1.5x the fit-step exit','Over 1.5x'],
+   ['Return rate, Custom Made vs stock, 30 days after delivery','order ID join','Within 3 points of stock','3-8 points over: review photos and the summary','8+ points over'],
+   ['Stylist pick kept without edits','recommendation_accepted, edits','50%+','25-50%: the rules need the tailors','Under 25%: drop the path'],
+  ];
+  const tbl=`<table class="tt pl"><tr><th>Metric</th><th>Worked</th><th>Change course</th><th>Pull it back</th></tr>${rows.map(([m,ev,...r])=>`<tr><td>${m}<br><span style="color:#9a9a95;font-family:ui-monospace,monospace;font-size:10px">${ev}</span></td>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</table>`;
+  const li=a=>`<ul style="margin:4px 0 0;padding-left:16px">${a.map(x=>`<li style="margin:3px 0;line-height:1.4">${x}</li>`).join('')}</ul>`;
+  return `<div class="note"><b>Success metrics.</b> A/B test, new drawer against today\'s, 50/50, all EU markets, 8-10 weeks. The thresholds are first guesses; the Data baselines below reset them before launch.${tbl}</div>
+  <div class="note"><b>Kill switch.</b> Week 2: add to bag down 2 or more points against control, switch the flag off (US9). Returns need 30 days to read, so the first decision is on conversion and adoption; the return read follows.</div>
+  <div class="note"><b>Guardrails.</b> Service contacts about returns or delivery per 100 drawer orders · size-finder use (<code>size_finder_applied</code>) as a read on size doubt · store link clicks (<code>store_handoff_clicked</code>) · switches back to standard details (<code>rec_standard_details</code>) as the cost of the 1-2 week wait · Keep-path add to bag vs today\'s No path, so the three-way screen is not slowing the people who skip fit.</div>
+  <div class="note"><b>Validate before building.</b>${li([
+   '<b>Usability test</b>, 8-10 people, unmoderated: do they find the options, understand side adjusters from the picture alone, and trust the stylist\'s pick more than plain cards?',
+   '<b>Tailoring team review</b> of the stylist rules. They are mine, from trend and tailoring sources; the tailors should own them (US14).',
+   '<b>Data baselines:</b> drawer traffic, fit-step skip rate, conversion and return rate. They replace the guesses above and say whether 8-10 weeks is enough.'])}</div>
+  <div class="note"><b>Open questions by stakeholder.</b>${li([
+   '<b>Production:</b> which fit and detail combinations can be made, and does the live 1-2 week Custom Made lead time hold at Lite\'s volume?',
+   '<b>Legal and Customer Service:</b> do Lite pairs follow the Custom Made return rule shown in the prototype (30 days, unworn and unaltered), in every EU market?',
+   '<b>Pricing:</b> do options carry a surcharge? Held at €179 in the prototype.',
+   '<b>Data:</b> the baselines above, and is 8-10 weeks enough traffic for a return read?',
+   '<b>Tailoring:</b> will you own the rule table, and which rules would you change first?',
+   '<b>Brand and content:</b> is "Custom Made" the right label for Lite pairs, and who writes the per-market copy (US13)?'])}</div>
+  <div class="note" style="color:#9a9a95">Assumptions not in the brief: delivery times and the return rule come from the live site; price fixed at €179; the live size guide applies to the new pairs.</div>`;
+}
 function treeHtml(){
   const layer=(k,t)=>`<div class="note"><b>${t}</b>${Object.entries(TREE[k]).map(([v,n])=>{const sets=[n.fit?LABEL.fit[n.fit[0]]+(TWO_LEGS(n.fit[0])?' '+LABEL.leg[n.fit[1]].toLowerCase():''):'',...Object.entries(n.set).map(([kk,vv])=>LABEL[kk][vv]),n.wideLeg?'Wide → straight leg':''].filter(Boolean).join(', ')||'no change';return `<div class="tr"><span>${esc(n.label)}</span><span>${esc(sets)}</span><i>${esc(n.src)}</i></div>`}).join('')}</div>`;
   let rows='',cm=0,tot=0;
@@ -715,12 +742,13 @@ function renderBts(){
   const b=$('btsBody');
   if(btsTab==='notes'){const key=S.step==='stylist'&&S.recReady?'rec':S.step;b.innerHTML=(NOTES[key]||[]).map((n,i)=>`<div class="note"><b>${i+1}.</b> ${esc(n)}</div>`).join('');}
   else if(btsTab==='tree'){b.innerHTML=treeHtml();}
+  else if(btsTab==='plan'){b.innerHTML=planHtml();}
   else if(btsTab==='stories'){const key=S.step==='stylist'&&S.recReady?'rec':S.step;b.innerHTML=storiesHtml(key);const t=$('allStories');if(t)t.onclick=()=>{showAllStories=!showAllStories;renderBts();};}
   else{b.innerHTML=events.length?events.slice().reverse().map(e=>{const {event,ts,...p}=e;return `<div class="ev"><b>${esc(event)}</b>  ${ts}\n${esc(JSON.stringify(p))}</div>`}).join(''):'<div class="note">No events yet. Click through the flow.</div>';}
 }
 function openBts(o){$('bts').classList.toggle('open',o);$('fab').hidden=o;renderBts();}
 $('fab').onclick=()=>openBts(true);$('btsClose').onclick=()=>openBts(false);
-['Notes','Stories','Events','Tree'].forEach(t=>$('tab'+t).onclick=()=>{btsTab=t.toLowerCase();['Notes','Stories','Events','Tree'].forEach(u=>$('tab'+u).setAttribute('aria-pressed',u===t));renderBts();});
+['Notes','Stories','Events','Tree','Plan'].forEach(t=>$('tab'+t).onclick=()=>{btsTab=t.toLowerCase();['Notes','Stories','Events','Tree','Plan'].forEach(u=>$('tab'+u).setAttribute('aria-pressed',u===t));renderBts();});
 $('views').onclick=e=>{const v=e.target.dataset.view;if(v){S.view=v;renderStage();}};
 $('dbody').addEventListener('click',e=>{const b=e.target.closest('[data-col]');if(b)setColour(b.dataset.col);});
 $('back').onclick=back;
