@@ -112,3 +112,6 @@ The three metrics are now three questions anyone can read: Do more people buy? D
 
 ### Drop-off and option use
 Two new events, 22 in all: cml_step_viewed (every screen of the panel, with step, step number and path) and cml_drawer_closed (leaving the panel, with the screen and the reason: back to the page, restart or left the page). The Plan tab gains a "What we watch" note: a drop-off funnel per way of choosing, the share of each option in orders, options changed and changed back, and which stylist detail people change most. US11 has a drop-off criterion.
+
+### Plan tab in plain language
+Every section of the Plan tab rewritten so anyone can follow it: what we watch, other numbers, checks before building, questions for each team, roadmap and the future stylist. Terms like MVP, funnel, baseline, stakeholder, gate, retrieval and recommender are gone; statistics and event names sit only in the small "For the analysts" note.
