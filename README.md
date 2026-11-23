@@ -173,3 +173,5 @@ The fit and leg design notes name the live product codes in parentheses (B6934, 
 The 10 slides as images, in order, are in [deck/](deck/) (slide-01.png to slide-10.png).
 
 - v92: Plan tab aligned with the one-pager: new "Check before we build" (timed test, photo check, Production, cost of a return, real numbers), "What I am least sure about", and why I'll pick comes before Help me choose.
+
+- v93: "For the analysts" note in the Plan tab rewritten in plain words.
