@@ -590,44 +590,49 @@ function recommend(){
   track('stylist_recommendation_shown',{...cfgProps(),rules_fired:fired.join(',')});
 }
 const STORIES=[
- {id:'US1',t:'Choose a path',s:'As a customer, I want to keep the trousers as shown in one tap, so buying stays as fast as today.',ac:[
+ {id:'US0',t:'See the options exist',screens:['pdp'],s:'As a customer on the product page, I want to see that these trousers come in more fits and details, so I know before I open the drawer.',ac:[
+  'The product page is otherwise unchanged; the line under Select size and fit says "Now in more fits and details".',
+  'Delivery & Returns opens with the live policy text (free delivery and returns, 30-day return policy) and fires <code>pdp_accordion_opened</code>.',
+  'Changing the colour swatch updates the photo and fires <code>colour_changed</code>.']},
+ {id:'US1',t:'Choose a path',screens:['choose'],s:'As a customer, I want to keep the trousers as shown in one tap, so buying stays as fast as today.',ac:[
   'The drawer opens on "How do you want to choose?" with three cards; Keep it as shown is first and says it ships in 1-2 days.',
   'Keep goes straight to size with the Straight fit\'s standard details; no other screen in between.',
   '<code>cml_drawer_opened</code> fires on opening; <code>cml_path_selected</code> fires with path keep, pick or stylist.']},
- {id:'US2',t:'Pick my fit and details',s:'As a customer who knows what I want, I want fit and each option as a picture, so I can choose without tailoring words.',ac:[
+ {id:'US2',t:'Pick my fit and details',screens:['fit','leg','details'],s:'As a customer who knows what I want, I want fit and each option as a picture, so I can choose without tailoring words.',ac:[
   'Fit shows three photo cards; Slim and Wide then show a leg step (tapered or straight) with each leg\'s delivery (1-2 days or Custom Made, 1-2 weeks).',
   'Picking a fit loads that fit\'s standard details, unless the customer already changed a detail.',
   'Waistband, hem and front show as picture pairs with a one-line outcome each; the standard choice is preselected and marked with a green Standard pill.',
   'A tap updates the on-model photo and fires <code>option_changed</code> with option, from, to and source.',
   'The bottom bar shows the delivery for the current choices: 1-2 business days with standard details, Custom Made 1-2 weeks after any change.']},
- {id:'US3',t:'Help me choose',s:'As an unsure customer, I want three quick questions and a recommended pair, so I don\'t have to know the options.',ac:[
+ {id:'US3',t:'Help me choose',screens:['stylist','rec'],s:'As an unsure customer, I want three quick questions and a recommended pair, so I don\'t have to know the options.',ac:[
   'Three tapped questions, no typing. Question 2 takes one body answer and one height answer on separate rows; picking one of each moves on, Next covers a single answer.',
   'The pick comes from the rule table; it changes at most 2 details from the fit\'s standard. The body answer sets the fit, the height answer sets leg and hem.',
   'Every detail the stylist chose shows a reason; editing a detail in place shows "Your choice" and updates the photo.',
   'A Custom Made pick shows "Arrives in 1-2 weeks" with "Use the standard details (1-2 days)", which fires <code>rec_standard_details</code>.',
   '<code>stylist_question_answered</code> fires per answer; <code>stylist_recommendation_shown</code> carries the rules fired; <code>recommendation_accepted</code> carries the number of edits.']},
- {id:'US4',t:'Review before size',s:'As a customer ordering a pair made for me, I want to see all my choices before size, so I can catch mistakes.',ac:[
+ {id:'US4',t:'Review before size',screens:['summary'],s:'As a customer ordering a pair made for me, I want to see all my choices before size, so I can catch mistakes.',ac:[
   'The summary lists colour, fit and leg, front, waistband, hem and price; changed details are tagged "your choice".',
   'A Custom Made pair shows "Made with your choices", free delivery in 1-2 weeks and "Returns within 30 days." A standard pair shows no notice.',
   'Only a Custom Made pair shows the help line: Get help choosing (fires <code>summary_to_stylist</code>) or ask a stylist in store (fires <code>store_handoff_clicked</code>).',
   '"Change something" returns to the path\'s last step; <code>summary_viewed</code> fires with the configuration.']},
- {id:'US5',t:'Find my size',s:'As a customer, I want a size from my height and waist, so I order the right size first time.',ac:[
+ {id:'US5',t:'Find my size',screens:['size'],s:'As a customer, I want a size from my height and waist, so I order the right size first time.',ac:[
   'Size buttons lead with the letter and show the length\'s number under it; Short, Regular and Long are picked by height (under 168, 168-186, over 186 cm).',
   'Find my size asks height and either a usual W size or a tape waist; W32 at 184 cm gives M, 48 Regular, from the live conversion.',
   'The result selects length and size, says "Selected for you", and offers the next size up near a boundary.',
   '<code>size_finder_opened</code>, <code>size_finder_result</code> and <code>size_finder_applied</code> fire; <code>size_chart_opened</code> fires on the chart.']},
- {id:'US6',t:'Bag and checkout',s:'As a customer, I want to see what I added and go to checkout in one tap, so the order feels done.',ac:[
+ {id:'US6',t:'Bag and checkout',screens:['added'],s:'As a customer, I want to see what I added and go to checkout in one tap, so the order feels done.',ac:[
   'Add to bag opens the bag: the item with colour, fit, details and size, a Custom Made pill when it applies, delivery and total.',
   'Proceed to checkout is the main button and fires <code>checkout_clicked</code>; Continue shopping returns to the product page and keeps the bag.',
   'The header Bag link opens the same view from any screen and fires <code>bag_opened</code>; an empty bag says so.']},
- {id:'US7',t:'Track the flow',s:'As the PM, I want every step tracked, so I can read adoption, drop-off, delivery choice and returns per path.',ac:[
+ {id:'US7',t:'Track the flow',screens:['added'],s:'As the PM, I want every step tracked, so I can read adoption, drop-off, delivery choice and returns per path.',ac:[
   'All 20 spec events fire with the listed properties; every event carries device, market, colour, product_id and a timestamp.',
   '<code>cml_add_to_bag</code> carries the configuration, size, length, path and made_to_order, and joins to the order ID for returns.',
   'The Events tab in this panel shows each event as it fires, newest first.']}
 ];
+const storyHtml=u=>`<div class="us"><div class="id">${u.id} · ${esc(u.t)}</div><div class="st">${esc(u.s)}</div><ul>${u.ac.map(a=>`<li>${a}</li>`).join('')}</ul></div>`;
 function storiesHtml(){
-  return `<div class="note">Seven stories, one per part of the flow. Each acceptance criterion maps to a screen in this prototype or to an event in the Events tab, so QA can test against the prototype. Out of scope for v1: checkout, store booking, a surcharge, real Black and Navy photos.</div>`+
-  STORIES.map(u=>`<div class="us"><div class="id">${u.id} · ${esc(u.t)}</div><div class="st">${esc(u.s)}</div><ul>${u.ac.map(a=>`<li>${a}</li>`).join('')}</ul></div>`).join('');
+  return `<div class="note">Eight stories, one per part of the flow. Each acceptance criterion maps to a screen in this prototype or to an event in the Events tab, so QA can test against the prototype. Out of scope for v1: checkout, store booking, a surcharge, real Black and Navy photos.</div>`+
+  STORIES.map(storyHtml).join('');
 }
 function treeHtml(){
   const layer=(k,t)=>`<div class="note"><b>${t}</b>${Object.entries(TREE[k]).map(([v,n])=>{const sets=[n.fit?LABEL.fit[n.fit[0]]+(TWO_LEGS(n.fit[0])?' '+LABEL.leg[n.fit[1]].toLowerCase():''):'',...Object.entries(n.set).map(([kk,vv])=>LABEL[kk][vv]),n.wideLeg?'Wide → straight leg':''].filter(Boolean).join(', ')||'no change';return `<div class="tr"><span>${esc(n.label)}</span><span>${esc(sets)}</span><i>${esc(n.src)}</i></div>`}).join('')}</div>`;
@@ -671,7 +676,7 @@ setOpt=function(k,v,src){if(src==='stylist')S.recEdits=(S.recEdits||0)+1;origSet
 let btsTab='notes';
 function renderBts(){
   const b=$('btsBody');
-  if(btsTab==='notes'){const key=S.step==='stylist'&&S.recReady?'rec':S.step;b.innerHTML=(NOTES[key]||[]).map((n,i)=>`<div class="note"><b>${i+1}.</b> ${esc(n)}</div>`).join('');}
+  if(btsTab==='notes'){const key=S.step==='stylist'&&S.recReady?'rec':S.step;const us=STORIES.filter(u=>u.screens.includes(key));b.innerHTML=(NOTES[key]||[]).map((n,i)=>`<div class="note"><b>${i+1}.</b> ${esc(n)}</div>`).join('')+(us.length?`<div class="note" style="margin-top:10px;border-bottom:0;color:#9a9a95;font-size:11px;text-transform:uppercase;letter-spacing:.04em">User stor${us.length>1?'ies':'y'} for this screen</div>`+us.map(storyHtml).join(''):'');}
   else if(btsTab==='tree'){b.innerHTML=treeHtml();}
   else if(btsTab==='stories'){b.innerHTML=storiesHtml();}
   else{b.innerHTML=events.length?events.slice().reverse().map(e=>{const {event,ts,...p}=e;return `<div class="ev"><b>${esc(event)}</b>  ${ts}\n${esc(JSON.stringify(p))}</div>`}).join(''):'<div class="note">No events yet. Click through the flow.</div>';}

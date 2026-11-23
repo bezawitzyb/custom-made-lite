@@ -88,3 +88,4 @@ After Add to bag the drawer shows a small bag: the item with colour, fit, detail
 The Bag link in the header opens the bag at any time (event `bag_opened`). Continue shopping keeps the bag; Restart empties it.
 Delivery & Returns on the product page opens with the live text (event `pdp_accordion_opened`). The Custom Made notice says "Returns within 30 days." only. The Details design note explains why the pleat is the third option.
 Behind the scenes has a fourth tab, Stories: seven user stories with acceptance criteria, each mapped to a screen or an event. Tabs are now Design notes, Events, Stylist rules, Stories.
+Each screen's design notes end with the user story (or stories) for that screen. US0 covers the product page. The Stories tab lists all eight.
