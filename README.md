@@ -103,3 +103,6 @@ On the stylist's recommendation card, tapping a detail's picture (fit, front, wa
 
 ### Roadmap and future vision (Plan tab)
 Added a Roadmap note (Now / Next / Later with gates) and a Future vision note: four stages from rules that learn from edits and returns, to an LLM that runs the conversation while the rule table decides, to retrieval over Suitsupply's own guides, to a recommender trained on outcomes. Lists the data conditions needed from day one and a volume check.
+
+### Metrics simplified (Plan tab)
+Six metrics cut to three that decide: conversion (relative), adoption, and returns (with cancellations as the early read). Two guardrails: delivery promise kept, and the Keep path stays as fast as today's No path. Everything else (Details-step exit, service contacts, standard-details switches, stylist acceptance, store clicks, time in drawer, write-off value) moved to a Diagnostics line, read only when a decision metric moves.
