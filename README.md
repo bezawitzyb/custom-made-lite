@@ -100,3 +100,6 @@ Walked every screen at phone size: no horizontal overflow or clipped text anywhe
 
 ### Recommendation thumbnails switch the main image
 On the stylist's recommendation card, tapping a detail's picture (fit, front, waistband, hem) shows that detail on the main image; the pressed thumbnail gets a dark border and the view pills follow. Noted in the rec design notes and US5.
+
+### Roadmap and future vision (Plan tab)
+Added a Roadmap note (Now / Next / Later with gates) and a Future vision note: four stages from rules that learn from edits and returns, to an LLM that runs the conversation while the rule table decides, to retrieval over Suitsupply's own guides, to a recommender trained on outcomes. Lists the data conditions needed from day one and a volume check.
