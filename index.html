@@ -606,7 +606,8 @@ const STORIES=[
  {id:'US4',pr:'Must',t:'Choose my details',screens:['details'],s:'As a customer who knows what I want, I want each option as a picture with a plain outcome, so I can choose without knowing what a side adjuster is.',ac:[
   'Waistband, hem and front each show two photo cards with a one-line outcome ("Small buckles on each hip. Adjust the waist without a belt").',
   'The fit\'s standard choice is preselected and marked with a green Standard pill. Tapping Review without a change keeps the standard pair.',
-  'A tap updates the on-model photo within 300 ms; the close-up views (Front, Side, Pleat, Waistband, Hem) match the current choices.',
+  'A tap updates the on-model photo immediately, without a page reload; the close-up views (Front, Side, Pleat, Waistband, Hem) match the current choices.',
+  'Colour swatches (Sand, Black, Navy) sit at the top of the step; changing colour keeps fit and details and updates every photo.',
   'The copy states the trade once: any change is Custom Made, 1-2 weeks; standard details arrive in 1-2 days. The bottom bar shows the delivery for the current choices.',
   'If a photo fails to load, the card still shows its name and outcome and stays tappable.']},
  {id:'US5',pr:'Should',t:'Help me choose',screens:['stylist','rec'],s:'As an unsure customer, I want three quick questions and a recommended pair with reasons, so I don\'t have to understand the options.',ac:[
@@ -619,7 +620,7 @@ const STORIES=[
  {id:'US6',pr:'Must',t:'Review before size',screens:['summary'],s:'As a customer ordering a pair made for me, I want to see all my choices before I pick a size, so I catch a mistake before it is made.',ac:[
   'The summary lists colour, fit and leg, front, waistband, hem and price. Any detail that differs from the fit\'s standard is tagged "your choice".',
   'A Custom Made pair (any changed detail, or Slim straight or Wide straight) shows "Made with your choices", free delivery in 1-2 weeks and "Returns within 30 days." A standard pair shows no notice; the bottom bar says 1-2 business days.',
-  'Only a Custom Made pair shows the help line: Get help choosing (opens the stylist with the current pair kept) or ask a stylist in store (store link).',
+  'Only a Custom Made pair shows the help line: Get help choosing starts the stylist from the first question and its pick replaces the current choices; ask a stylist in store opens the store page.',
   '"Change something" returns to the path\'s last step with every choice kept.']},
  {id:'US7',pr:'Should',t:'Find my size',screens:['size'],s:'As a customer, I want my size from my height and waist, so a pair made for me is the right size first time.',ac:[
   'Size buttons lead with the letter (M) and show the length\'s number under it. Length (Short, Regular, Long) is chosen by height: under 168, 168-186, over 186 cm. Changing length keeps the letter and swaps the number.',
@@ -630,9 +631,9 @@ const STORIES=[
  {id:'US8',pr:'Must',t:'Bag and checkout',screens:['added'],s:'As a customer, I want to see what I added and go straight to checkout, so I can pay without hunting for the bag.',ac:[
   'Add to bag opens the bag: the item with photo, colour, fit, details and size, a Custom Made pill when it applies, delivery (1-2 business days or 1-2 weeks) and total.',
   'Proceed to checkout is the main button. Continue shopping returns to the product page and keeps the bag. The header Bag opens the same view from any screen; an empty bag says so.',
-  'Checkout itself is out of scope for this story; the Custom Made delivery time must carry through to checkout and the order confirmation (separate story for the checkout team).']},
+  'Checkout itself is unchanged. Depends on US12: the Custom Made details and delivery time carry through to checkout and the order.']},
  {id:'US9',x:true,pr:'Must',t:'Run it as a test with a kill switch',screens:['pdp','choose','added'],s:'As the PM, I want the new drawer behind a feature flag with 50/50 assignment, so I can run the A/B test and switch it off within a day if add-to-bag drops.',ac:[
-  'Assignment is per customer and sticky across sessions and devices where the customer is signed in; the variant is a property on every event.',
+  'Assignment is 50/50 per customer and sticky: a 12-month cookie for guests, the account for signed-in customers, as with the current A/B tooling. The variant is a property on every event.',
   'Flag off returns the live yes/no flow with no trace of the new screens. Flag on shows the three-way choose screen.',
   'The flag can be changed per market without a release. Target: off within one working day of the week-2 check (add to bag down 2+ points).',
   'The size finder and the stylist are separate flags, so either can be switched off without losing the options.']},
@@ -643,17 +644,32 @@ const STORIES=[
   'Each on-model and close-up image has alt text that names the current fit and details.']},
  {id:'US11',x:true,pr:'Must',t:'Track the flow',screens:['pdp','choose','fit','leg','details','stylist','rec','summary','size','added'],s:'As the PM, I want every step tracked, so I can read adoption, drop-off, delivery choice and returns per path and per variant.',ac:[
   'The 20 events in the Events tab fire with the listed properties, once per action, at the moment the action happens. Base properties on every event: device, market, colour, product_id, variant, timestamp.',
-  'Key events and when they fire: cml_drawer_opened on Select size and fit; cml_path_selected on a path card; option_changed on any detail tap, with from and to; stylist_question_answered per answer; stylist_recommendation_shown with rules_fired; recommendation_accepted with the number of edits; summary_viewed with made_to_order; size_finder_applied; cml_add_to_bag with configuration, size, length, path and made_to_order; checkout_clicked; bag_opened; store_handoff_clicked.',
+  'The five that feed the success metrics: cml_path_selected (path), option_changed (option, from, to), summary_viewed (made_to_order), cml_add_to_bag (configuration, size, path, made_to_order), checkout_clicked. The full list, with properties, is in the Events tab and the tracking plan.',
   'cml_add_to_bag carries the order ID once the order is placed, so returns join back to the configuration.',
   'Nothing fires before the customer has given analytics consent; events respect the consent choice in every EU market.',
-  'QA: the prototype\'s Events tab is the reference; each event there must appear in the live implementation with the same name and properties.']}
+  'QA: the prototype\'s Events tab is the reference; each event there must appear in the live implementation with the same name and properties.']},
+ {id:'US12',x:true,pr:'Must',t:'Pass the configuration to the order',screens:['added'],s:'As the operations team, I want every order line to carry the chosen fit and details and a made-to-order flag, so the right pair is made, shipped, confirmed and returned.',ac:[
+  'The order line carries colour, fit, leg, waistband, front, hem, size and length, plus made_to_order true or false and the delivery promise (1-2 days or 1-2 weeks).',
+  'A standard pair is picked from stock as today. A Custom Made pair creates a production order with the same details; nothing is picked from stock.',
+  'Checkout and the confirmation email show the details and the delivery time the customer saw. The Custom Made notice wording is the same as on the summary.',
+  'Customer Service sees the details and the flag on the order, so a return request is handled under the Custom Made rule.']},
+ {id:'US13',x:true,pr:'Should',t:'Works in every EU market',screens:['pdp','choose','details','stylist','summary'],s:'As a customer in any EU market, I want the options, the stylist and the delivery promise in my language and currency, so the flow feels local.',ac:[
+  'All copy, including the stylist\'s questions, answers and reasons, is translatable and ships in every language CM Lite is live in.',
+  'Price shows in the market\'s currency; delivery times come from the market\'s delivery settings, not fixed text.',
+  'Sizes follow the market\'s size guide; the size finder\'s thresholds and conversions are per market.',
+  'The feature flag (US9) can differ per market.']},
+ {id:'US14',x:true,pr:'Should',t:'Tailors own the stylist rules',screens:['stylist','rec'],s:'As the tailoring team, I want to change the stylist\'s rules and reasons without a release, so the advice stays ours.',ac:[
+  'The rule table (occasion, body, height, belt, with set, why and source) lives in a content tool, not in code; a change is live within an hour.',
+  'Every change is logged with who and when; the previous version can be restored.',
+  'A rule can only choose from the fixed options; it cannot add an option, change a price or promise a delivery time.',
+  'stylist_recommendation_shown carries the rule-table version, so results can be read per version.']}
 ];
 const storyHtml=u=>`<div class="us"><div class="id">${u.id} · ${esc(u.t)} <span class="pr ${u.pr==='Must'?'must':''}">${u.pr} for v1</span></div><div class="st">${esc(u.s)}</div><ul>${u.ac.map(a=>`<li>${a}</li>`).join('')}</ul></div>`;
 let showAllStories=false;
 function storiesHtml(key){
   const here=STORIES.filter(u=>u.screens.includes(key)&&!u.x),also=STORIES.filter(u=>u.screens.includes(key)&&u.x);
-  if(showAllStories)return `<div class="note">All eleven stories, in flow order. Must = v1 cannot ship without it; Should = ship in v1 if the sprint allows, otherwise next. Customer stories describe what the customer sees; events live in US11. Each acceptance criterion maps to a screen in this prototype or to an event in the Events tab, so QA can test against the prototype. Out of scope for v1: checkout, store booking, a surcharge, real Black and Navy photos. <button class="link" id="allStories" style="color:#fff">Show this screen only</button></div>`+STORIES.map(storyHtml).join('');
-  return `<div class="note" style="color:#9a9a95">User stor${here.length>1?'ies':'y'} for this screen. Each acceptance criterion maps to what you see here or to an event in the Events tab. <button class="link" id="allStories" style="color:#fff">Show all 11</button></div>`+here.map(storyHtml).join('')+(also.length?`<div class="note" style="color:#9a9a95;font-size:11px;border-bottom:0">Also applies here: ${also.map(u=>u.id+' '+esc(u.t)).join(' · ')}. See Show all 11.</div>`:'');
+  if(showAllStories)return `<div class="note">All fourteen stories, in flow order. Must = v1 cannot ship without it; Should = ship in v1 if the sprint allows, otherwise next. Customer stories describe what the customer sees; events live in US11. Each acceptance criterion maps to a screen in this prototype or to an event in the Events tab, so QA can test against the prototype. Out of scope for v1: checkout, store booking, a surcharge, real Black and Navy photos. <button class="link" id="allStories" style="color:#fff">Show this screen only</button></div>`+STORIES.map(storyHtml).join('');
+  return `<div class="note" style="color:#9a9a95">User stor${here.length>1?'ies':'y'} for this screen. Each acceptance criterion maps to what you see here or to an event in the Events tab. <button class="link" id="allStories" style="color:#fff">Show all 14</button></div>`+here.map(storyHtml).join('')+(also.length?`<div class="note" style="color:#9a9a95;font-size:11px;border-bottom:0">Also applies here: ${also.map(u=>u.id+' '+esc(u.t)).join(' · ')}. See Show all 14.</div>`:'');
 }
 function treeHtml(){
   const layer=(k,t)=>`<div class="note"><b>${t}</b>${Object.entries(TREE[k]).map(([v,n])=>{const sets=[n.fit?LABEL.fit[n.fit[0]]+(TWO_LEGS(n.fit[0])?' '+LABEL.leg[n.fit[1]].toLowerCase():''):'',...Object.entries(n.set).map(([kk,vv])=>LABEL[kk][vv]),n.wideLeg?'Wide → straight leg':''].filter(Boolean).join(', ')||'no change';return `<div class="tr"><span>${esc(n.label)}</span><span>${esc(sets)}</span><i>${esc(n.src)}</i></div>`}).join('')}</div>`;
