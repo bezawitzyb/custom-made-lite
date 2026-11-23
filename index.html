@@ -155,7 +155,7 @@ table.sum .chg{color:var(--accent);font-size:11px;font-weight:500;margin-left:6p
 .bts{position:fixed;left:16px;bottom:16px;width:min(420px,calc(100vw - 32px));max-height:46vh;background:#1d1e1c;color:#e9e9e6;border-radius:8px;box-shadow:0 10px 30px rgba(0,0,0,.3);display:none;flex-direction:column;z-index:30;font-size:12px}
 .bts.open{display:flex}
 .bts .bh{display:flex;gap:2px;padding:8px 36px 8px 8px;border-bottom:1px solid #333;flex-wrap:wrap;position:relative}
-.us{padding:8px 0;border-bottom:1px solid #2e2e2e}.us .id{color:#9a9a95;font-size:11px}.us .st{margin:2px 0 4px;line-height:1.4}.us ul{margin:0;padding-left:16px}.us li{margin:2px 0;line-height:1.4}.us li code{color:#cfcfcf;font-size:11px}
+.us{padding:8px 0;border-bottom:1px solid #2e2e2e}.us .id{color:#9a9a95;font-size:11px}.us .st{margin:2px 0 4px;line-height:1.4}.us ul{margin:0;padding-left:16px}.us li{margin:2px 0;line-height:1.4}.us li code{color:#cfcfcf;font-size:11px}.us .pr{display:inline-block;margin-left:6px;padding:1px 7px;border-radius:99px;border:1px solid #555;color:#bbb;font-size:10px}.us .pr.must{background:#49FFCB;color:#000;border-color:#49FFCB}
 .bts .bh button{background:none;border:0;color:#aaa;padding:4px 8px;border-radius:99px;font-size:12px}
 .bts .bh button[aria-pressed=true]{background:#333;color:#fff}
 .bts .bh .x{position:absolute;right:8px;top:8px;margin:0}
@@ -590,51 +590,70 @@ function recommend(){
   track('stylist_recommendation_shown',{...cfgProps(),rules_fired:fired.join(',')});
 }
 const STORIES=[
- {id:'US0',t:'See the options exist',screens:['pdp'],s:'As a customer on the product page, I want to see that these trousers come in more fits and details, so I know before I open the drawer.',ac:[
-  'The product page is otherwise unchanged; the line under Select size and fit says "Now in more fits and details".',
-  'Delivery & Returns opens with the live policy text (free delivery and returns, 30-day return policy) and fires <code>pdp_accordion_opened</code>.',
-  'Changing the colour swatch updates the photo and fires <code>colour_changed</code>.']},
- {id:'US1',t:'Choose a path',screens:['choose'],s:'As a customer, I want to keep the trousers as shown in one tap, so buying stays as fast as today.',ac:[
-  'The drawer opens on "How do you want to choose?" with three cards; Keep it as shown is first and says it ships in 1-2 days.',
-  'Keep goes straight to size with the Straight fit\'s standard details; no other screen in between.',
-  '<code>cml_drawer_opened</code> fires on opening; <code>cml_path_selected</code> fires with path keep, pick or stylist.']},
- {id:'US2',t:'Pick my fit and details',screens:['fit','leg','details'],s:'As a customer who knows what I want, I want fit and each option as a picture, so I can choose without tailoring words.',ac:[
-  'Fit shows three photo cards; Slim and Wide then show a leg step (tapered or straight) with each leg\'s delivery (1-2 days or Custom Made, 1-2 weeks).',
-  'Picking a fit loads that fit\'s standard details, unless the customer already changed a detail.',
-  'Waistband, hem and front show as picture pairs with a one-line outcome each; the standard choice is preselected and marked with a green Standard pill.',
-  'A tap updates the on-model photo and fires <code>option_changed</code> with option, from, to and source.',
-  'The bottom bar shows the delivery for the current choices: 1-2 business days with standard details, Custom Made 1-2 weeks after any change.']},
- {id:'US3',t:'Help me choose',screens:['stylist','rec'],s:'As an unsure customer, I want three quick questions and a recommended pair, so I don\'t have to know the options.',ac:[
-  'Three tapped questions, no typing. Question 2 takes one body answer and one height answer on separate rows; picking one of each moves on, Next covers a single answer.',
-  'The pick comes from the rule table; it changes at most 2 details from the fit\'s standard. The body answer sets the fit, the height answer sets leg and hem.',
-  'Every detail the stylist chose shows a reason; editing a detail in place shows "Your choice" and updates the photo.',
-  'A Custom Made pick shows "Arrives in 1-2 weeks" with "Use the standard details (1-2 days)", which fires <code>rec_standard_details</code>.',
-  '<code>stylist_question_answered</code> fires per answer; <code>stylist_recommendation_shown</code> carries the rules fired; <code>recommendation_accepted</code> carries the number of edits.']},
- {id:'US4',t:'Review before size',screens:['summary'],s:'As a customer ordering a pair made for me, I want to see all my choices before size, so I can catch mistakes.',ac:[
-  'The summary lists colour, fit and leg, front, waistband, hem and price; changed details are tagged "your choice".',
-  'A Custom Made pair shows "Made with your choices", free delivery in 1-2 weeks and "Returns within 30 days." A standard pair shows no notice.',
-  'Only a Custom Made pair shows the help line: Get help choosing (fires <code>summary_to_stylist</code>) or ask a stylist in store (fires <code>store_handoff_clicked</code>).',
-  '"Change something" returns to the path\'s last step; <code>summary_viewed</code> fires with the configuration.']},
- {id:'US5',t:'Find my size',screens:['size'],s:'As a customer, I want a size from my height and waist, so I order the right size first time.',ac:[
-  'Size buttons lead with the letter and show the length\'s number under it; Short, Regular and Long are picked by height (under 168, 168-186, over 186 cm).',
-  'Find my size asks height and either a usual W size or a tape waist; W32 at 184 cm gives M, 48 Regular, from the live conversion.',
-  'The result selects length and size, says "Selected for you", and offers the next size up near a boundary.',
-  '<code>size_finder_opened</code>, <code>size_finder_result</code> and <code>size_finder_applied</code> fire; <code>size_chart_opened</code> fires on the chart.']},
- {id:'US6',t:'Bag and checkout',screens:['added'],s:'As a customer, I want to see what I added and go to checkout in one tap, so the order feels done.',ac:[
-  'Add to bag opens the bag: the item with colour, fit, details and size, a Custom Made pill when it applies, delivery and total.',
-  'Proceed to checkout is the main button and fires <code>checkout_clicked</code>; Continue shopping returns to the product page and keeps the bag.',
-  'The header Bag link opens the same view from any screen and fires <code>bag_opened</code>; an empty bag says so.']},
- {id:'US7',t:'Track the flow',screens:['added'],s:'As the PM, I want every step tracked, so I can read adoption, drop-off, delivery choice and returns per path.',ac:[
-  'All 20 spec events fire with the listed properties; every event carries device, market, colour, product_id and a timestamp.',
-  '<code>cml_add_to_bag</code> carries the configuration, size, length, path and made_to_order, and joins to the order ID for returns.',
-  'The Events tab in this panel shows each event as it fires, newest first.']}
+ {id:'US1',pr:'Must',t:'See the options exist',screens:['pdp'],s:'As a customer on the product page, I want to see that these trousers come in more fits and details, so I know before I open the drawer.',ac:[
+  'The product page is otherwise unchanged. The line under Select size and fit reads "Now in more fits and details".',
+  'Delivery & Returns opens with the live policy text: free delivery and returns, 30-day return policy.',
+  'Price shows €179 and does not change anywhere in the flow, whatever the details.']},
+ {id:'US2',pr:'Must',t:'Keep it as shown in one tap',screens:['choose'],s:'As a customer who just wants the trousers as shown, I want one tap to size, so buying stays as fast as today.',ac:[
+  'The drawer opens on "How do you want to choose?" with three cards. Keep it as shown is first and says it ships in 1-2 days.',
+  'Keep goes straight to size with the Straight fit\'s standard details. No screen in between.',
+  'The other two cards lead to I\'ll pick (fit step) and Help me choose (first question).']},
+ {id:'US3',pr:'Must',t:'Choose my fit',screens:['fit','leg'],s:'As a customer, I want to compare the three fits as photos and, where a fit has two legs, choose the leg, so I pick a shape without knowing tailoring terms.',ac:[
+  'Fit shows three photo cards with a one-line description each. The chosen fit\'s photo appears on the model.',
+  'Slim and Wide then show a leg step: Tapered or Straight, each card with its delivery (In stock, 1-2 days, or Custom Made, 1-2 weeks). Straight fit has no leg step.',
+  'Picking a fit loads that fit\'s standard details. If the customer has already changed a detail, their details are kept.',
+  'Back returns to the previous step with every choice kept.']},
+ {id:'US4',pr:'Must',t:'Choose my details',screens:['details'],s:'As a customer who knows what I want, I want each option as a picture with a plain outcome, so I can choose without knowing what a side adjuster is.',ac:[
+  'Waistband, hem and front each show two photo cards with a one-line outcome ("Small buckles on each hip. Adjust the waist without a belt").',
+  'The fit\'s standard choice is preselected and marked with a green Standard pill. Tapping Review without a change keeps the standard pair.',
+  'A tap updates the on-model photo within 300 ms; the close-up views (Front, Side, Pleat, Waistband, Hem) match the current choices.',
+  'The copy states the trade once: any change is Custom Made, 1-2 weeks; standard details arrive in 1-2 days. The bottom bar shows the delivery for the current choices.',
+  'If a photo fails to load, the card still shows its name and outcome and stays tappable.']},
+ {id:'US5',pr:'Should',t:'Help me choose',screens:['stylist','rec'],s:'As an unsure customer, I want three quick questions and a recommended pair with reasons, so I don\'t have to understand the options.',ac:[
+  'Three tapped questions, no typing. Question 2 takes one body answer and one height answer on separate rows; one of each moves on by itself, Next covers a single answer, "Nothing really" skips.',
+  'The pick comes from the rule table (Stylist rules tab) and changes at most 2 details from the fit\'s standard. The body answer sets the fit, the height answer sets leg and hem; a wedding keeps a plain hem.',
+  'Every detail the stylist chose shows a one-line reason. Details it left alone show no reason.',
+  'Each detail can be changed in place; a changed one shows "Your choice" and the photo updates. Looks good goes to the summary.',
+  'A Custom Made pick shows "Arrives in 1-2 weeks" and "Use the standard details (1-2 days)", which resets the three details in one tap. A ready-to-ship pick shows no extra box.',
+  'Start over returns to the first question and clears the answers.']},
+ {id:'US6',pr:'Must',t:'Review before size',screens:['summary'],s:'As a customer ordering a pair made for me, I want to see all my choices before I pick a size, so I catch a mistake before it is made.',ac:[
+  'The summary lists colour, fit and leg, front, waistband, hem and price. Any detail that differs from the fit\'s standard is tagged "your choice".',
+  'A Custom Made pair (any changed detail, or Slim straight or Wide straight) shows "Made with your choices", free delivery in 1-2 weeks and "Returns within 30 days." A standard pair shows no notice; the bottom bar says 1-2 business days.',
+  'Only a Custom Made pair shows the help line: Get help choosing (opens the stylist with the current pair kept) or ask a stylist in store (store link).',
+  '"Change something" returns to the path\'s last step with every choice kept.']},
+ {id:'US7',pr:'Should',t:'Find my size',screens:['size'],s:'As a customer, I want my size from my height and waist, so a pair made for me is the right size first time.',ac:[
+  'Size buttons lead with the letter (M) and show the length\'s number under it. Length (Short, Regular, Long) is chosen by height: under 168, 168-186, over 186 cm. Changing length keeps the letter and swaps the number.',
+  'Find my size asks height and either a usual W size or a tape waist. Example test case: 184 cm and W32 gives M, 48 Regular (live conversion table; re-check when the size guide changes).',
+  'The result selects length and size, says "Selected for you", and near the top of a size offers the next size up in one tap.',
+  'Both fields empty: "Add your height and waist", no result. Waist above the largest size: "Larger than our biggest size" with the WhatsApp stylist line. Wide fit: the result says it uses the Straight chart.',
+  'Add to bag stays disabled until a size is selected. The size chart opens inline for the chosen fit and length.']},
+ {id:'US8',pr:'Must',t:'Bag and checkout',screens:['added'],s:'As a customer, I want to see what I added and go straight to checkout, so I can pay without hunting for the bag.',ac:[
+  'Add to bag opens the bag: the item with photo, colour, fit, details and size, a Custom Made pill when it applies, delivery (1-2 business days or 1-2 weeks) and total.',
+  'Proceed to checkout is the main button. Continue shopping returns to the product page and keeps the bag. The header Bag opens the same view from any screen; an empty bag says so.',
+  'Checkout itself is out of scope for this story; the Custom Made delivery time must carry through to checkout and the order confirmation (separate story for the checkout team).']},
+ {id:'US9',x:true,pr:'Must',t:'Run it as a test with a kill switch',screens:['pdp','choose','added'],s:'As the PM, I want the new drawer behind a feature flag with 50/50 assignment, so I can run the A/B test and switch it off within a day if add-to-bag drops.',ac:[
+  'Assignment is per customer and sticky across sessions and devices where the customer is signed in; the variant is a property on every event.',
+  'Flag off returns the live yes/no flow with no trace of the new screens. Flag on shows the three-way choose screen.',
+  'The flag can be changed per market without a release. Target: off within one working day of the week-2 check (add to bag down 2+ points).',
+  'The size finder and the stylist are separate flags, so either can be switched off without losing the options.']},
+ {id:'US10',x:true,pr:'Should',t:'Usable on a phone and with a screen reader',screens:['choose','fit','leg','details','size'],s:'As a customer on a phone or using a screen reader, I want every option reachable and named, so I can order without a mouse or without seeing the pictures.',ac:[
+  'On a phone the drawer is a bottom sheet with the photo above; every step works at 390 px wide with no horizontal scroll and the main button always visible.',
+  'Every picture card is a button with a text name and outcome; the selected state uses a border and the Standard pill, not colour alone, and is exposed as aria-pressed.',
+  'All steps complete by keyboard alone: Tab reaches every card and button, Enter or Space selects, Escape closes the drawer.',
+  'Each on-model and close-up image has alt text that names the current fit and details.']},
+ {id:'US11',x:true,pr:'Must',t:'Track the flow',screens:['pdp','choose','fit','leg','details','stylist','rec','summary','size','added'],s:'As the PM, I want every step tracked, so I can read adoption, drop-off, delivery choice and returns per path and per variant.',ac:[
+  'The 20 events in the Events tab fire with the listed properties, once per action, at the moment the action happens. Base properties on every event: device, market, colour, product_id, variant, timestamp.',
+  'Key events and when they fire: cml_drawer_opened on Select size and fit; cml_path_selected on a path card; option_changed on any detail tap, with from and to; stylist_question_answered per answer; stylist_recommendation_shown with rules_fired; recommendation_accepted with the number of edits; summary_viewed with made_to_order; size_finder_applied; cml_add_to_bag with configuration, size, length, path and made_to_order; checkout_clicked; bag_opened; store_handoff_clicked.',
+  'cml_add_to_bag carries the order ID once the order is placed, so returns join back to the configuration.',
+  'Nothing fires before the customer has given analytics consent; events respect the consent choice in every EU market.',
+  'QA: the prototype\'s Events tab is the reference; each event there must appear in the live implementation with the same name and properties.']}
 ];
-const storyHtml=u=>`<div class="us"><div class="id">${u.id} · ${esc(u.t)}</div><div class="st">${esc(u.s)}</div><ul>${u.ac.map(a=>`<li>${a}</li>`).join('')}</ul></div>`;
+const storyHtml=u=>`<div class="us"><div class="id">${u.id} · ${esc(u.t)} <span class="pr ${u.pr==='Must'?'must':''}">${u.pr} for v1</span></div><div class="st">${esc(u.s)}</div><ul>${u.ac.map(a=>`<li>${a}</li>`).join('')}</ul></div>`;
 let showAllStories=false;
 function storiesHtml(key){
-  const here=STORIES.filter(u=>u.screens.includes(key));
-  if(showAllStories)return `<div class="note">All eight stories. Each acceptance criterion maps to a screen in this prototype or to an event in the Events tab, so QA can test against the prototype. Out of scope for v1: checkout, store booking, a surcharge, real Black and Navy photos. <button class="link" id="allStories" style="color:#fff">Show this screen only</button></div>`+STORIES.map(storyHtml).join('');
-  return `<div class="note" style="color:#9a9a95">User stor${here.length>1?'ies':'y'} for this screen. Each acceptance criterion maps to what you see here or to an event in the Events tab. <button class="link" id="allStories" style="color:#fff">Show all 8</button></div>`+here.map(storyHtml).join('');
+  const here=STORIES.filter(u=>u.screens.includes(key)&&!u.x),also=STORIES.filter(u=>u.screens.includes(key)&&u.x);
+  if(showAllStories)return `<div class="note">All eleven stories, in flow order. Must = v1 cannot ship without it; Should = ship in v1 if the sprint allows, otherwise next. Customer stories describe what the customer sees; events live in US11. Each acceptance criterion maps to a screen in this prototype or to an event in the Events tab, so QA can test against the prototype. Out of scope for v1: checkout, store booking, a surcharge, real Black and Navy photos. <button class="link" id="allStories" style="color:#fff">Show this screen only</button></div>`+STORIES.map(storyHtml).join('');
+  return `<div class="note" style="color:#9a9a95">User stor${here.length>1?'ies':'y'} for this screen. Each acceptance criterion maps to what you see here or to an event in the Events tab. <button class="link" id="allStories" style="color:#fff">Show all 11</button></div>`+here.map(storyHtml).join('')+(also.length?`<div class="note" style="color:#9a9a95;font-size:11px;border-bottom:0">Also applies here: ${also.map(u=>u.id+' '+esc(u.t)).join(' · ')}. See Show all 11.</div>`:'');
 }
 function treeHtml(){
   const layer=(k,t)=>`<div class="note"><b>${t}</b>${Object.entries(TREE[k]).map(([v,n])=>{const sets=[n.fit?LABEL.fit[n.fit[0]]+(TWO_LEGS(n.fit[0])?' '+LABEL.leg[n.fit[1]].toLowerCase():''):'',...Object.entries(n.set).map(([kk,vv])=>LABEL[kk][vv]),n.wideLeg?'Wide → straight leg':''].filter(Boolean).join(', ')||'no change';return `<div class="tr"><span>${esc(n.label)}</span><span>${esc(sets)}</span><i>${esc(n.src)}</i></div>`}).join('')}</div>`;
