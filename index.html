@@ -1,0 +1,618 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Help Me Choose prototype</title>
+<style>
+:root{
+  color-scheme:light;
+  --ink:#2D2E2C; --paper:#FFFFFF; --ground:#EFEFEF; --panel:#F6F6F6; --line:#E1E1E1;
+  --muted:#6F6F6F; --disabled:#C6C6C6; --black:#000; --accent:#8A5A1F; --accent-bg:#FBF4EA;
+  --ok:#2F6B3A; --ok-bg:#EEF5EF; --warn:#9A3B1B; --warn-bg:#FCEFEA;
+  --f:"Inter","Helvetica Neue",Arial,ui-sans-serif,system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{margin:0;height:100%}
+body{background:var(--paper);color:var(--ink);font-family:var(--f);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,a:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.banner{background:var(--ink);color:#fff;font-size:12px;text-align:center;padding:6px 16px;letter-spacing:.02em}
+.banner button{background:none;border:1px solid rgba(255,255,255,.5);color:#fff;border-radius:99px;padding:1px 10px;margin-left:10px;font-size:12px}
+header{height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;border-bottom:1px solid var(--line)}
+.logo{font-weight:600;letter-spacing:.12em;font-size:16px}
+.hicons{display:flex;gap:18px;font-size:13px;color:var(--muted)}
+.bag{position:relative}
+.bag b[hidden]{display:none}
+.bag b{position:absolute;top:-8px;right:-10px;background:var(--ink);color:#fff;border-radius:99px;font-size:10px;min-width:16px;height:16px;display:grid;place-items:center;font-weight:500}
+main{display:grid;grid-template-columns:minmax(0,1fr) 460px;height:calc(100vh - 56px - 30px)}
+.stage{position:relative;background:var(--ground);overflow:hidden}
+.stage img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;transition:opacity .35s}
+.stage img.cover{object-fit:cover;object-position:50% 20%}
+.stage .tag{position:absolute;left:20px;top:20px;background:rgba(255,255,255,.92);border-radius:99px;padding:6px 14px;font-size:13px}
+.stage .views{position:absolute;left:50%;bottom:20px;transform:translateX(-50%);display:flex;gap:6px;background:rgba(255,255,255,.92);padding:5px;border-radius:99px}
+.stage .views button{white-space:nowrap;border:0;background:none;border-radius:99px;padding:6px 14px;font-size:13px}
+.stage .views button[aria-pressed=true]{background:var(--ink);color:#fff}
+.stage .imgnote{position:absolute;right:16px;bottom:22px;font-size:11px;color:var(--muted);max-width:220px;text-align:right}
+aside.drawer{display:flex;flex-direction:column;border-left:1px solid var(--line);background:var(--paper);min-height:0}
+.dhead{display:flex;align-items:center;gap:10px;padding:14px 20px;border-bottom:1px solid var(--line);min-height:58px}
+.dhead h2{font-size:16px;font-weight:600;margin:0;flex:1}
+.iconbtn{border:1px solid var(--line);background:#fff;border-radius:50%;width:34px;height:34px;display:grid;place-items:center;font-size:16px;line-height:1}
+.dbody{flex:1;overflow:auto;padding:20px}
+.dfoot{border-top:1px solid var(--line);background:var(--panel);padding:14px 20px;display:flex;align-items:center;gap:14px}
+.price{font-weight:600}
+.deliv{font-size:13px;color:var(--muted)}
+.deliv.mfy{color:var(--accent)}
+.primary{background:var(--ink);color:#fff;border:0;border-radius:2px;padding:13px 22px;font-weight:500;margin-left:auto;min-height:46px;white-space:nowrap;flex-shrink:0}
+.primary:disabled{background:var(--disabled);cursor:not-allowed}
+.secondary{background:#fff;border:1px solid var(--line);border-radius:2px;padding:11px 18px;min-height:44px}
+.link{background:none;border:0;padding:0;text-decoration:underline;font-size:13px;color:var(--ink)}
+.muted{color:var(--muted)}
+.small{font-size:13px}
+h3{font-size:20px;font-weight:600;margin:0 0 6px}
+p{margin:0 0 12px}
+/* PDP */
+.pdp .title{display:flex;justify-content:space-between;font-weight:600;font-size:17px}
+.swatches{display:flex;gap:8px;margin:16px 0}
+.swatches span,.swatches button{width:58px;height:58px;border-radius:2px;background:var(--ground);border:1px solid var(--line);display:grid;place-items:center}
+.swatches span.on,.swatches button.on{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.swatches.sm{margin:6px 0 14px}.swatches.sm button{width:40px;height:40px}.swatches.sm i{height:26px;width:9px}
+.swatches i{display:block;width:12px;height:40px;border-radius:2px}
+.acc{border-top:1px solid var(--line);margin-top:18px}
+.acc div{display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--line);font-size:14px}
+/* choose cards */
+.cards{display:grid;gap:10px;margin-top:14px}
+.card{display:flex;gap:14px;align-items:center;text-align:left;width:100%;background:#fff;border:1px solid var(--line);border-radius:4px;padding:16px;min-height:72px}
+.card:hover{border-color:var(--ink)}
+.card .ico{width:40px;height:40px;border-radius:50%;background:var(--ground);display:grid;place-items:center;flex:none;font-size:18px}
+.card b{display:block;font-weight:600}
+.card span.s{font-size:13px;color:var(--muted)}
+.card.star{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.badge{display:inline-block;font-size:11px;background:var(--accent-bg);color:var(--accent);border-radius:99px;padding:1px 8px;margin-left:6px;font-weight:500}
+/* segmented */
+.seg{display:flex;background:var(--ground);border-radius:4px;padding:3px;gap:3px}
+.seg button{flex:1;border:0;background:none;border-radius:3px;padding:10px 6px;color:var(--muted);min-height:42px}
+.seg button[aria-pressed=true]{background:#fff;color:var(--ink);font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+/* details */
+.drow{margin-bottom:22px}
+.drow .lab{display:flex;justify-content:space-between;font-weight:600;margin-bottom:8px}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.fitopts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.fitopts.two{grid-template-columns:1fr 1fr}
+.fitopts .opt img{aspect-ratio:21/52;object-fit:cover;object-position:50% 0}
+.opt{border:1px solid var(--line);border-radius:4px;background:#fff;padding:8px;text-align:left;display:flex;flex-direction:column;gap:6px;min-height:44px}
+.opt img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:2px;background:var(--ground)}
+.opt b{font-size:14px;font-weight:600}
+.opt span{font-size:12px;color:var(--muted);line-height:1.35}
+.opt[aria-pressed=true]{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.opt:disabled{opacity:.45;cursor:not-allowed}
+.opt .std{font-size:11px;color:var(--muted)}
+/* chat */
+.chat{display:flex;flex-direction:column;gap:10px}
+.msg{max-width:86%;padding:10px 14px;border-radius:14px;font-size:14px;animation:in .25s ease}
+.bot{background:var(--panel);border-top-left-radius:4px;align-self:flex-start}
+.me{background:var(--ink);color:#fff;border-top-right-radius:4px;align-self:flex-end}
+.who{font-size:11px;color:var(--muted);margin:4px 0 -4px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.chip{border:1px solid var(--ink);background:#fff;border-radius:99px;padding:9px 16px;font-size:14px;min-height:42px}
+.chip:hover{background:var(--ink);color:#fff}
+.typing{display:inline-flex;gap:4px}
+.typing i{width:6px;height:6px;border-radius:50%;background:var(--muted);animation:blink 1s infinite}
+.typing i:nth-child(2){animation-delay:.2s}.typing i:nth-child(3){animation-delay:.4s}
+@keyframes blink{0%,100%{opacity:.25}50%{opacity:1}}
+@keyframes in{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+/* recommendation */
+.rec{border:1px solid var(--line);border-radius:6px;overflow:hidden;animation:in .3s ease}
+.rec .rhead{background:var(--panel);padding:12px 14px;font-size:14px}
+.ritem{display:grid;grid-template-columns:56px 1fr;gap:12px;padding:12px 14px;border-top:1px solid var(--line)}
+.ritem img{width:56px;height:56px;object-fit:contain;border-radius:2px;background:var(--ground)}
+.ritem .k{font-size:12px;color:var(--muted)}
+.ritem .v{font-weight:600}
+.ritem .why{font-size:13px;color:var(--ink);margin:2px 0 6px}
+.mini{display:flex;gap:6px;flex-wrap:wrap}
+.chip[aria-pressed=true]{background:var(--ground);box-shadow:inset 0 0 0 1px var(--ink);font-weight:600}
+.chip[aria-pressed=true]::before{content:'\2713  '}
+.chip.next{background:var(--ink);color:#fff;border-color:var(--ink);font-weight:600}
+.chipbreak{flex-basis:100%;height:0}
+.mini button{border:1px solid var(--line);background:#fff;border-radius:99px;padding:4px 12px;font-size:12px;min-height:32px}
+.mini button[aria-pressed=true]{border-color:var(--ink);background:var(--ink);color:#fff}
+.mini button:disabled{opacity:.4;cursor:not-allowed}
+.legpick{margin-top:10px;padding:10px 12px;border-left:3px solid var(--ink);background:var(--ground)}
+.legpick .q{font-size:13px;font-weight:600;margin-bottom:6px}
+/* notices */
+.notice{border-radius:4px;padding:12px 14px;font-size:13px;margin:12px 0}
+.notice.mfy{background:var(--accent-bg);color:#5a3a12}
+.notice.warn{background:var(--warn-bg);color:var(--warn)}
+.notice.ok{background:var(--ok-bg);color:var(--ok)}
+.notice b{display:block;margin-bottom:2px}
+.oq{display:inline-block;font-size:11px;border:1px dashed var(--accent);color:var(--accent);border-radius:3px;padding:0 6px;margin-left:4px}
+/* summary */
+.sumimgs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+.sumimgs img{width:100%;aspect-ratio:4/5;object-fit:contain;border-radius:2px;background:var(--ground)}
+table.sum{width:100%;border-collapse:collapse;font-size:14px}
+table.sum td{padding:9px 0;border-bottom:1px solid var(--line)}
+table.sum td:last-child{text-align:right;font-weight:600}
+table.sum .chg{color:var(--accent);font-size:11px;font-weight:500;margin-left:6px}
+/* size */
+.sizes{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:12px}
+.sizes button{border:1px solid var(--line);background:#fff;border-radius:2px;min-height:52px;line-height:1.2}.sizes button .small{font-size:11px;opacity:.7}.finder{border:1px solid var(--line);border-radius:4px;padding:14px;margin-top:10px}.fl{display:block;font-size:13px;margin-top:10px}.fl input,.fl select{display:block;width:100%;margin-top:4px;padding:10px;border:1px solid #8a8a8a;border-radius:2px;font:inherit;font-size:16px;line-height:1.3;min-height:46px;background:#fff;color:var(--ink);-webkit-text-fill-color:var(--ink);opacity:1;color-scheme:light;-webkit-appearance:none;appearance:none}.fl select{background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%232D2E2C' stroke-width='1.6'/%3E%3C/svg%3E") no-repeat right 12px center;padding-right:34px}.fl input::placeholder{color:#8a8a8a;-webkit-text-fill-color:#8a8a8a}.fl input:focus,.fl select:focus{outline:2px solid var(--ink);outline-offset:1px}.seg button .small{font-size:11px;font-weight:400}.chartwrap{max-width:100%;overflow-x:auto;margin-top:8px;border:1px solid var(--line)}.chart{border-collapse:collapse;font-size:12px;white-space:nowrap}.chart th,.chart td{padding:6px 8px;border-bottom:1px solid var(--line);text-align:center}.chart th span{font-weight:400;color:var(--muted)}.chart td:first-child,.chart th:first-child{text-align:left;position:sticky;left:0;background:#fff}
+.sizes button[aria-pressed=true]{background:var(--black);color:#fff;border-color:var(--black)}
+/* behind the scenes */
+.bts{position:fixed;left:16px;bottom:16px;width:min(420px,calc(100vw - 32px));max-height:46vh;background:#1d1e1c;color:#e9e9e6;border-radius:8px;box-shadow:0 10px 30px rgba(0,0,0,.3);display:none;flex-direction:column;z-index:30;font-size:12px}
+.bts.open{display:flex}
+.bts .bh{display:flex;gap:4px;padding:8px;border-bottom:1px solid #333}
+.bts .bh button{background:none;border:0;color:#aaa;padding:4px 10px;border-radius:99px}
+.bts .bh button[aria-pressed=true]{background:#333;color:#fff}
+.bts .bh .x{margin-left:auto}
+.bts .bb{overflow:auto;padding:10px 12px}
+.ev{font-family:ui-monospace,Menlo,monospace;border-bottom:1px solid #2e2e2e;padding:6px 0;white-space:pre-wrap;word-break:break-word}
+.ev b{color:#f3c98b;font-weight:500}
+aside.drawer,.dbody{min-width:0}
+.tr{display:grid;grid-template-columns:1fr 1.3fr;gap:2px 8px;padding:5px 0;border-top:1px solid #2e2e2e}.tr i{grid-column:1/-1;color:#9a9a95;font-style:normal;font-size:11px}.tt{width:100%;border-collapse:collapse;margin-top:6px;font-size:11px}.tt td,.tt th{text-align:left;padding:3px 4px;border-top:1px solid #2e2e2e;vertical-align:top}.tt th{color:#9a9a95;font-weight:500}
+.note{padding:6px 0;border-bottom:1px solid #2e2e2e;line-height:1.45}
+.note b{color:#f3c98b;font-weight:500}
+.fab{position:fixed;left:16px;bottom:16px;z-index:29;background:var(--ink);color:#fff;border:0;border-radius:99px;padding:10px 16px;font-size:13px;box-shadow:0 4px 14px rgba(0,0,0,.2)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+@media (max-width:820px){
+  main{grid-template-columns:1fr;grid-template-rows:42vh auto;height:auto}
+  aside.drawer{border-left:0;border-top:1px solid var(--line);min-height:58vh}
+  .dfoot{position:sticky;bottom:0;z-index:3}
+  .stage{position:sticky;top:0;z-index:4;height:42vh;border-bottom:1px solid var(--line)}
+  body.cfg main{grid-template-rows:36vh auto}
+  body.cfg .stage{height:36vh}
+  body.cfg .stage img{top:40px;height:calc(100% - 82px)}
+  body.cfg .stage .views{bottom:4px;max-width:calc(100% - 16px);overflow-x:auto;gap:2px}
+  body.cfg .stage .views button{padding:5px 8px;font-size:12px}
+  body.cfg .stage .tag{top:6px;padding:4px 10px}
+  .dfoot[hidden]{display:none}
+  .stage .imgnote{display:none}
+  .hicons span:not(.bag){display:none}
+  .fab{position:absolute;left:auto;right:12px;bottom:auto;top:112px;padding:7px 12px;font-size:12px}
+  .dbody{overflow:visible}
+  .stage .views button{padding:6px 10px}
+  .stage .tag{font-size:11px;left:12px;right:150px;top:12px}
+  body.fm-typing.cfg main{grid-template-rows:0 auto}
+  body.fm-typing .stage{height:0;min-height:0;overflow:hidden;border:0}
+  body.fm-typing .fab{display:none}
+}
+</style>
+</head>
+<body>
+<div class="banner">Concept prototype for the Custom Made Lite case. Not a live page. Images from the existing configurator.<button id="restart" type="button">Restart</button></div>
+<header><div class="logo">CUSTOM MADE LITE</div><div class="hicons"><span>Search</span><span>Account</span><span class="bag">Bag<b id="bagcount" hidden>1</b></span></div></header>
+<main>
+  <section class="stage" aria-label="Product image">
+    <img id="mainimg" alt="">
+    <div class="tag" id="tag"></div>
+    <div class="views" id="views" hidden></div>
+    <div class="imgnote" id="imgnote"></div>
+  </section>
+  <aside class="drawer" aria-live="polite">
+    <div class="dhead"><button class="iconbtn" id="back" aria-label="Back" hidden>&#8249;</button><h2 id="dtitle"></h2></div>
+    <div class="dbody" id="dbody"></div>
+    <div class="dfoot" id="dfoot"></div>
+  </aside>
+</main>
+<button class="fab" id="fab" type="button">Behind the scenes</button>
+<div class="bts" id="bts" role="region" aria-label="Behind the scenes">
+  <div class="bh"><button id="tabNotes" aria-pressed="true">Design notes</button><button id="tabEvents" aria-pressed="false">Tracking events <span id="evcount">0</span></button><button id="tabTree" aria-pressed="false">Stylist rules</button><button class="x" id="btsClose" aria-label="Close">&times;</button></div>
+  <div class="bb" id="btsBody"></div>
+</div>
+
+<script>
+(function(){
+let IMG='img/';
+const COL={sand:{label:'Sand',hex:'#e6dccb'},black:{label:'Black',hex:'#1b1b1b'},navy:{label:'Navy',hex:'#1c2032'}};
+const PIDS={sand:{'slim-tapered':'B6934','slim-straight':'B6936',straight:'B6935','wide-tapered':'B6939','wide-straight':'B3769'},black:{'slim-tapered':'B7334',straight:'B2149','wide-tapered':'B2248'},navy:{straight:'B6862'}};
+const swatches=(cls='')=>`<div class="swatches ${cls}" role="group" aria-label="Colour">${Object.entries(COL).map(([k,v])=>`<button class="${S.colour===k?'on':''}" data-col="${k}" aria-pressed="${S.colour===k}" aria-label="${v.label}" title="${v.label}"><i style="background:${v.hex}"></i></button>`).join('')}</div>`;
+function setColour(k){if(S.colour===k)return;const from=S.colour;S.colour=k;track('colour_changed',{from_value:from,to_value:k,step:S.step});render();}
+// Size guide on the live product pages, read 22 Nov 2026: B6934 (Slim, "Vigo") and B6935 (Straight, "Milano").
+// Each length has its own size numbers. Waist width (laid flat) is the same for Slim and Straight; inside leg differs.
+// The Wide fit pages (B3769, B6939) publish no measurements, so the chart says so instead of guessing.
+const LETTERS=['XXS','XS','S','M','M/L','L','XL','XXL','3XL','4XL'];
+const SIZE_GUIDE={
+  regular:{nums:[42,44,46,48,50,52,54,56,58,60],waist:[37,39,41,43,45,47,49,51,53,55],leg:{slim:[81,82,83,84,85,86,87,88,89,90],straight:[83,84,85,86,87,88,89,90,91,92]}},
+  short:{nums:[23,24,25,26,27,28,29,30],waist:[41,43,45,47,49,51,53,55],leg:{slim:[78.5,79.5,80.5,81.5,82.5,83.5,84.5,85.5],straight:[80.5,81.5,82.5,83.5,84.5,85.5,86.5,87.5]}},
+  long:{nums:[90,94,98,102,106,110,114,118],waist:[40,42,44,46,48,50,52,54],leg:{slim:[87,88,89,90,91,92,93,94],straight:[89,90,91,92,93,94,95,96]}}
+};
+const sizesFor=len=>{const g=SIZE_GUIDE[len],off=LETTERS.length-g.nums.length;return g.nums.map((n,i)=>[n,LETTERS[i+off],g.waist[i]]);};
+const legFor=(len,fit)=>(SIZE_GUIDE[len].leg[fit]||null);
+// UK/US trouser (W) size per Regular size, from the live size guide's conversion table.
+const US_W={42:26,44:28,46:30,48:32,50:34,52:36,54:38,56:40,58:42,60:44};
+const LEN_BY_H=h=>h<168?'short':h>186?'long':'regular';
+// Find my size. Waist: smallest size whose garment waist (2 x laid flat) is at least body waist + 2 cm ease.
+// The 2 cm ease is our assumption; it makes the measured route agree with the live W conversion (W32 body, 81 cm, gives 48).
+function findSize({h,waist,w,leg,fit}){
+  const len0=LEN_BY_H(h);let idx,edge=false;
+  if(w){idx=LETTERS.findIndex((t,i)=>US_W[SIZE_GUIDE.regular.nums[i]]>=w);}
+  else{const need=waist+2;const g=SIZE_GUIDE.regular.waist.map(x=>x*2);idx=g.findIndex(x=>x>=need);if(idx>0&&g[idx]-need<1)edge=true;}
+  if(idx<0)return {err:'big'};
+  let len=len0,legNote='';
+  if(leg&&SIZE_GUIDE.regular.leg[fit]){
+    const opts=['short','regular','long'].map(k=>{const g=SIZE_GUIDE[k],off=LETTERS.length-g.nums.length,j=idx-off;return j<0?null:{k,d:Math.abs(g.leg[fit][j]-leg),v:g.leg[fit][j]}}).filter(Boolean).sort((a,b)=>a.d-b.d);
+    if(opts[0].k!==len0){len=opts[0].k;legNote=`Your inside leg (${leg} cm) is closest to our ${opts[0].k[0].toUpperCase()+opts[0].k.slice(1)} length (${opts[0].v} cm), so we went with that over your height.`;}
+  }
+  const g=SIZE_GUIDE[len],off=LETTERS.length-g.nums.length,j=idx-off;
+  if(j<0){len='regular';}
+  const G=SIZE_GUIDE[len],o2=LETTERS.length-G.nums.length,k=idx-o2;
+  const next=idx+1<LETTERS.length&&idx+1-o2<G.nums.length?[LETTERS[idx+1],G.nums[idx+1-o2]]:null;
+  return {len,letter:LETTERS[idx],num:G.nums[k],legNote,edge:edge&&next,next,lenChanged:len!==len0,noShort:j<0};
+}
+const FIT_NAME={slim:'Slim (Vigo)',straight:'Straight (Milano)',wide:'Wide'};
+const DEFAULT={fit:'straight',leg:'straight',waist:'beltloops',hem:'plain',pleat:'flat'};
+const LABEL={
+  fit:{slim:'Slim',straight:'Straight',wide:'Wide'},
+  leg:{straight:'Straight leg',tapered:'Tapered leg'},
+  waist:{beltloops:'Belt loops',adjusters:'Side adjusters'},
+  hem:{plain:'Plain hem',turnup:'Turn-up 4 cm'},
+  pleat:{flat:'Flat front',pleat:'Single pleat'}
+};
+const OPT={
+  waist:[{v:'beltloops',img:'thumb-beltloops',d:'Classic. Wear with or without a belt.'},{v:'adjusters',img:'thumb-adjusters',d:'Small buckles on each hip. Adjust the waist without a belt.'}],
+  hem:[{v:'plain',img:'thumb-plain',d:'Clean finish, keeps the leg line long.'},{v:'turnup',img:'thumb-turnup',d:'A folded cuff that adds weight so the trouser falls straight.'}],
+  pleat:[{v:'flat',img:'thumb-flat',d:'Lies flat. Neat and versatile.'},{v:'pleat',img:'thumb-pleat',d:'A fold at the front that adds room through the thigh.'}]
+};
+// ship: 'days' = in stock on the live site (1-2 days); 'weeks' = made to order (1-2 weeks). Checked on the live fit drawer, 22-23 Nov 2026.
+const STOCK={'slim-tapered':{waist:'adjusters',pleat:'pleat',hem:'turnup',pid:'B6934',ship:'days'},'slim-straight':{waist:'beltloops',pleat:'flat',hem:'plain',pid:'B6936',ship:'weeks'},straight:{waist:'beltloops',pleat:'flat',hem:'plain',pid:'B6935',ship:'days'},'wide-tapered':{waist:'beltloops',pleat:'pleat',hem:'plain',pid:'B6939',ship:'days'},'wide-straight':{waist:'beltloops',pleat:'pleat',hem:'plain',pid:'B3769',ship:'weeks'}};
+const TWO_LEGS=f=>f==='slim'||f==='wide';
+const fitKey=c=>TWO_LEGS(c.fit)?c.fit+'-'+c.leg:c.fit;
+const stockOf=c=>STOCK[fitKey(c)];
+const FIT_DESC={slim:'Close to the leg, narrower opening.',straight:'Regular through the thigh, straight from knee to hem.',wide:'Roomier through the thigh with a fuller leg.'};
+const MODEL=c=>'m-'+(fitKey(c)==='slim-tapered'?'slim':fitKey(c))+'-'+K(c);
+const withFit=(c,fit,leg)=>({...c,fit,leg:TWO_LEGS(fit)?(leg||'tapered'):'straight'});
+// Picture for a fit or leg card: standard details if the customer hasn't changed any, otherwise their details.
+const fitPreview=(c,fit,leg)=>{const n=withFit(c,fit,leg);if(!detailsChanged(c)){const st=stockOf(n);n.waist=st.waist;n.pleat=st.pleat;n.hem=st.hem;}return n;};
+const K=c=>(c.waist==='adjusters'?'sa':'bl')+'-'+c.pleat+'-'+c.hem;
+const VIEW_IMG={front:c=>'r-front-'+K(c),side:c=>'r-side-'+K(c),pleat:c=>'r-zoom-front-'+c.pleat,waist:c=>'r-zoom-waist-'+(c.waist==='adjusters'?'sa':'bl'),hem:c=>'r-zoom-hem-'+c.hem};
+const VIEW_LABEL={front:'Front',side:'Side',pleat:'Front detail',waist:'Waistband',hem:'Hem'};
+const VIEW_FOR={pleat:'pleat',waist:'waist',hem:'hem'};
+const NOTES={
+  pdp:['PDP unchanged. The flow starts from the same "Select size and fit" button, so nothing changes for people who never open it.'],
+  choose:['Replaces today\'s yes/no "Want a different fit?". Three answers instead of two, so the stylist is offered to everyone, including people who used to skip fit.','"Keep it as shown" stays first and fastest: today\'s path to size is still one tap. Its card says it ships in 1-2 days, so the cost of changing something is visible before anyone starts.'],
+  fit:['Today\'s fit step, now with a photo per fit, built from the live product page\'s own fit photos.','Each fit card shows that fit with its own standard details, as the live site sells it. Once the customer has changed a detail, every card shows their details instead, so they compare shape only.','Picking a fit loads that fit\'s standard details (Slim: side adjusters, single pleat, turn-up), unless the customer has already changed a detail; then their details are kept.','Delivery follows the live site: a fit in stock with its standard details ships in 1-2 days. Any changed detail, or a fit the live site makes to order (Slim straight, Wide straight), is Custom Made: 1-2 weeks. The bottom bar always shows the delivery for the current choices.'],
+  leg:['Today\'s leg step, shown for Slim and Wide fit, as on the live site.','Each leg card shows its delivery, like the live fit drawer: tapered is in stock (1-2 days), straight is Custom Made (1-2 weeks).','Slim straight leg is the live B6936 (belt loops, flat front, plain hem). Its photo is from the live fit drawer.'],
+  details:['One extra screen for the "I\'ll pick" path. Three pairs of pictures, the fit\'s own details preselected, so Next keeps today\'s order.','The copy invites change ("Make them yours… at no extra cost") and states the trade once: any change is Custom Made, 1-2 weeks; standard details arrive in 1-2 days. A "Standard" tag marks the 1-2 day option in each pair.','Two choices per option only: research shows overload comes from hard choices, not option count.','No option is blocked: the live Slim fit already has a pleat. Which combinations Production can make is still an open question.'],
+  stylist:['Scripted rules, not a live AI: the stylist can only choose from the fixed list, so it can never invent options, prices or dates.','Three questions, all tappable. No typing.','Question 2 takes several concerns: one body answer (tight on thighs or seat, room around the middle) and one height answer (tall, shorter), on separate rows. Picking one from each moves on by itself; Next covers a single answer. The body answer sets the fit, the height answer sets leg and hem.','"Room around the middle" was added from research: 51% of Dutch adults are overweight (CBS 2023), and pleats with a higher rise are the standard tailoring advice. Wide is Suitsupply\'s high-rise fit.','Rules come from trend and tailoring sources (see the Stylist rules tab). The tailoring team would own them.'],
+  rec:['One finished pair, with a picture per detail and a reason for each detail the stylist chose. Details it left alone show no reason, so nothing reads as filler.','Each choice can be changed in place. The image and the bottom bar follow the last change.','A Custom Made pick shows its 1-2 week delivery, with "Use the standard details (1-2 days)" for anyone with a deadline (event rec_standard_details). A ready-to-ship pick shows no extra box: the bottom bar already says 1-2 days.','No store link here: it would undercut the pick.'],
+  summary:['New: today there is no summary before size. A Custom Made pair is made for one customer, so they check their choices here before ordering.','A Custom Made pair says so plainly: made with your choices, 1-2 weeks, and the return rule. "Can\'t be resold" is the company\'s cost, not the customer\'s concern, so it is left out. A standard pair shows no notice; like the live flow, the bottom bar carries delivery.','Return line uses Suitsupply\'s own Custom Made rule (UK FAQ: returns within 30 days of delivery, unworn, unaltered). Whether it applies to CM Lite in the EU is a question for Legal and Customer Service.','One way out, only for Custom Made pairs: "Get help choosing" first, so the decision can still happen online, then "ask a stylist in store" (events summary_to_stylist, store_handoff_clicked). Showrooms lift total sales, but a store link mid-flow invites putting the decision off.','Price stays at €179 whatever the details. Whether options carry a surcharge is an open question for Pricing.'],
+  size:['Today\'s size step, now with a back arrow and a one-line recap of every choice, colour included.','Letter first: each button shows the letter, with the length\'s own number under it (M is 48 in Regular, 24 in Short, 94 in Long), as on the live size guide. The numbers update when the length changes, so no extra line explains it.','Find my size asks two things: height picks the length (live thresholds), the waist picks the size. A usual W size uses the live UK/US conversion; a tape measurement uses the chart plus 2 cm ease, our assumption, which agrees with that conversion. The result selects the size for them.','Opening the chart or the finder are signals of size doubt; finder result and applied show whether it helped.'],
+  added:['End of flow. "Continue shopping" takes them back to the product page. Open the Tracking events tab to see what was captured.','Copy audit (23 Nov): every customer line was checked. Lines that repeated the screen, or were written for us rather than the customer, were cut.']
+};
+
+let S,events=[];
+function fresh(){S={step:'pdp',hist:[],path:null,cfg:{...DEFAULT},view:'model',colour:'sand',ans:{},chat:[],size:null,len:'regular',chart:false,warnShown:false,lastChange:null};}
+fresh();
+
+// ---------- helpers
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function detailsChanged(c){const st=stockOf(c);return c.waist!==st.waist||c.hem!==st.hem||c.pleat!==st.pleat}
+// Made to order = any detail differs from that fit's standard, or the fit itself is made to order on the live site.
+function madeForYou(c){return detailsChanged(c)||stockOf(c).ship==='weeks'}
+function delivery(c){
+  return madeForYou(c)?{mfy:true,days:14,text:'Custom Made · free delivery in 1-2 weeks'}:{mfy:false,days:2,text:'Free delivery in 1-2 business days'};
+}
+function dateIn(n){const d=new Date();d.setDate(d.getDate()+n);return d.toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'});}
+function fitText(c){return LABEL.fit[c.fit]+' fit'+(TWO_LEGS(c.fit)?' · '+LABEL.leg[c.leg]:'');}
+function track(name,props){
+  const e={event:name,...props,device:innerWidth<820?'mobile':'desktop',market:'NL',colour:S.colour,product_id:(PIDS[S.colour]||{})[fitKey(S.cfg)]||'n/a',ts:new Date().toISOString().slice(11,19)};
+  events.push(e);$('evcount').textContent=events.length;if(btsTab==='events')renderBts();
+}
+function cfgProps(){return {...S.cfg,details_changed:detailsChanged(S.cfg),made_to_order:madeForYou(S.cfg),changed_count:['waist','hem','pleat'].filter(k=>S.cfg[k]!==stockOf(S.cfg)[k]).length};}
+function go(step){S.hist.push(S.step);S.step=step;render();}
+function back(){if(!S.hist.length)return;S.step=S.hist.pop();render();}
+function setOpt(k,v,source){
+  if(S.cfg[k]===v)return;
+  const from=S.cfg[k],wasStd=!detailsChanged(S.cfg);S.cfg[k]=v;
+  if(k==='fit')S.cfg.leg=TWO_LEGS(v)?'tapered':'straight';
+  // Untouched details follow the product, as on the live site (each fit is its own product).
+  // Details the customer already changed are kept.
+  if((k==='fit'||k==='leg')&&wasStd){const st=stockOf(S.cfg);S.cfg.waist=st.waist;S.cfg.pleat=st.pleat;S.cfg.hem=st.hem;}
+  S.view='model';
+  track('option_changed',{option:k,from_value:from,to_value:v,source});
+  render();
+}
+
+// ---------- stage
+function renderStage(){
+  const img=$('mainimg');let src,cover=false,alt;
+  if(S.view==='model'){if(S.step==='pdp'||S.step==='choose'){src='model';cover=true;alt='Straight leg suit trousers in '+COL[S.colour].label.toLowerCase()+', on model';}else{src=MODEL(S.cfg);alt=COL[S.colour].label+', '+fitText(S.cfg)+', '+LABEL.pleat[S.cfg.pleat]+', '+LABEL.waist[S.cfg.waist]+', '+LABEL.hem[S.cfg.hem]+', on model';}}
+  else{src=VIEW_IMG[S.view](S.cfg);alt=VIEW_LABEL[S.view]+' view: '+LABEL.pleat[S.cfg.pleat]+', '+LABEL.waist[S.cfg.waist]+', '+LABEL.hem[S.cfg.hem];}
+  src=IMG+src;
+  if(img.dataset.src!==src){img.style.opacity=0;setTimeout(()=>{img.src=src+'.jpg';img.dataset.src=src;img.onload=()=>img.style.opacity=1;},120);}
+  img.className=cover?'cover':'';img.alt=alt;
+  const prev=(S.colour==='navy'||(S.colour==='black'&&S.step!=='pdp'&&S.step!=='choose'))?' (colour preview)':'';
+  $('tag').textContent=S.step==='pdp'||S.step==='choose'?COL[S.colour].label+prev+' · Wrinkle-free 4-ply wool':COL[S.colour].label+prev+' · '+fitText(S.cfg)+' · '+LABEL.pleat[S.cfg.pleat]+' · '+LABEL.waist[S.cfg.waist]+' · '+LABEL.hem[S.cfg.hem];
+  const showViews=!['pdp','choose'].includes(S.step);
+  const v=$('views');v.hidden=!showViews;
+  if(showViews){v.innerHTML=[['model','On model'],['front','Front'],['side','Side'],['pleat','Pleat'],['waist','Waistband'],['hem','Hem']].map(([k,l])=>`<button aria-pressed="${S.view===k}" data-view="${k}">${l}</button>`).join('');}
+  let note='';
+  if(S.view==='model'&&!['pdp','choose'].includes(S.step)){const st=stockOf(S.cfg);note='';}
+  else if(S.view!=='model')note='';
+  if(S.colour!=='sand'&&!['pdp','choose'].includes(S.step))note=note||'';
+  $('imgnote').textContent=note;
+}
+
+// ---------- drawer screens
+function foot(btnLabel,onClick,{disabled=false,hidePrice=false}={}){
+  const d=delivery(S.cfg);
+  $('dfoot').innerHTML=`<div>${hidePrice?'':'<div class="price">€179</div>'}<div class="deliv ${d.mfy?'mfy':''}">${esc(d.text)}</div></div>`+(btnLabel?`<button class="primary" id="fbtn" ${disabled?'disabled':''}>${esc(btnLabel)}</button>`:'');
+  if(btnLabel)$('fbtn').onclick=onClick;
+}
+function head(title){$('dtitle').textContent=title;$('back').hidden=!S.hist.length||S.step==='added';}
+
+const screens={
+pdp(){
+  head('');
+  $('dbody').innerHTML=`<div class="pdp"><div class="title"><span>Straight Leg Suit Trousers</span><span>€179</span></div>
+  <div class="muted small">${COL[S.colour].label} · Wrinkle-Free 4-Ply Wool · Rogna, Italy</div>
+  ${swatches()}
+  <button class="primary" id="sel" style="width:100%;margin:0">Select size and fit</button>
+  <p class="small muted" style="text-align:center;margin-top:10px">✓ Free delivery in 1 - 2 business days · Now in more fits and details</p>
+  <div class="acc"><div>Size &amp; Fit<span>+</span></div><div>Details &amp; Care<span>+</span></div><div>Delivery &amp; Returns<span>+</span></div></div></div>`;
+  $('dfoot').innerHTML='';
+  $('sel').onclick=()=>{track('cml_drawer_opened',{base_fit:'straight',colour:S.colour});go('choose');};
+},
+choose(){
+  head('How do you want to choose?');
+  $('dbody').innerHTML=`<p class="muted small">These trousers come in 3 fits and can be made with your choice of details.</p>
+  <div class="cards">
+   <button class="card" data-p="keep"><span class="ico">✓</span><span><b>Keep it as shown</b><span class="s">Straight fit, flat front, belt loops, plain hem. Pick your size. Ships in 1-2 days.</span></span></button>
+   <button class="card star" data-p="stylist"><span class="ico">✦</span><span><b>Help me choose <span class="badge">3 quick questions</span></b><span class="s">Tell us what they're for. Our stylist suggests the fit and details.</span></span></button>
+   <button class="card" data-p="pick"><span class="ico">⇄</span><span><b>I'll pick my fit and details</b><span class="s">Choose fit, waistband, hem and front yourself.</span></span></button>
+  </div>`;
+  foot(null);
+  document.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{S.path=b.dataset.p;track('cml_path_selected',{path:S.path});
+    if(S.path==='keep'){S.cfg={...DEFAULT};go('size');}
+    else if(S.path==='pick'){S.cfg={...DEFAULT};S.view='model';go('fit');}
+    else{S.cfg={...DEFAULT};S.ans={};S.recReady=false;go('stylist');}});
+  bindStore();
+},
+fit(){
+  head('Choose your fit');
+  const c=S.cfg;
+  $('dbody').innerHTML=`<div class="fitopts" role="group" aria-label="Fit">${['slim','straight','wide'].map(f=>`<button class="opt" aria-pressed="${c.fit===f}" data-fit="${f}"><img src="${IMG+MODEL(fitPreview(c,f,c.fit===f?c.leg:'tapered'))}.jpg" alt=""><b>${LABEL.fit[f]} Fit</b><span>${FIT_DESC[f]}</span></button>`).join('')}</div>
+  <p class="small muted" style="margin-top:12px">${detailsChanged(c)?`Every fit is shown with your details (${LABEL.waist[c.waist].toLowerCase()}, ${LABEL.pleat[c.pleat].toLowerCase()}, ${LABEL.hem[c.hem].toLowerCase()}), so only the shape changes.`:''} You can change the details next.</p>`;
+  document.querySelectorAll('[data-fit]').forEach(b=>b.onclick=()=>setOpt('fit',b.dataset.fit,'fit'));
+  foot('Next',()=>go(TWO_LEGS(S.cfg.fit)?'leg':'details'));
+},
+leg(){
+  head('Choose your leg');
+  $('dbody').innerHTML=`<div class="fitopts two" role="group" aria-label="Leg">${['tapered','straight'].map(l=>`<button class="opt" aria-pressed="${S.cfg.leg===l}" data-leg="${l}"><img src="${IMG+MODEL(fitPreview(S.cfg,S.cfg.fit,l))}.jpg" alt=""><b>${LABEL.leg[l]}</b><span>${STOCK[S.cfg.fit+'-'+l].ship==='weeks'?'Custom Made, 1-2 weeks':'In stock, 1-2 days'}</span></button>`).join('')}</div>
+  <p class="small muted" style="margin-top:14px">Tapered narrows from the knee. Straight stays the same width to the hem.</p>`;
+  document.querySelectorAll('[data-leg]').forEach(b=>b.onclick=()=>setOpt('leg',b.dataset.leg,'leg'));
+  foot('Next',()=>go('details'));
+},
+details(){
+  head('Choose your details');
+  const c=S.cfg;
+  const row=(k,title)=>`<div class="drow"><div class="lab"><span>${title}</span><span class="small muted">${LABEL[k][c[k]]}</span></div><div class="pair">${OPT[k].map(o=>{
+    return `<button class="opt" aria-pressed="${c[k]===o.v}" data-k="${k}" data-v="${o.v}"><img src="${IMG+o.img}.jpg" alt=""><b>${LABEL[k][o.v]}</b><span>${o.d}</span>${o.v===stockOf(c)[k]?'<span class="std">Standard</span>':''}</button>`}).join('')}</div></div>`;
+  $('dbody').innerHTML=`<div class="drow"><div class="lab"><span>Colour</span><span class="small muted">${COL[S.colour].label}</span></div>${swatches('sm')}</div><p class="small"><b>Make them yours.</b> Choose your waistband, front and hem at no extra cost. ${stockOf(c).ship==='weeks'?'This fit is Custom Made and arrives in 1-2 weeks.':'Any change makes your pair Custom Made, arriving in 1-2 weeks. Keep the standard details and it arrives in 1-2 days.'}</p>${row('waist','Waistband')}${row('hem','Hem')}${row('pleat','Front')}`;
+  document.querySelectorAll('.opt[data-k]').forEach(b=>b.onclick=()=>setOpt(b.dataset.k,b.dataset.v,'details'));
+  foot('Review',()=>go('summary'));
+},
+stylist(){
+  head('Help me choose');
+  renderChat();
+},
+summary(){
+  head('Your trousers');
+  const c=S.cfg,d=delivery(c);
+  const r=(k,l,val)=>`<tr><td>${l}</td><td>${esc(val)}${(k&&k!=='fit'&&c[k]!==stockOf(c)[k])?`<span class="chg">${S.path==='stylist'&&S.recCfg&&S.recCfg[k]===c[k]?"stylist's pick":'your choice'}</span>`:''}</td></tr>`;
+  $('dbody').innerHTML=`<div class="sumimgs"><img src="${IMG+MODEL(c)}.jpg" alt="Your trousers on model" style="object-fit:cover;object-position:50% 0"><img src="${IMG+VIEW_IMG.front(c)}.jpg" alt="Front view of your trousers"><img src="${IMG+VIEW_IMG.side(c)}.jpg" alt="Side view of your trousers"></div>
+  <table class="sum"><tr><td>Colour</td><td>${COL[S.colour].label}</td></tr>${r('fit','Fit',fitText(c))}${r('pleat','Front',LABEL.pleat[c.pleat])}${r('waist','Waistband',LABEL.waist[c.waist])}${r('hem','Hem',LABEL.hem[c.hem])}<tr><td>Price</td><td>€179</td></tr></table>
+  ${madeForYou(c)?`<div class="notice mfy"><b>Made with your choices</b>Please check them above before you pick a size. Free delivery in 1-2 weeks. Returns within 30 days, unworn and unaltered.</div>`:''}
+  <p class="small"><button class="link" id="edit">Change something</button></p>${madeForYou(c)?`<p class="small muted" style="margin-top:10px">Not sure about these details? ${S.path==='stylist'?'':'<button class="link" id="toStylist">Get help choosing (3 quick questions)</button> or '}<button class="link" data-store>${S.path==='stylist'?'Ask a stylist in store':'ask a stylist in store'}</button></p>`:''}`;
+  $('edit').onclick=()=>go(S.path==='stylist'?'stylist':'details');
+  const ts=$('toStylist');if(ts)ts.onclick=()=>{track('summary_to_stylist',{...cfgProps(),from_path:S.path});S.path='stylist';track('cml_path_selected',{path:'stylist',source:'summary'});S.cfg={...DEFAULT};S.ans={};S.recReady=false;S.view='model';go('stylist');};
+  bindStore();
+  track('summary_viewed',cfgProps());
+  foot('Choose size',()=>go('size'));
+},
+size(){
+  head('Select your size');
+  const c=S.cfg,L=S.len||'regular';
+  const LENS=[['short','Short','under 168 cm'],['regular','Regular','168-186 cm'],['long','Long','over 186 cm']];
+  const SZ=sizesFor(L),LEG=legFor(L,c.fit),LL=LENS.find(x=>x[0]===L)[1];
+  if(S.size&&!SZ.some(([n])=>n===S.size))S.size=null;
+  const F=S.fm||{},R=S.fr;
+  const finder=S.finder?`<div class="finder" id="finder">
+    <p class="small" style="margin:0 0 10px"><b>Find my size</b> <span class="muted">· takes 30 seconds, uses the live size guide</span></p>
+    <label class="fl">Your height (cm)<input id="fmH" inputmode="numeric" type="number" min="140" max="215" value="${F.h||''}" placeholder="e.g. 180"></label>
+    <div class="seg" role="group" aria-label="Waist" style="margin:10px 0 8px">${[['w','My usual trouser size'],['cm','Measure my waist']].map(([k,l])=>`<button aria-pressed="${(F.m||'w')===k}" data-fm="${k}">${l}</button>`).join('')}</div>
+    ${(F.m||'w')==='w'?`<label class="fl">Waist size in jeans or chinos (W)<select id="fmW"><option value="">Choose</option>${[26,27,28,29,30,31,32,33,34,36,38,40,42,44].map(w=>`<option ${+F.w===w?'selected':''}>${w}</option>`).join('')}</select></label>`:`<label class="fl">Waist, around where your trousers sit (cm)<input id="fmC" inputmode="numeric" type="number" min="60" max="130" value="${F.cm||''}" placeholder="e.g. 84"></label><p class="small muted" style="margin:4px 0 0">Measure over your shirt, tape snug but not tight.</p>`}
+    <button class="secondary" id="fmGo" style="margin-top:12px;width:100%">Find my size</button>
+    ${R?(R.err?`<div class="notice warn" role="status"><b>${R.err==='big'?'Larger than our biggest size':'Add your height and waist'}</b>${R.err==='big'?'Our largest is 4XL (60). A stylist on WhatsApp can help you find another option.':'We need both to suggest a size.'}</div>`:`<div class="notice ok" role="status"><span class="small">For ${esc(String(F.h))} cm, ${(F.m||'w')==='w'?'W'+esc(String(F.w)):esc(String(F.cm))+' cm waist'}${F.leg?', '+esc(String(F.leg))+' cm inside leg':''}</span><b>Your size: ${R.letter}, size ${R.num} in ${LENS.find(x=>x[0]===R.len)[1]}</b>${R.legNote||''}${R.noShort?' Short starts at S, so we kept Regular.':''}${R.edge?` You're close to the top of ${R.letter}. If you like room at the waist, go one size up.`:''}${c.fit==='wide'?' Wide has no published measurements, so this is based on the Straight chart.':''}<br><b style="display:inline;margin:0">✓ Selected for you below.</b>${R.edge?` <button class="link" id="fmNext">Take ${R.next[0]} (${R.next[1]}) instead</button>`:''}</div>`):''}
+  </div>`:'';
+  $('dbody').innerHTML=`<p class="small muted">${COL[S.colour].label} · ${esc(fitText(c))} · ${LABEL.pleat[c.pleat]} · ${LABEL.waist[c.waist]} · ${LABEL.hem[c.hem]}</p>
+  <p style="margin:12px 0 0"><button class="secondary" id="finderBtn" aria-expanded="${!!S.finder}" style="width:100%">${S.finder?'Hide size finder':'Not sure? Find my size'}</button></p>
+  ${finder}
+  <div class="lab small" style="margin:14px 0 6px"><b>Length</b> <span class="muted">· by your height</span></div>
+  <div class="seg" role="group" aria-label="Length">${LENS.map(([k,l,h])=>`<button aria-pressed="${L===k}" data-len="${k}">${l}<br><span class="small">${h}</span></button>`).join('')}</div>
+  <div class="lab small" style="margin:16px 0 0"><b>Size</b></div>
+  <div class="sizes">${SZ.map(([n,t])=>`<button aria-pressed="${S.size===n}" data-s="${n}" aria-label="${t}, size ${n}"><b>${t}</b><br><span class="small">${n}</span></button>`).join('')}</div>
+  <p class="small" style="margin-top:12px"><button class="link" id="chartBtn" aria-expanded="${!!S.chart}">${S.chart?'Hide size chart':'Size chart'}</button></p>
+  ${S.chart?(LEG?`<div class="chartwrap"><table class="chart"><tr><th>${LL} size</th>${SZ.map(([n,t])=>`<th>${t}<br><span>${n}</span></th>`).join('')}</tr><tr><td>Waist, laid flat (cm)</td>${SZ.map(([n,t,w])=>`<td>${w}</td>`).join('')}</tr><tr><td>Inside leg (cm)</td>${LEG.map(i=>`<td>${i}</td>`).join('')}</tr></table></div><p class="small muted">${FIT_NAME[c.fit]} fit, ${LL} length. Double the waist width for your full waist.</p>`:`<p class="small muted" style="margin-top:8px">Suitsupply doesn't publish measurements for the Wide fit yet, so there is no chart here. Use the size finder, or ask a stylist on WhatsApp.</p>`):''}`;
+  const save=()=>{if(!S.finder)return;const v=id=>{const e=$(id);return e?e.value:undefined};S.fm={...F,h:v('fmH'),w:v('fmW')??F.w,cm:v('fmC')??F.cm,leg:v('fmL')??F.leg};};
+  $('finderBtn').onclick=()=>{S.finder=!S.finder;if(S.finder)track('size_finder_opened',{length:L,size_selected:S.size});render();};
+  if(S.finder){
+    document.querySelectorAll('#finder input,#finder select').forEach(el=>{el.addEventListener('focus',()=>{document.body.classList.add('fm-typing');setTimeout(()=>el.scrollIntoView({block:'center'}),250);});el.addEventListener('blur',()=>setTimeout(()=>{if(!document.activeElement||!document.activeElement.closest('#finder'))document.body.classList.remove('fm-typing')},100));});
+    document.querySelectorAll('[data-fm]').forEach(b=>b.onclick=()=>{save();S.fm.m=b.dataset.fm;S.fr=null;render();});
+    $('fmGo').onclick=()=>{save();const m=S.fm.m||'w',h=+S.fm.h,w=+S.fm.w,cm=+S.fm.cm,leg=+S.fm.leg||0;
+      if(!h||(m==='w'?!w:!cm)){S.fr={err:'missing'};render();const n=document.querySelector('#finder .notice');if(n)n.scrollIntoView({block:'nearest'});return;}
+      S.fr=findSize({h,w:m==='w'?w:0,waist:cm,leg,fit:c.fit==='wide'?'straight':c.fit});
+      track('size_finder_result',S.fr.err?{error:S.fr.err,method:m}:{method:m,used_inside_leg:!!leg,length:S.fr.len,size:S.fr.num,letter:S.fr.letter,length_differs_from_height:S.fr.lenChanged});if(!S.fr.err){S.len=S.fr.len;S.size=S.fr.num;track('size_finder_applied',{length:S.fr.len,size:S.fr.num,auto:true});}render();const n=document.querySelector('#finder .notice');if(n)n.scrollIntoView({block:'nearest',behavior:'smooth'});};
+    if($('fmNext'))$('fmNext').onclick=()=>{track('size_finder_applied',{length:S.fr.len,size:S.fr.next[1],auto:false,size_up:true});S.size=S.fr.next[1];S.fr={...S.fr,edge:false,num:S.fr.next[1],letter:S.fr.next[0]};render();};
+  }
+  document.querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>{save();S.size=+b.dataset.s;render();});
+  document.querySelectorAll('[data-len]').forEach(b=>b.onclick=()=>{if(S.len===b.dataset.len)return;save();track('length_selected',{from_value:L,to_value:b.dataset.len});const prev=SZ.find(([n])=>n===S.size);S.len=b.dataset.len;const match=prev&&sizesFor(S.len).find(([,t])=>t===prev[1]);S.size=match?match[0]:null;render();});
+  $('chartBtn').onclick=()=>{save();S.chart=!S.chart;if(S.chart)track('size_chart_opened',{size_selected:S.size});render();};
+  const cur=SZ.find(([n])=>n===S.size);
+  foot('Add to bag',()=>{track('cml_add_to_bag',{...cfgProps(),size:S.size,letter_size:cur&&cur[1],length:L,path:S.path});$('bagcount').hidden=false;go('added');},{disabled:!S.size});
+},
+added(){
+  head('Added to bag');
+  const d=delivery(S.cfg);
+  $('dbody').innerHTML=`<div class="notice ok"><b>Added to your bag</b>${esc(fitText(S.cfg))}, ${LABEL.pleat[S.cfg.pleat].toLowerCase()}, ${LABEL.waist[S.cfg.waist].toLowerCase()}, ${LABEL.hem[S.cfg.hem].toLowerCase()}. Size ${(sizesFor(S.len||'regular').find(([n])=>n===S.size)||[,''])[1]} (${S.size}, ${S.len||'regular'} length).</div>
+  <p class="small muted">${esc(d.text)}</p>
+  <button class="secondary" id="again" style="width:100%">Continue shopping</button>`;
+  $('again').onclick=restart;
+  $('dfoot').innerHTML='<span class="small muted">Open "Behind the scenes" to see the events this order fired.</span>';
+}
+};
+function bindStore(){document.querySelectorAll('[data-store]').forEach(b=>b.onclick=()=>{track('store_handoff_clicked',{step:S.step});b.outerHTML='<span class="small">Store booking would open here.</span>';});}
+
+
+// ---------- stylist
+const Q=[
+ {id:'occasion',text:"Hi, I'm your stylist. What are these trousers mainly for?",a:[['work','Work'],['wedding','Wedding or event'],['everyday','Everyday smart']]},
+ {id:'worry',multi:true,text:'Anything trousers usually get wrong for you? Pick any that apply.',a:[['thighs','Tight on thighs or seat'],['tall',"I'm tall"],['short',"I'm on the shorter side"],['middle','Room around the middle'],['none','Nothing really']]},
+ {id:'belt',text:'Last one: do you like wearing a belt?',a:[['belt','Yes, I wear a belt'],['nobelt',"I'd rather not"]]}
+];
+const WORRY_GROUP={thighs:'body',middle:'body',tall:'height',short:'height'};
+const WORRY_COMBOS=['none','thighs','middle','tall','short','thighs+tall','thighs+short','middle+tall','middle+short'];
+function ansLabel(q,v){return String(v).split('+').sort((a,b)=>(WORRY_GROUP[a]==='body'?0:1)-(WORRY_GROUP[b]==='body'?0:1)).map(x=>(q.a.find(y=>y[0]===x)||[,x])[1]).join(' · ');}
+function nextQ(){return Q.find(q=>!(q.id in S.ans)&&(!q.when||q.when(S.ans)));}
+function renderChat(){
+  let html='<div class="chat">';
+  let qi=0;
+  for(const q of Q){ if(q.when&&!q.when(S.ans))continue; if(!(q.id in S.ans))break;
+    html+=`<div class="who">Stylist</div><div class="msg bot">${esc(q.text)}</div><div class="msg me">${esc(ansLabel(q,S.ans[q.id]))}</div>`;qi++;}
+  const q=nextQ();
+  if(q){const sel=q.multi?(S.multi||[]):[];html+=`<div class="who">Stylist</div><div class="msg bot">${esc(q.text)}</div><div class="chips">${(q.multi?['body','height',undefined].map(g=>q.a.filter(([v])=>WORRY_GROUP[v]===g)).filter(r=>r.length).map(r=>r.map(x=>x)).reduce((acc,r,i)=>acc.concat(i?[['__br']]:[],r),[]):q.a).map(([v,l])=>v==='__br'?'<span class="chipbreak"></span>':`<button class="chip" data-a="${v}"${q.multi?` aria-pressed="${sel.includes(v)}"`:''}>${esc(l)}</button>`).join('')}${q.multi&&sel.length?'<button class="chip next" id="multiNext">Next →</button>':''}</div>`;}
+  else if(!S.recReady){html+=`<div class="who">Stylist</div><div class="msg bot"><span class="typing" aria-label="Stylist is thinking"><i></i><i></i><i></i></span></div>`;
+    if(!S.thinking){S.thinking=true;setTimeout(()=>{S.thinking=false;if(S.step!=='stylist'||nextQ()||S.recReady)return;recommend();S.recReady=true;render();},900);}}
+  else{html+=`<div class="who">Stylist</div><div class="msg bot">Here's what I'd make for you. Change anything you like.</div>`+recCard();}
+  html+='</div>';
+  $('dbody').innerHTML=html;$('dbody').scrollTop=1e5;if(innerWidth<820)scrollTo(0,document.body.scrollHeight);
+  const commit=(q,val,type)=>{S.ans[q.id]=val;S.multi=[];
+    track('stylist_question_answered',{question_id:q.id,answer:val,step_number:Object.keys(S.ans).length,input_type:type});
+    if(!nextQ())S.recReady=false;renderChat();};
+  document.querySelectorAll('[data-a]').forEach(b=>b.onclick=()=>{
+    const q=nextQ(),v=b.dataset.a;
+    if(!q.multi||v==='none')return commit(q,v,q.multi?'multi_chip':'chip');
+    // One answer per group (height, body): tapping another in the same group replaces it; tapping again removes it.
+    let sel=(S.multi||[]).slice();
+    if(sel.includes(v))sel=sel.filter(x=>x!==v);else{sel=sel.filter(x=>WORRY_GROUP[x]!==WORRY_GROUP[v]);sel.push(v);}
+    S.multi=sel;
+    if(new Set(sel.map(x=>WORRY_GROUP[x])).size===2)return commit(q,sel.join('+'),'multi_chip');
+    renderChat();
+  });
+  const mn=$('multiNext');if(mn)mn.onclick=()=>commit(nextQ(),(S.multi||[]).join('+'),'multi_chip');
+  if(S.recReady&&!nextQ()){
+    document.querySelectorAll('.mini [data-k]').forEach(b=>b.onclick=()=>setOpt(b.dataset.k,b.dataset.v,'stylist'));
+    const ok=$('recok');if(ok)ok.onclick=()=>go('summary');
+    const fast=$('recFast');if(fast)fast.onclick=()=>{const st=stockOf(S.cfg);track('rec_standard_details',{...cfgProps()});S.cfg.waist=st.waist;S.cfg.pleat=st.pleat;S.cfg.hem=st.hem;S.view='model';render();};
+    const so=$('restartChat');if(so)so.onclick=()=>{S.ans={};S.recReady=false;S.cfg={...DEFAULT};S.view='model';render();};
+    bindStore();
+    foot('Looks good',()=>{track('recommendation_accepted',{...cfgProps(),edits:S.recEdits||0});go('summary');});
+  } else foot(null,null,{});
+}
+// Stylist decision tree. One source of truth: the prototype's logic and the "Stylist rules" panel both read it.
+// Order: the fit comes from the body answer, else the occasion. Start from that fit's standard details,
+// then apply occasion, then body, then belt. Later layers win.
+const TREE={
+ occasion:{
+  work:{label:'Work',fit:['straight','straight'],set:{},why:{fit:'Straight is the classic office line: clean, with a little room.'},src:'Office: straight to relaxed-straight; belt loops are the office default (Real Men Real Style 2026; Proper Cloth)'},
+  wedding:{label:'Wedding or event',fit:['straight','straight'],set:{waist:'adjusters',pleat:'pleat',hem:'plain'},why:{fit:'Straight is a timeless choice for an event.',waist:'Side adjusters give a clean waist for a dressed-up look, no belt needed.',pleat:'A single pleat is this year\'s dressier front and drapes well when you sit.',hem:'A plain hem is the more formal finish.'},src:'Wedding: side adjusters (King & Allen; Suitsupply trouser guide); single forward pleat (Nathan Tailors 2026); turn-ups read less formal (Gentleman\'s Gazette)'},
+  everyday:{label:'Everyday smart',fit:['wide','tapered'],set:{},why:{fit:'Fuller through the thigh, tapered to the ankle: this year\'s relaxed tailoring shape.',pleat:'A single pleat, standard on this fit, adds room and movement.'},src:'Relaxed tailoring: fuller thigh, straight or gently tapered (Nathan Tailors 2026); Lyst searches for pleated trousers up 110% (FashionUnited, 24 Jun 2026)'}
+ },
+ worry:{
+  thighs:{label:'Tight on thighs or seat',fit:['wide','tapered'],roomWhy:'Room through the thigh and seat.',set:{pleat:'pleat'},why:{fit:'Room through the thigh, tapered below the knee so it stays sharp.',pleat:'A pleat makes room for thigh and seat without a bigger waist.'},src:'Pleats fit larger quads and glutes (Nathan Tailors 2026)'},
+  tall:{label:"I'm tall",fit:null,set:{hem:'turnup'},wideLeg:'straight',why:{hem:'A 4 cm turn-up adds weight at the hem and breaks up a long leg.',leg:'A full straight leg suits a taller frame.'},src:'Turn-up gives long legs a horizontal break (Bonnegueule); wide suits 5\'11"+ (Real Men Real Style 2026)'},
+  short:{label:"I'm on the shorter side",fit:['slim','tapered'],set:{hem:'plain'},why:{fit:'A narrower leg keeps the line long on a shorter frame.',hem:'A plain hem keeps the leg looking longer. A turn-up shortens it.'},src:'Under 5\'9": closer to slim (Real Men Real Style 2026); bold turn-ups shorten the leg (Suitsupply trouser guide)'},
+  middle:{label:'Room around the middle',fit:['wide','tapered'],roomWhy:'High-rise, so it sits at your natural waist, with room through the hip and thigh.',set:{pleat:'pleat'},why:{fit:'High-rise, so it sits at your natural waist, with room through the hip and thigh.',pleat:'A single pleat gives room at the front, especially when you sit.'},src:'Pleats and a higher rise for a fuller middle (Gentleman\'s Gazette; The Rake); Wide fits are the high-rise fits (Suitsupply fit guide). 51% of Dutch adults are overweight (CBS 2023)'},
+  none:{label:'Nothing really',fit:null,set:{},why:{},src:'No change'}
+ },
+ belt:{
+  belt:{label:'Yes, I wear a belt',set:{waist:'beltloops'},why:{waist:'You like wearing a belt, so we keep belt loops.'},src:'If it has loops, wear a belt (King & Allen)'},
+  nobelt:{label:"I'd rather not",set:{waist:'adjusters'},why:{waist:'Side adjusters let you fine-tune the waist without a belt.'},src:'Adjusters tighten the waist about 5 cm, no belt (King & Allen)'}
+ }
+};
+function decide(a){
+  const o=TREE.occasion[a.occasion],bl=TREE.belt[a.belt],why={},fired=[];
+  // Several concerns allowed: one body answer and one height answer. Body sets the fit (comfort first); height sets leg and hem.
+  const ws=String(a.worry||'none').split('+');
+  const B=ws.find(x=>WORRY_GROUP[x]==='body'),H=ws.find(x=>WORRY_GROUP[x]==='height');
+  const bn=B&&TREE.worry[B],hn=H&&TREE.worry[H];
+  const [fit,leg]=(bn&&bn.fit)||(hn&&hn.fit)||o.fit;
+  const c={...DEFAULT,fit,leg};Object.assign(c,stockOf(c));delete c.pid;
+  const apply=(node,name)=>{if(!node)return;Object.assign(c,node.set);Object.assign(why,node.why);fired.push(name);};
+  apply(o,'occasion:'+a.occasion);
+  if(bn){apply(bn,'worry:'+B);}
+  if(hn){
+    Object.assign(c,hn.set);fired.push('worry:'+H);
+    for(const k in hn.why){if(k==='leg')continue;if(k==='fit'&&bn)continue;why[k]=hn.why[k];}
+    if(hn.wideLeg&&c.fit==='wide'){c.leg=hn.wideLeg;why.fit=(bn&&bn.roomWhy?bn.roomWhy:(why.fit||''))+' '+hn.why.leg;}
+    if(H==='short'&&bn){why.fit=(bn.roomWhy||why.fit||'')+' Tapered below the knee keeps the line long on a shorter frame.';}
+  }
+  // Exception: at a wedding or event the formal plain hem beats the tall turn-up.
+  if(a.occasion==='wedding'&&c.hem==='turnup'){c.hem='plain';why.hem='A plain hem is the more formal finish for an event. You can still add a turn-up.';fired.push('wedding_hem_override');}
+  apply(bl,'belt:'+a.belt);
+  return {c,why,fired};
+}
+function recommend(){
+  const {c,why,fired}=decide(S.ans);
+  S.cfg=c;S.recCfg={...c};S.why=why;S.view='model';S.recEdits=0;
+  track('stylist_recommendation_shown',{...cfgProps(),rules_fired:fired.join(',')});
+}
+function treeHtml(){
+  const layer=(k,t)=>`<div class="note"><b>${t}</b>${Object.entries(TREE[k]).map(([v,n])=>{const sets=[n.fit?LABEL.fit[n.fit[0]]+(TWO_LEGS(n.fit[0])?' '+LABEL.leg[n.fit[1]].toLowerCase():''):'',...Object.entries(n.set).map(([kk,vv])=>LABEL[kk][vv]),n.wideLeg?'Wide → straight leg':''].filter(Boolean).join(', ')||'no change';return `<div class="tr"><span>${esc(n.label)}</span><span>${esc(sets)}</span><i>${esc(n.src)}</i></div>`}).join('')}</div>`;
+  let rows='',cm=0,tot=0;
+  for(const o in TREE.occasion)for(const w of WORRY_COMBOS)for(const b in TREE.belt){const {c}=decide({occasion:o,worry:w,belt:b});const st=stockOf(c);const n=['waist','pleat','hem'].filter(k=>c[k]!==st[k]).length;
+    rows+=`<tr><td>${esc(TREE.occasion[o].label)}</td><td>${esc(w.split('+').map(x=>TREE.worry[x].label).join(' + '))}</td><td>${b==='belt'?'Belt':'No belt'}</td><td>${esc(fitText(c))}, ${esc(LABEL.pleat[c.pleat])}, ${esc(LABEL.waist[c.waist])}, ${esc(LABEL.hem[c.hem])}</td><td>${n}</td><td>${madeForYou(c)?'1-2 wks':'1-2 days'}</td></tr>`;cm+=madeForYou(c)?1:0;tot++;}
+  return `<div class="note">Three questions; the second takes one body and one height answer. The fit comes from the body answer, else the height answer, else the occasion. Height then sets the leg and hem. The trousers start from that fit's standard details, then occasion, body and belt rules apply. Later rules win: a belt answer overrides the wedding waistband. One exception: at a wedding the formal plain hem beats the tall turn-up.</div>`+layer('occasion','1. What are they for?')+layer('worry','2. What do trousers get wrong?')+layer('belt','3. Belt?')+`<div class="note"><b>All ${tot} outcomes</b> (Δ: details changed from that fit's standard; ${cm} of ${tot} are Custom Made)<table class="tt"><tr><th>Occasion</th><th>Body / height</th><th>Belt</th><th>Recommendation</th><th>Δ</th><th>Delivery</th></tr>${rows}</table></div>`;
+}
+function recWhy(k){const c=S.cfg,w=S.why||{},r=S.recCfg||{};
+  if(k!=='fit'&&r[k]!==undefined&&c[k]!==r[k])return 'Your choice.';
+  if(k==='fit'&&r.fit!==undefined&&(c.fit!==r.fit||c.leg!==r.leg))return 'Your choice.';
+  if(w[k])return w[k];
+  return '';}
+function recCard(){
+  const c=S.cfg,w=S.why||{};
+  const chips=(opts,label)=>`<div class="mini" role="group" aria-label="${label}">${opts.map(([kk,v,l])=>`<button data-k="${kk}" data-v="${v}" aria-pressed="${c[kk]===v}">${l}</button>`).join('')}</div>`;
+  const item=(k,label,img,opts,extra='')=>`<div class="ritem"><img src="${IMG+img}.jpg" alt=""><div><div class="k">${label}</div><div class="v">${k==='fit'?esc(fitText(c)):LABEL[k][c[k]]}</div>${recWhy(k)?`<div class="why">${esc(recWhy(k))}</div>`:''}${chips(opts,label)}${extra}</div></div>`;
+  const legPick=TWO_LEGS(c.fit)?`<div class="legpick"><div class="q">${LABEL.fit[c.fit]} fit comes in two legs:</div>${chips([['leg','tapered','Tapered leg'],['leg','straight','Straight leg']],'Leg')}</div>`:'';
+  return `<div class="rec"><div class="rhead">Your recommended trousers</div><div class="ritem"><span></span><div><div class="k">Colour</div><div class="v">${COL[S.colour].label}</div>${swatches('sm')}</div></div>
+  ${item('fit','Fit',MODEL(c),[['fit','slim','Slim'],['fit','straight','Straight'],['fit','wide','Wide']],legPick)}
+  ${item('pleat','Front',c.pleat==='pleat'?'thumb-pleat':'thumb-flat',[['pleat','flat','Flat front'],['pleat','pleat','Single pleat']])}
+  ${item('waist','Waistband',c.waist==='adjusters'?'thumb-adjusters':'thumb-beltloops',[['waist','beltloops','Belt loops'],['waist','adjusters','Side adjusters']])}
+  ${item('hem','Hem',c.hem==='turnup'?'thumb-turnup':'thumb-plain',[['hem','plain','Plain'],['hem','turnup','Turn-up 4 cm']])}
+  </div>${(()=>{const st=stockOf(c);if(!madeForYou(c))return '';if(st.ship==='weeks')return '<div class="notice mfy" style="margin-top:10px"><b>Custom Made</b>Arrives in 1-2 weeks.</div>';return '<div class="notice mfy" style="margin-top:10px"><b>Custom Made</b>Arrives in 1-2 weeks. Need them sooner? <button class="link" id="recFast">Use the standard details (1-2 days)</button></div>';})()}<p class="small" style="margin-top:10px"><button class="link" id="restartChat">Start over</button></p>`;
+}
+
+// ---------- render
+function render(){
+  IMG='img/'+(S.colour==='sand'?'':S.colour+'/');
+  if(S.step==='pdp'||S.step==='choose')S.view='model';
+  document.body.classList.toggle('cfg',!['pdp','choose'].includes(S.step));
+  $('dfoot').hidden=S.step==='pdp';
+  renderStage();screens[S.step]();
+  if(btsTab==='notes')renderBts();
+}
+const origSet=setOpt;
+// count edits made on the recommendation
+setOpt=function(k,v,src){if(src==='stylist')S.recEdits=(S.recEdits||0)+1;origSet(k,v,src);};
+
+// ---------- behind the scenes
+let btsTab='notes';
+function renderBts(){
+  const b=$('btsBody');
+  if(btsTab==='notes'){const key=S.step==='stylist'&&S.recReady?'rec':S.step;b.innerHTML=(NOTES[key]||[]).map((n,i)=>`<div class="note"><b>${i+1}.</b> ${esc(n)}</div>`).join('');}
+  else if(btsTab==='tree'){b.innerHTML=treeHtml();}
+  else{b.innerHTML=events.length?events.slice().reverse().map(e=>{const {event,ts,...p}=e;return `<div class="ev"><b>${esc(event)}</b>  ${ts}\n${esc(JSON.stringify(p))}</div>`}).join(''):'<div class="note">No events yet. Click through the flow.</div>';}
+}
+function openBts(o){$('bts').classList.toggle('open',o);$('fab').hidden=o;renderBts();}
+$('fab').onclick=()=>openBts(true);$('btsClose').onclick=()=>openBts(false);
+['Notes','Events','Tree'].forEach(t=>$('tab'+t).onclick=()=>{btsTab=t.toLowerCase();['Notes','Events','Tree'].forEach(u=>$('tab'+u).setAttribute('aria-pressed',u===t));renderBts();});
+$('views').onclick=e=>{const v=e.target.dataset.view;if(v){S.view=v;renderStage();}};
+$('dbody').addEventListener('click',e=>{const b=e.target.closest('[data-col]');if(b)setColour(b.dataset.col);});
+$('back').onclick=back;
+function restart(){fresh();$('bagcount').hidden=true;render();}
+$('restart').onclick=()=>{events=[];$('evcount').textContent=0;restart();};
+render();
+})();
+</script>
+</body>
+</html>
