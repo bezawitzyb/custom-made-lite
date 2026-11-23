@@ -87,5 +87,4 @@ Behind the scenes was updated the same day: design notes now cover the delivery 
 After Add to bag the drawer shows a small bag: the item with colour, fit, details and size, a Custom Made pill when it applies, delivery and total. "Proceed to checkout" is the main action (event `checkout_clicked`); checkout itself is out of scope. "Continue shopping" goes back to the product page.
 The Bag link in the header opens the bag at any time (event `bag_opened`). Continue shopping keeps the bag; Restart empties it.
 Delivery & Returns on the product page opens with the live text (event `pdp_accordion_opened`). The Custom Made notice says "Returns within 30 days." only. The Details design note explains why the pleat is the third option.
-Behind the scenes has a fourth tab, Stories: seven user stories with acceptance criteria, each mapped to a screen or an event. Tabs are now Design notes, Events, Stylist rules, Stories.
-Each screen's design notes end with the user story (or stories) for that screen. US0 covers the product page. The Stories tab lists all eight.
+Behind the scenes has a Stories tab (second tab): the user story for the open screen, with acceptance criteria mapped to what is on screen or to an event; "Show all 8" lists every story. Tabs: Design notes, Stories, Events, Stylist rules.

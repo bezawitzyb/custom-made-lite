@@ -210,7 +210,7 @@ aside.drawer,.dbody{min-width:0}
 </main>
 <button class="fab" id="fab" type="button">Behind the scenes</button>
 <div class="bts" id="bts" role="region" aria-label="Behind the scenes">
-  <div class="bh"><button id="tabNotes" aria-pressed="true">Design notes</button><button id="tabEvents" aria-pressed="false">Events <span id="evcount">0</span></button><button id="tabTree" aria-pressed="false">Stylist rules</button><button id="tabStories" aria-pressed="false">Stories</button><button class="x" id="btsClose" aria-label="Close">&times;</button></div>
+  <div class="bh"><button id="tabNotes" aria-pressed="true">Design notes</button><button id="tabStories" aria-pressed="false">Stories</button><button id="tabEvents" aria-pressed="false">Events <span id="evcount">0</span></button><button id="tabTree" aria-pressed="false">Stylist rules</button><button class="x" id="btsClose" aria-label="Close">&times;</button></div>
   <div class="bb" id="btsBody"></div>
 </div>
 
@@ -630,9 +630,11 @@ const STORIES=[
   'The Events tab in this panel shows each event as it fires, newest first.']}
 ];
 const storyHtml=u=>`<div class="us"><div class="id">${u.id} · ${esc(u.t)}</div><div class="st">${esc(u.s)}</div><ul>${u.ac.map(a=>`<li>${a}</li>`).join('')}</ul></div>`;
-function storiesHtml(){
-  return `<div class="note">Eight stories, one per part of the flow. Each acceptance criterion maps to a screen in this prototype or to an event in the Events tab, so QA can test against the prototype. Out of scope for v1: checkout, store booking, a surcharge, real Black and Navy photos.</div>`+
-  STORIES.map(storyHtml).join('');
+let showAllStories=false;
+function storiesHtml(key){
+  const here=STORIES.filter(u=>u.screens.includes(key));
+  if(showAllStories)return `<div class="note">All eight stories. Each acceptance criterion maps to a screen in this prototype or to an event in the Events tab, so QA can test against the prototype. Out of scope for v1: checkout, store booking, a surcharge, real Black and Navy photos. <button class="link" id="allStories" style="color:#fff">Show this screen only</button></div>`+STORIES.map(storyHtml).join('');
+  return `<div class="note" style="color:#9a9a95">User stor${here.length>1?'ies':'y'} for this screen. Each acceptance criterion maps to what you see here or to an event in the Events tab. <button class="link" id="allStories" style="color:#fff">Show all 8</button></div>`+here.map(storyHtml).join('');
 }
 function treeHtml(){
   const layer=(k,t)=>`<div class="note"><b>${t}</b>${Object.entries(TREE[k]).map(([v,n])=>{const sets=[n.fit?LABEL.fit[n.fit[0]]+(TWO_LEGS(n.fit[0])?' '+LABEL.leg[n.fit[1]].toLowerCase():''):'',...Object.entries(n.set).map(([kk,vv])=>LABEL[kk][vv]),n.wideLeg?'Wide → straight leg':''].filter(Boolean).join(', ')||'no change';return `<div class="tr"><span>${esc(n.label)}</span><span>${esc(sets)}</span><i>${esc(n.src)}</i></div>`}).join('')}</div>`;
@@ -666,7 +668,7 @@ function render(){
   document.body.classList.toggle('cfg',!['pdp','choose'].includes(S.step));
   $('dfoot').hidden=S.step==='pdp';
   renderStage();screens[S.step]();
-  if(btsTab==='notes')renderBts();
+  if(btsTab==='notes'||btsTab==='stories')renderBts();
 }
 const origSet=setOpt;
 // count edits made on the recommendation
@@ -676,14 +678,14 @@ setOpt=function(k,v,src){if(src==='stylist')S.recEdits=(S.recEdits||0)+1;origSet
 let btsTab='notes';
 function renderBts(){
   const b=$('btsBody');
-  if(btsTab==='notes'){const key=S.step==='stylist'&&S.recReady?'rec':S.step;const us=STORIES.filter(u=>u.screens.includes(key));b.innerHTML=(NOTES[key]||[]).map((n,i)=>`<div class="note"><b>${i+1}.</b> ${esc(n)}</div>`).join('')+(us.length?`<div class="note" style="margin-top:10px;border-bottom:0;color:#9a9a95;font-size:11px;text-transform:uppercase;letter-spacing:.04em">User stor${us.length>1?'ies':'y'} for this screen</div>`+us.map(storyHtml).join(''):'');}
+  if(btsTab==='notes'){const key=S.step==='stylist'&&S.recReady?'rec':S.step;b.innerHTML=(NOTES[key]||[]).map((n,i)=>`<div class="note"><b>${i+1}.</b> ${esc(n)}</div>`).join('');}
   else if(btsTab==='tree'){b.innerHTML=treeHtml();}
-  else if(btsTab==='stories'){b.innerHTML=storiesHtml();}
+  else if(btsTab==='stories'){const key=S.step==='stylist'&&S.recReady?'rec':S.step;b.innerHTML=storiesHtml(key);const t=$('allStories');if(t)t.onclick=()=>{showAllStories=!showAllStories;renderBts();};}
   else{b.innerHTML=events.length?events.slice().reverse().map(e=>{const {event,ts,...p}=e;return `<div class="ev"><b>${esc(event)}</b>  ${ts}\n${esc(JSON.stringify(p))}</div>`}).join(''):'<div class="note">No events yet. Click through the flow.</div>';}
 }
 function openBts(o){$('bts').classList.toggle('open',o);$('fab').hidden=o;renderBts();}
 $('fab').onclick=()=>openBts(true);$('btsClose').onclick=()=>openBts(false);
-['Notes','Events','Tree','Stories'].forEach(t=>$('tab'+t).onclick=()=>{btsTab=t.toLowerCase();['Notes','Events','Tree','Stories'].forEach(u=>$('tab'+u).setAttribute('aria-pressed',u===t));renderBts();});
+['Notes','Stories','Events','Tree'].forEach(t=>$('tab'+t).onclick=()=>{btsTab=t.toLowerCase();['Notes','Stories','Events','Tree'].forEach(u=>$('tab'+u).setAttribute('aria-pressed',u===t));renderBts();});
 $('views').onclick=e=>{const v=e.target.dataset.view;if(v){S.view=v;renderStage();}};
 $('dbody').addEventListener('click',e=>{const b=e.target.closest('[data-col]');if(b)setColour(b.dataset.col);});
 $('back').onclick=back;
