@@ -124,3 +124,6 @@ Every screen's design notes rewritten for any reader: same decisions, sources an
 
 ### Event names kept in parentheses
 The plain-language design notes and Plan tab now name the event behind each tracked action in parentheses, for example "Opening it is recorded (pdp_accordion_opened)".
+
+### Product codes kept in parentheses
+The fit and leg design notes name the live product codes in parentheses (B6934, B6935, B6936, B6939, B3769).
