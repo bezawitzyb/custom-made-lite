@@ -62,15 +62,15 @@ ul.list li b{font-weight:600}
 .card{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:14px 16px;display:flex;flex-direction:column;gap:8px;min-width:0}
 .card h3{margin:0;font-size:15px}
 a{color:inherit}
-@media (max-width:640px){.opts,.two{grid-template-columns:1fr}.bar{grid-template-columns:110px 1fr 40px}}
+@media (max-width:640px){.fgrid{grid-template-columns:1fr;min-width:0}.start{grid-row:auto}.fgrid .arr{display:none}.lane{flex-wrap:wrap}.lane .lbl{width:100%}.taps{margin-left:0;width:100%}.opts,.two{grid-template-columns:1fr}.bar{grid-template-columns:110px 1fr 40px}}
 @media (prefers-reduced-motion:no-preference){.fill{transition:width .4s}}
 </style>
 
 <div class="page">
   <header>
-    <span class="eyebrow">Junior PM case · Custom Made Lite · Reasoning</span>
-    <h1>Design options in the drawer you already open</h1>
-    <p>Three design options added inside the "Select size and fit" drawer, without slowing down the customer who changes nothing. Any changed detail makes the pair Custom Made: 1-2 weeks instead of 1-2 days.</p>
+    <span class="eyebrow">Junior PM case · Custom Made Lite · My reasoning</span>
+    <h1>Choose your trouser details, in the same few taps</h1>
+    <p>Customers can now change three details of their trousers. The new choices sit in the panel that opens when you tap "Select size and fit". If you change nothing, buying is as quick as today. If you change something, the pair is made for you and arrives in 1-2 weeks instead of 1-2 days.</p>
     <div class="links">
       <a href="https://claude.ai/artifact/7Yo8nRPhMpLGmdXEZ1Qngg" target="_blank" rel="noopener">Clickable prototype</a>
       <a href="https://claude.ai/artifact/FptH8SYEsXkfTXRxtBcghR" target="_blank" rel="noopener">Tracking and funnel</a>
@@ -79,72 +79,72 @@ a{color:inherit}
   </header>
 
   <section>
-    <h2>The three options</h2>
+    <h2>The three new choices</h2>
     <div class="opts">
-      <div class="opt"><span class="tag">Given</span><b>Waistband</b><span>Belt loops or side adjusters</span></div>
-      <div class="opt"><span class="tag">Given</span><b>Hem</b><span>Plain or 4 cm turn-up</span></div>
-      <div class="opt mine"><span class="tag">My choice</span><b>Front</b><span>Flat or single pleat</span></div>
+      <div class="opt"><span class="tag">From the brief</span><b>Waistband</b><span>Belt loops, or side adjusters (small buckles on the hips)</span></div>
+      <div class="opt"><span class="tag">From the brief</span><b>Hem</b><span>Plain, or a 4 cm turn-up (folded cuff)</span></div>
+      <div class="opt mine"><span class="tag">My choice</span><b>Front</b><span>Flat, or one pleat (a fold below the waist)</span></div>
     </div>
-    <p><b>Why a single pleat:</b> it is the only option with demand data. Lyst searches for pleated trousers rose 110% (<a href="https://fashionunited.uk/news/fashion/menswear-trends-that-have-gone-from-catwalk-to-cart/2026062488852" target="_blank" rel="noopener">FashionUnited, June 2026</a>). It adds room through the thigh and seat without a bigger waist, and Suitsupply already makes it on Slim and Wide, so it is a known make.</p>
+    <p><b>Why I picked the pleat:</b> people are looking for it. Searches for pleated trousers went up 110% on Lyst (<a href="https://fashionunited.uk/news/fashion/menswear-trends-that-have-gone-from-catwalk-to-cart/2026062488852" target="_blank" rel="noopener">FashionUnited, June 2026</a>). A pleat also gives more room at the thighs without a bigger waist. And Suitsupply already makes it, so it is easy to produce.</p>
   </section>
 
   <section>
-    <h2>Why this placement</h2>
-    <p>Everything lives in the drawer "Select size and fit" already opens, so the product page is unchanged. Today's yes/no fit question becomes "How do you want to choose?".</p>
+    <h2>Where the choices go, and why</h2>
+    <p>The product page does not change. When you tap "Select size and fit", the first question is now "How do you want to choose?". You can keep the trousers as shown, or pick the details yourself.</p>
     <div class="flow" role="img" aria-label="Flow: Select size and fit opens How do you want to choose. Keep it as shown goes straight to size and bag in 4 taps. I'll pick goes through fit and leg, details, size with a check, then bag, in 6 to 7 taps. Help me choose, phase 2, goes through three questions and a suggested pair before size and bag, in 8 to 9 taps.">
       <div class="fgrid">
         <div class="box start">Select size and fit<small>How do you want to choose?</small></div>
         <div class="arr">→</div>
-        <div class="lane keep"><span class="lbl">Keep it as shown<small>version 1</small></span><span class="chip">Size</span><span class="to">→</span><span class="chip">Bag</span><span class="taps">4 taps, as today</span></div>
+        <div class="lane keep"><span class="lbl">Keep it as shown<small>version 1</small></span><span class="chip">Size</span><span class="to">→</span><span class="chip">Bag</span><span class="taps">4 taps, same as today</span></div>
         <div class="arr">→</div>
         <div class="lane pick"><span class="lbl">I'll pick<small>version 1</small></span><span class="chip">Fit + leg</span><span class="to">→</span><span class="chip new">Details</span><span class="to">→</span><span class="chip cm">Size + check</span><span class="to">→</span><span class="chip">Bag</span><span class="taps">6-7 taps</span></div>
         <div class="arr">→</div>
-        <div class="lane sty"><span class="lbl">Help me choose<small>phase 2 test</small></span><span class="chip new">3 questions</span><span class="to">→</span><span class="chip new">Suggested pair</span><span class="to">→</span><span class="chip cm">Size + check</span><span class="to">→</span><span class="chip">Bag</span><span class="taps">8-9 taps</span></div>
+        <div class="lane sty"><span class="lbl">Help me choose<small>later, own test</small></span><span class="chip new">3 questions</span><span class="to">→</span><span class="chip new">Suggested pair</span><span class="to">→</span><span class="chip cm">Size + check</span><span class="to">→</span><span class="chip">Bag</span><span class="taps">8-9 taps</span></div>
       </div>
-      <p class="cap">Bold border: new screen. Amber: where a Custom Made pair shows "Made with your choices", 1-2 weeks and the return rule.</p>
+      <p class="cap">Thick border: a new screen. Orange: where a pair made for you shows the 1-2 week wait and the return rule.</p>
     </div>
     <div class="two">
-      <div class="card"><h3>The trade-off, made explicit</h3><p>One extra screen (Details) for people who change something; none for people who don't. The check sits on the size screen, so there is no summary screen.</p></div>
-      <div class="card"><h3>Built for limited product knowledge</h3><p>Every option is a photo with one line on what it does ("small buckles on each hip, adjust the waist without a belt"), and the standard choice is preselected, so Next changes nothing.</p></div>
+      <div class="card"><h3>The trade-off</h3><p>People who change something see one extra screen. People who change nothing see no extra screens. Their choices are shown again on the size screen, so there is no separate check screen.</p></div>
+      <div class="card"><h3>No tailoring words needed</h3><p>Each choice is a photo with one short line, like "small buckles on each hip, so you don't need a belt". The usual choice is already selected, so tapping Next changes nothing.</p></div>
     </div>
     <div class="bars" aria-label="Taps from Select size and fit to Add to bag">
       <div class="bar"><span>Today</span><span class="track"><span class="fill" style="display:block;width:44%"></span></span><span class="n">4</span></div>
       <div class="bar"><span>Keep it as shown</span><span class="track"><span class="fill keep" style="display:block;width:44%"></span></span><span class="n">4</span></div>
       <div class="bar"><span>I'll pick</span><span class="track"><span class="fill pick" style="display:block;width:78%"></span></span><span class="n">6-7</span></div>
       <div class="bar"><span>Help me choose</span><span class="track"><span class="fill sty" style="display:block;width:100%"></span></span><span class="n">8-9</span></div>
-      <p class="cap" style="margin-top:4px">Taps from "Select size and fit" to Add to bag. No study ties a click count to conversion (<a href="https://www.nngroup.com/articles/3-click-rule/" target="_blank" rel="noopener">Nielsen Norman Group</a>); the A/B test checks whether picking's extra taps cost orders.</p>
+      <p class="cap" style="margin-top:4px">Taps from "Select size and fit" to "Add to bag". No study shows that fewer clicks always means more sales (<a href="https://www.nngroup.com/articles/3-click-rule/" target="_blank" rel="noopener">Nielsen Norman Group</a>), so the test will show whether the extra taps lose orders.</p>
     </div>
-    <p><b>Why the stylist waits:</b> Help me choose is built in the prototype but ships later as its own A/B test. A small first release tests the options on their own; the stylist is then judged against version 1.</p>
+    <p><b>Why "Help me choose" comes later:</b> it asks three quick questions and suggests a pair. It is in the prototype, but I would launch it later as a separate test. That way the first launch stays small, and we learn what the new choices do on their own first.</p>
   </section>
 
   <section>
     <h2>What I deliberately left out</h2>
     <ul class="list">
-      <li><b>A free-text AI chat.</b> Costly, hard to keep on-brand and to translate for every EU market. Fixed rules give the suggestion and the reason.</li>
-      <li><b>More values per option</b> (5 cm turn-up, double pleat). Two clear choices per option; people stall when choices are hard to tell apart.</li>
-      <li><b>Fabric, pockets, lining.</b> That is the full Custom Made configurator, not Lite.</li>
-      <li><b>A surcharge.</b> The price stays at €179 so the test measures the options, not a price change.</li>
-      <li><b>Photo or body-scan sizing.</b> The strongest next step for returns, but a big build with privacy risk. Find my size is the cheap version.</li>
+      <li><b>An AI chat where people type.</b> It costs a lot, can say the wrong thing, and needs translating for every country. Simple fixed rules do the job.</li>
+      <li><b>More than two choices per detail</b>, like a double pleat. Too many similar choices make people hesitate.</li>
+      <li><b>Fabric, pockets and lining.</b> That belongs in the full Custom Made service, not the quick version.</li>
+      <li><b>An extra charge.</b> The price stays €179, so the test shows the effect of the choices, not of a price change.</li>
+      <li><b>Sizing from a photo or body scan.</b> It could cut returns a lot, but it is a big build and raises privacy questions. "Find my size" is a simple first step.</li>
     </ul>
   </section>
 
   <section>
-    <h2>What I'd validate before building it for real</h2>
+    <h2>What I would check before building it</h2>
     <ul class="list">
-      <li><b>Usability test with 8-10 shoppers.</b> Do they find the options and understand a side adjuster from the photo alone?</li>
-      <li><b>Production:</b> can every mix be made, and does the 1-2 week Custom Made lead time hold at Lite's volume?</li>
-      <li><b>Legal and Customer Service:</b> do these pairs follow the Custom Made return rule (30 days, unworn and unaltered) in every market?</li>
-      <li><b>Data:</b> today's panel opens, fit-step skip rate, order and return rates, so the thresholds and test length are real, not my guesses.</li>
+      <li><b>Test with 8-10 shoppers.</b> Do they find the new choices? Do they understand them from the photos alone?</li>
+      <li><b>Production:</b> can every combination be made, and still arrive in 1-2 weeks when orders grow?</li>
+      <li><b>Legal and Customer Service:</b> does the return rule for made-to-order pairs (30 days, unworn and not altered) apply in every country?</li>
+      <li><b>Data:</b> today's real numbers for visits, orders and returns, to replace my guesses and decide how long the test must run.</li>
     </ul>
   </section>
 
   <section>
-    <h2>What I'm least sure about</h2>
+    <h2>What I am least sure about</h2>
     <ul class="list">
-      <li><b>Whether people will wait 1-2 weeks.</b> Any change makes a pair Custom Made. The flow states the wait wherever it applies, and the test watches cancellations before shipping.</li>
-      <li><b>Demand for side adjusters and turn-ups.</b> I found no data for either; only the pleat has numbers behind it.</li>
-      <li><b>Returns read late.</b> A Custom Made pair takes 1-2 weeks to arrive plus 30 days to return, so the cost of the options shows 5-6 weeks after an order. Orders decide at week 8, returns at week 15.</li>
-      <li><b>Whether a stylist beats picture cards.</b> No evidence either way for custom clothing, which is why it is a separate phase 2 test.</li>
+      <li><b>Will people wait 1-2 weeks?</b> Any change means the pair is made for you. The wait is shown clearly, and we will watch how many people cancel before it ships.</li>
+      <li><b>Do people want side adjusters and turn-ups?</b> I found no numbers for either. Only the pleat has data behind it.</li>
+      <li><b>Returns come in late.</b> A made-to-order pair takes 1-2 weeks to arrive, and people have 30 days to send it back. So we only know about returns 5-6 weeks after an order. We judge orders at week 8 and returns at week 15.</li>
+      <li><b>Does "Help me choose" sell better than photos alone?</b> I found no proof either way. That is why it gets its own test later.</li>
     </ul>
   </section>
 </div>
