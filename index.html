@@ -319,7 +319,7 @@ function delivery(c){
 function dateIn(n){const d=new Date();d.setDate(d.getDate()+n);return d.toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'});}
 function fitText(c){return LABEL.fit[c.fit]+' fit'+(TWO_LEGS(c.fit)?' · '+LABEL.leg[c.leg]:'');}
 function track(name,props){
-  const e={event:name,path:S.path||'none',...props,feature:'custom_made_lite',device:innerWidth<820?'mobile':'desktop',market:'NL',colour:S.colour,product_id:(PIDS[S.colour]||{})[fitKey(S.cfg)]||'n/a',ts:new Date().toISOString().slice(11,19)};
+  const e={event:name,panel_session_id:S.psid||null,path:S.path||'none',...props,feature:'custom_made_lite',variant:'new_panel',device:innerWidth<820?'mobile':'desktop',market:'NL',colour:S.colour,product_id:(PIDS[S.colour]||{})[fitKey(S.cfg)]||'n/a',ts:new Date().toISOString().slice(11,19)};
   events.push(e);$('evcount').textContent=events.length;if(btsTab==='events')renderBts();
 }
 function cfgProps(){return {...S.cfg,details_changed:detailsChanged(S.cfg),made_to_order:madeForYou(S.cfg),changed_count:['waist','hem','pleat'].filter(k=>S.cfg[k]!==stockOf(S.cfg)[k]).length};}
@@ -376,7 +376,7 @@ pdp(){
   <div class="acc"><div>Size &amp; Fit<span>+</span></div><div>Details &amp; Care<span>+</span></div><details id="dlv"><summary>Delivery &amp; Returns<span>+</span></summary><ul class="small"><li><a href="https://suitsupply.com/en-nl/delivery-time-cost.html" target="_blank" rel="noopener">Free delivery</a> and free returns</li><li>30 days <a href="https://suitsupply.com/en-nl/returns-refunds.html" target="_blank" rel="noopener">return policy</a></li></ul></details></div></div>`;
   $('dlv').ontoggle=()=>{if($('dlv').open)track('accordion_opened',{section:'delivery_returns',colour:S.colour});};
   $('dfoot').innerHTML='';
-  $('sel').onclick=()=>{track('panel_opened',{base_fit:'straight',colour:S.colour});go('choose');};
+  $('sel').onclick=()=>{S.path=null;S.psid=Math.random().toString(36).slice(2,10);track('panel_opened',{base_fit:'straight',colour:S.colour});go('choose');};
 },
 choose(){
   head('How do you want to choose?');
@@ -513,7 +513,7 @@ function renderChat(){
   html+='</div>';
   $('dbody').innerHTML=html;$('dbody').scrollTop=1e5;if(innerWidth<820)scrollTo(0,document.body.scrollHeight);
   const commit=(q,val,type)=>{S.ans[q.id]=val;S.multi=[];
-    track('stylist_question_answered',{question_id:q.id,answer:val,step_number:Object.keys(S.ans).length,input_type:type});
+    track('stylist_question_answered',{question_id:q.id,answer:val,question_number:Object.keys(S.ans).length,input_type:type});
     if(!nextQ())S.recReady=false;renderChat();};
   document.querySelectorAll('[data-a]').forEach(b=>b.onclick=()=>{
     const q=nextQ(),v=b.dataset.a;
@@ -642,7 +642,7 @@ const STORIES=[
   'Every screen of the panel sends step_viewed once when it is shown, with step, step_number and path.',
   'Leaving the panel sends panel_closed with from_step and reason: back to the page, restart or left the page.',
   'Each way of choosing has its own funnel, built from these events alone: keep (choose, size, bag), pick (choose, fit and leg, details, size, bag), stylist (choose, questions, recommendation, size, bag). The Events tab map is the reference.',
-  'Test: walking keep, pick and stylist paths in the prototype gives one step_viewed per screen and no duplicates.']},
+  'Going back fires step_viewed again, so funnels count unique panel_session_id per step, not events. Someone who switches to the stylist from size keeps their first path for the funnel (path_selected with source size marks the switch).','Test: walking keep, pick and stylist paths in the prototype gives one step_viewed per screen shown.']},
  {id:'US15',p:'pick',x:true,pr:'Must',t:'Track which options people pick',screens:['fit','details','size','added'],s:'As the PM, I want to see which fit and details people pick and undo on the I\'ll pick path, so I know which options earn their place.',ac:[
   'option_changed fires on every change with option, from_value, to_value and source (fit, leg or details), so a change can be traced to the screen it was made on.',
   'product_added carries the full pair: colour, fit, leg, waistband, front, hem, size, length, path and made_to_order.',
@@ -660,12 +660,12 @@ const STORIES=[
   'stylist_opened from the size screen, with path_selected source size, counts people who switch to the stylist midway.',
   'The stylist has its own flag and variant, so results compare stylist against version 1, not against today.']},
  {id:'US16',p:'all',x:true,pr:'Must',t:'Link orders to returns',screens:['added'],s:'As the analyst, I want every order from the panel linked to its return and return reason, so we can read return rates for Custom Made against normal pairs.',ac:[
-  'product_added carries the order ID once the order is placed.',
+  'Checkout sends order_completed (server side, not in this prototype) with order_id, the full pair, path, made_to_order and panel_session_id. product_added cannot carry the order ID because the order does not exist yet.',
   'The order ID joins to the return record and its reason, and to cancellations before shipping.',
   'Return rates can be cut by path, made_to_order, size-finder use and device.']},
  {id:'US17',p:'all',x:true,pr:'Must',t:'Consent and one naming rule',screens:['pdp','choose','size','added'],s:'As the data team, I want every event named one way and sent only with consent, so the data is clean and lawful in every EU market.',ac:[
   'Event names are object_action in the past tense, in snake_case (panel_opened, product_added). Feature and variant are properties, not part of the name.',
-  'Every event carries feature, variant, path (keep, pick, stylist or none before the choice), device, market, colour, product_id and timestamp.',
+  'Every event carries panel_session_id (one per panel opening, so a funnel counts people, not repeat views), feature, variant, path (keep, pick, stylist or none before the choice), device, market, colour, product_id and timestamp.',
   'Nothing fires before analytics consent. Height and waist from Find my size are not sent with the shopping events.',
   'QA: the Events tab is the reference; each event there appears in the live build with the same name and properties.']},
  {id:'US12',p:'all',x:true,pr:'Must',t:'Pass the configuration to the order',screens:['added'],s:'As the operations team, I want every order line to carry the chosen fit and details and a made-to-order flag, so the right pair is made, shipped, confirmed and returned.',ac:[
@@ -697,9 +697,9 @@ function storiesHtml(key){
 }
 function planHtml(){
   const rows=[
-   ['<b>1. Do more people buy?</b> Of everyone who opens the size and fit panel, how many end up ordering. New version against today\'s.','Tracked: panel opened (panel_opened), added to bag (product_added), order placed (order ID)','About the same or better: at most 5% fewer orders than today','5-10% fewer orders: make the Details screen simpler','10% or more fewer orders, two weeks running'],
+   ['<b>1. Do more people buy?</b> Of everyone who opens the size and fit panel, how many end up ordering. New version against today\'s.','Tracked: panel opened (panel_opened), added to bag (product_added), order placed (order_completed)','About the same or better: at most 5% fewer orders than today','5-10% fewer orders: make the Details screen simpler','10% or more fewer orders, two weeks running'],
    ['<b>2. Do people use the new options?</b> Of the orders from the panel, how many have at least one changed detail: waistband, hem or pleat. Counted in weeks 5-8, once the first curiosity has worn off.','Tracked: which detail was changed (option_changed), added to bag (product_added)','15 or more in every 100 orders','5 to 15 in 100: people see the options but don\'t want them; try better photos and words','Fewer than 5 in 100'],
-   ['<b>3. Do more pairs come back?</b> Of Custom Made pairs, how many are returned within 30 days, and why, compared with normal pairs. A returned Custom Made pair can\'t be sold again, so this is the cost. Early warning: orders cancelled before they ship.','Tracked: order (product_added with order ID), return and return reason, cancellation','At most 3 extra returns per 100 pairs','3 to 8 extra per 100: check the photos and the check on the size screen','More than 8 extra per 100'],
+   ['<b>3. Do more pairs come back?</b> Of Custom Made pairs, how many are returned within 30 days, and why, compared with normal pairs. A returned Custom Made pair can\'t be sold again, so this is the cost. Early warning: orders cancelled before they ship.','Tracked: order (order_completed with order_id), return and return reason, cancellation','At most 3 extra returns per 100 pairs','3 to 8 extra per 100: check the photos and the check on the size screen','More than 8 extra per 100'],
   ];
   const tbl=`<table class="tt pl"><tr><th>What we ask</th><th>Worked</th><th>Change course</th><th>Pull it back</th></tr>${rows.map(([m,ev,...r])=>`<tr><td>${m}<br><span style="color:#9a9a95;font-size:10px">${ev}</span></td>${r.map((c,i)=>`<td data-l="${['Worked','Change course','Pull it back'][i]}">${c}</td>`).join('')}</tr>`).join('')}</table>`;
   const li=a=>`<ul style="margin:4px 0 0;padding-left:16px">${a.map(x=>`<li style="margin:3px 0;line-height:1.4">${x}</li>`).join('')}</ul>`;
@@ -718,14 +718,14 @@ function planHtml(){
     <div><b>What we ask:</b> do people who pick actually change a detail, and where do they give up?</div>
     <div><b>We measure:</b> orders with a changed detail (question 2 comes mostly from here); how many reach fit and leg, details and size; the most chosen and most undone options; returns of Custom Made pairs (question 3).</div>
     <div><b>Good sign:</b> 15 or more in 100 orders with a changed detail, no single screen losing most people. <b>Warning:</b> many leave at Details, or options picked and then undone, which points to unclear photos or words.</div>
-    <div class="ppe">path_selected (pick) · step_viewed (fit, details, size) · option_changed (source fit, leg, details) · product_added (made_to_order) · order ID to returns · panel_closed (from_step)</div></div>
+    <div class="ppe">path_selected (pick) · step_viewed (fit, details, size) · option_changed (source fit, leg, details) · product_added (made_to_order) · order_completed (order_id) to returns · panel_closed (from_step)</div></div>
    <div class="pp p2"><div class="pph">Help me choose · phase 2, its own A/B test</div>
     <div><b>What we ask:</b> compared with version 1, does the stylist bring more orders and fewer returns?</div>
     <div><b>We measure:</b> orders per panel opened, stylist variant against version 1; drop-off per question; how many keep the suggestion as it is; which suggested detail people change; switches to the faster standard details; returns of stylist pairs against picked pairs.</div>
     <div><b>Good sign:</b> more orders than version 1 and no more returns than picked pairs. <b>Warning:</b> people leave during the questions, or change most suggestions. Targets are set from the version 1 results.</div>
     <div class="ppe">path_selected (stylist) · stylist_question_answered · recommendation_shown (rules_fired) · option_changed (source stylist) · standard_details_selected · recommendation_accepted (edits) · stylist_opened · product_added (path stylist)</div></div>
    <div class="pp"><div class="pph">Every path</div>
-    <div>Panel opened (panel_opened), the split between ways (path_selected), size help (size_chart_opened, size_finder_applied, store_link_clicked), bag and checkout (bag_opened, checkout_started), leaving the panel (panel_closed) and returns through the order ID.</div></div></div>
+    <div>Panel opened (panel_opened), the split between ways (path_selected), size help (size_chart_opened, size_finder_applied, store_link_clicked), bag and checkout (bag_opened, checkout_started), leaving the panel (panel_closed) and orders and returns through order_completed and its order_id.</div></div></div>
   <div class="note"><b>What we watch, to understand why a number moved.</b> ${li([
    '<b>Where people give up.</b> For each way of choosing (keep as shown, pick myself, stylist), we count how many people reach each screen: panel opened, fit, details, size, bag, checkout. Each screen shown is recorded (step_viewed) and so is leaving the panel (panel_closed). The screen where most people leave is the one to fix first.',
    '<b>Which options people like.</b> For each detail, how many orders have belt loops or side adjusters, a plain hem or a turn-up, a flat front or a pleat. We also count options people pick and then undo, which can mean the photo or the words are unclear (product_added, option_changed).',
@@ -788,7 +788,7 @@ const STEP_NO={choose:1,fit:2,stylist:2,details:3,rec:3,size:4,added:5};
 function render(){
   if(S.step!==lastStep){
     if(STEP_NO[S.step])track('step_viewed',{step:S.step,step_number:STEP_NO[S.step],path:S.path||'none',from_step:lastStep});
-    else if(S.step==='pdp'&&STEP_NO[lastStep]&&lastStep!=='added')track('panel_closed',{from_step:lastStep,step_number:STEP_NO[lastStep],path:S.path||'none',reason:'back_to_page'});
+    else if(S.step==='pdp'&&STEP_NO[lastStep]&&lastStep!=='added'){track('panel_closed',{from_step:lastStep,step_number:STEP_NO[lastStep],path:S.path||'none',reason:'back_to_page'});S.psid=null;}
     lastStep=S.step;
   }
   IMG='img/'+(S.colour==='sand'?'':S.colour+'/');
@@ -811,9 +811,9 @@ function evMapHtml(){
   const start=[['Product page','accordion_opened, colour_changed','—'],['Panel opened','panel_opened','Q1 base: every order is counted per panel opened'],['Way chosen','path_selected (keep, pick, stylist)','Splits every number by path']];
   const lanes=[
    ['Keep it as shown · version 1','keep','',[['Size','step_viewed (size), length_selected, size_chart_opened, size_finder_opened, size_finder_completed, size_finder_applied','Leaves at size?'],['Bag','product_added (path keep, made_to_order false)','Keep orders against today']]],
-   ["I'll pick · version 1",'pick','',[['Fit and leg, one screen','step_viewed (fit), option_changed (source fit, leg)','Which fit and leg; drop-off'],['Details','step_viewed (details), option_changed (source details)','Q2 options, undo'],['Size + check','step_viewed (size), size events, stylist_opened, store_link_clicked','Drop-off, size doubt, help'],['Bag','product_added (made_to_order, order ID)','Q1, Q2, Q3 returns']]],
+   ["I'll pick · version 1",'pick','',[['Fit and leg, one screen','step_viewed (fit), option_changed (source fit, leg)','Which fit and leg; drop-off'],['Details','step_viewed (details), option_changed (source details)','Q2 options, undo'],['Size + check','step_viewed (size), size events, stylist_opened, store_link_clicked','Drop-off, size doubt, help'],['Bag','product_added (made_to_order)','Add to bag; orders and returns via order_completed']]],
    ['Help me choose · phase 2','stylist',' p2',[['Questions','step_viewed (stylist), stylist_question_answered','Drop-off per question'],['Recommendation','recommendation_shown (rules_fired), option_changed (source stylist), standard_details_selected, recommendation_accepted (edits)','Rules people disagree with'],['Size + check','step_viewed (size), size events, store_link_clicked','Drop-off'],['Bag','product_added (path stylist)','Stylist against version 1']]]];
-  const end=[['Bag and checkout, every path','bag_opened, checkout_started','End of the funnel'],['Leaving, every path','panel_closed (from_step, path, reason)','Where each path loses people']];
+  const end=[['Bag and checkout, every path','bag_opened, checkout_started','End of the panel funnel'],['Order placed (checkout, not in this prototype)','order_completed (order_id, pair, path, panel_session_id)','Q1 orders; Q3 returns join on order_id'],['Leaving, every path','panel_closed (from_step, path, reason)','Where each path loses people']];
   const f=k=>`<button class="evf" data-f="${k}" aria-pressed="${evFilter===k}">${{all:'All',keep:'Keep',pick:'Pick',stylist:'Stylist'}[k]}</button>`;
   return `<a class="evlink" href="https://claude.ai/artifact/FptH8SYEsXkfTXRxtBcghR" target="_blank" rel="noopener">Open the full funnel diagram ↗<span>Every path, screen by screen, with its events and drop-off</span></a><div class="note"><b>Event map, by way of choosing.</b> Every path starts the same, then splits. Every event carries path, so each funnel can be read on its own. Names follow one rule: object_action, past tense, snake_case; feature and variant are properties.</div>
   <div class="evmap">${start.map(x=>box(x)).join(arrow)}${arrow}

@@ -71,7 +71,7 @@ code,.ev{font-family:var(--mono);font-size:12px}
 <div class="wrap">
   <header>
     <h1>Funnel event tracking, per path</h1>
-    <p class="lede">Custom Made Lite trousers: every screen of the size and fit panel, the events it sends, and where people can leave. Everyone starts the same way, then splits into three paths. Keep it as shown and I'll pick are version 1; Help me choose is a phase 2 test of its own. Every event carries <code>path</code>, so each lane is its own funnel.</p>
+    <p class="lede">Custom Made Lite trousers: every screen of the size and fit panel, the events it sends, and where people can leave. 21 events fire in the prototype; order_completed comes from checkout. Everyone starts the same way, then splits into three paths. Keep it as shown and I'll pick are version 1; Help me choose is a phase 2 test of its own. Every event carries <code>path</code>, so each lane is its own funnel.</p>
   </header>
 
   <div class="legend" aria-label="Legend">
@@ -102,7 +102,7 @@ code,.ev{font-family:var(--mono);font-size:12px}
       <!-- shared start -->
       <div class="node shared first" style="grid-column:2;grid-row:2 / span 3">
         <h3>Product page</h3><span class="no">Unchanged; "Select size and fit" opens the panel</span>
-        <ul><li>accordion_opened <i>(section)</i></li><li>colour_changed <i>(from, to)</i></li></ul>
+        <ul><li>accordion_opened <i>(section)</i></li><li>colour_changed <i>(from_value, to_value)</i></li></ul>
         <div class="q">Context only, not a funnel step</div>
       </div>
       <div class="node shared" style="grid-column:3;grid-row:2 / span 3">
@@ -135,7 +135,7 @@ code,.ev{font-family:var(--mono);font-size:12px}
       </div>
       <div class="node pick" style="grid-column:6;grid-row:3">
         <h3>Details</h3><span class="no">Waistband, hem, front</span>
-        <ul><li>step_viewed <i>(details, 3)</i></li><li>option_changed <i>(option, from, to, source details)</i></li><li class="opt">colour_changed</li></ul>
+        <ul><li>step_viewed <i>(details, 3)</i></li><li>option_changed <i>(option, from_value, to_value, source details)</i></li><li class="opt">colour_changed</li></ul>
         <div class="q">Q2: do people use the options? Which are undone?</div>
         <span class="drop">panel_closed · from_step: details</span>
       </div>
@@ -149,7 +149,7 @@ code,.ev{font-family:var(--mono);font-size:12px}
       <!-- stylist lane -->
       <div class="node sty" style="grid-column:5;grid-row:4">
         <h3>Three questions</h3><span class="no">Occasion, body and height, belt</span>
-        <ul><li>step_viewed <i>(stylist, 2)</i></li><li>stylist_question_answered <i>(question_id, answer) ×3</i></li></ul>
+        <ul><li>step_viewed <i>(stylist, 2)</i></li><li>stylist_question_answered <i>(question_id, answer, question_number) ×3</i></li></ul>
         <div class="q">Drop-off per question</div>
         <span class="drop">panel_closed · from_step: stylist</span>
       </div>
@@ -169,13 +169,14 @@ code,.ev{font-family:var(--mono);font-size:12px}
       <!-- shared end -->
       <div class="node shared" style="grid-column:8;grid-row:2 / span 3">
         <h3>Bag</h3><span class="no">Item, delivery, total</span>
-        <ul><li>product_added <i>(full pair, size, path, made_to_order, order ID)</i></li><li>step_viewed <i>(added, 5)</i></li><li class="opt">bag_opened <i>(from header)</i></li></ul>
-        <div class="q">Q1 orders · Q2 options in orders · Q3 returns via order ID</div>
+        <ul><li>product_added <i>(full pair, size, length, path, made_to_order)</i></li><li>step_viewed <i>(added, 5)</i></li><li class="opt">bag_opened <i>(from header)</i></li></ul>
+        <div class="q">Add-to-bag rate · Q2 options in the bag</div>
       </div>
       <div class="node shared" style="grid-column:9;grid-row:2 / span 3">
-        <h3>Checkout</h3><span class="no">Existing checkout, unchanged</span>
-        <ul><li>checkout_started <i>(pair, size, from)</i></li></ul>
-        <div class="q">End of the panel funnel. Orders, returns and cancellations join on the order ID</div>
+        <h3>Checkout and order</h3><span class="no">Existing checkout, unchanged</span>
+        <ul><li>checkout_started <i>(pair, size, from)</i></li><li>order_completed <i>(order_id, pair, path, made_to_order, panel_session_id)</i></li></ul>
+        <span class="no">order_completed is sent by checkout, server side. It is not in the prototype, because checkout is not.</span>
+        <div class="q">Q1 orders. Returns and cancellations join on order_id (Q3)</div>
       </div>
     </div>
   </div>
@@ -185,26 +186,36 @@ code,.ev{font-family:var(--mono);font-size:12px}
     <h2>Each funnel, step by step</h2>
     <div class="cards">
       <div class="card keep"><h3>Keep it as shown</h3>
-        <ol class="ladder"><li>panel_opened</li><li>path_selected <span>path = keep</span></li><li>step_viewed <span>size</span></li><li>product_added <span>path = keep</span></li><li>checkout_started</li></ol>
+        <ol class="ladder"><li>panel_opened</li><li>path_selected <span>path = keep</span></li><li>step_viewed <span>size</span></li><li>product_added <span>path = keep</span></li><li>checkout_started</li><li>order_completed <span>order_id</span></li></ol>
         <p class="muted">Read against shoppers on today's panel who changed nothing. Must not get worse.</p></div>
       <div class="card pick"><h3>I'll pick</h3>
-        <ol class="ladder"><li>panel_opened</li><li>path_selected <span>path = pick</span></li><li>step_viewed <span>fit</span></li><li>step_viewed <span>details</span></li><li>step_viewed <span>size</span></li><li>product_added <span>made_to_order</span></li><li>checkout_started</li></ol>
+        <ol class="ladder"><li>panel_opened</li><li>path_selected <span>path = pick</span></li><li>step_viewed <span>fit</span></li><li>step_viewed <span>details</span></li><li>step_viewed <span>size</span></li><li>product_added <span>made_to_order</span></li><li>checkout_started</li><li>order_completed <span>order_id</span></li></ol>
         <p class="muted">The biggest drop between two steps is the screen to fix first. option_changed shows which options earn their place.</p></div>
       <div class="card sty"><h3>Help me choose · phase 2</h3>
-        <ol class="ladder"><li>panel_opened</li><li>path_selected <span>path = stylist</span></li><li>stylist_question_answered <span>×3</span></li><li>recommendation_shown</li><li>recommendation_accepted <span>edits</span></li><li>step_viewed <span>size</span></li><li>product_added <span>path = stylist</span></li><li>checkout_started</li></ol>
+        <ol class="ladder"><li>panel_opened</li><li>path_selected <span>path = stylist</span></li><li>stylist_question_answered <span>×3</span></li><li>recommendation_shown</li><li>recommendation_accepted <span>edits</span></li><li>step_viewed <span>size</span></li><li>product_added <span>path = stylist</span></li><li>checkout_started</li><li>order_completed <span>order_id</span></li></ol>
         <p class="muted">Its own A/B test, read against version 1, not against today.</p></div>
       <div class="card all"><h3>Leaving, on every path</h3>
-        <p><code>panel_closed</code> fires once when someone leaves the panel, with <code>from_step</code>, <code>step_number</code>, <code>path</code> and <code>reason</code>:</p>
+        <p><code>panel_closed</code> fires once when someone leaves the panel, with <code>from_step</code>, <code>step_number</code>, <code>path</code> and <code>reason</code>. It is not sent after Add to bag, because that visit ended in the bag:</p>
         <div class="props"><code>back_to_page</code><code>restart</code><code>left_page</code></div>
         <p class="muted">Together with step_viewed it shows exactly where each path loses people.</p></div>
     </div>
   </section>
 
   <section class="card all" style="gap:10px">
+    <h2>How to count</h2>
+    <ul class="ladder" style="list-style:disc">
+      <li><span>Count people, not events: one <code>panel_session_id</code> per panel opening. Going back to a screen sends <code>step_viewed</code> again.</span></li>
+      <li><span>Each step counts the sessions that reached it. A step's drop-off is the share of the step before that never reached it.</span></li>
+      <li><span>Someone who switches to Help me choose from the size screen sends <code>path_selected</code> with <code>source: size</code>. Keep them in their first path's funnel and count the switch on its own.</span></li>
+      <li><span>The suggested pair has no screen event of its own. <code>recommendation_shown</code> counts who reached it.</span></li>
+    </ul>
+  </section>
+
+  <section class="card all" style="gap:10px">
     <h2>One naming rule</h2>
     <p>object_action, past tense, snake_case (<code>panel_opened</code>, <code>product_added</code>). The feature and test variant are properties, not part of the name. Nothing fires before analytics consent; height and waist from Find my size are never sent with the shopping events.</p>
     <p class="muted">Every event carries:</p>
-    <div class="props"><code>path</code><code>feature</code><code>variant</code><code>device</code><code>market</code><code>colour</code><code>product_id</code><code>timestamp</code></div>
+    <div class="props"><code>panel_session_id</code><code>path</code><code>feature</code><code>variant</code><code>device</code><code>market</code><code>colour</code><code>product_id</code><code>timestamp</code></div>
   </section>
 </div>
 </html>
