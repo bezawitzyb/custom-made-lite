@@ -121,3 +121,6 @@ Behind the scenes tabs now run Design notes, User stories, Plan, Stylist rules, 
 
 ### Design notes in plain language
 Every screen's design notes rewritten for any reader: same decisions, sources and trade-offs, without event names or terms like copy, path, preselected, meta-analysis, surcharge or ease.
+
+### Event names kept in parentheses
+The plain-language design notes and Plan tab now name the event behind each tracked action in parentheses, for example "Opening it is recorded (pdp_accordion_opened)".
