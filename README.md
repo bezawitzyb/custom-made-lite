@@ -115,3 +115,6 @@ Two new events, 22 in all: cml_step_viewed (every screen of the panel, with step
 
 ### Plan tab in plain language
 Every section of the Plan tab rewritten so anyone can follow it: what we watch, other numbers, checks before building, questions for each team, roadmap and the future stylist. Terms like MVP, funnel, baseline, stakeholder, gate, retrieval and recommender are gone; statistics and event names sit only in the small "For the analysts" note.
+
+### Tab order
+Behind the scenes tabs now run Design notes, User stories, Plan, Stylist rules, Events. "Stories" is renamed "User stories". On a phone all five fit on one line beside the close button.
