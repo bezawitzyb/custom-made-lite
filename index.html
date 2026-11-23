@@ -277,7 +277,7 @@ const OPT={
   hem:[{v:'plain',img:'thumb-plain',d:'Clean finish, keeps the leg line long.'},{v:'turnup',img:'thumb-turnup',d:'A folded cuff that adds weight so the trouser falls straight.'}],
   pleat:[{v:'flat',img:'thumb-flat',d:'Lies flat. Neat and versatile.'},{v:'pleat',img:'thumb-pleat',d:'A fold at the front that adds room through the thigh.'}]
 };
-// ship: 'days' = in stock on the live site (1-2 days); 'weeks' = made to order (1-2 weeks). Checked on the live fit drawer, 22-23 Nov 2026.
+// ship: 'days' = in stock on the live site (1-2 days); 'weeks' = made to order (1-2 weeks, my assumption; Production to confirm).
 const STOCK={'slim-tapered':{waist:'adjusters',pleat:'pleat',hem:'turnup',pid:'B6934',ship:'days'},'slim-straight':{waist:'beltloops',pleat:'flat',hem:'plain',pid:'B6936',ship:'weeks'},straight:{waist:'beltloops',pleat:'flat',hem:'plain',pid:'B6935',ship:'days'},'wide-tapered':{waist:'beltloops',pleat:'pleat',hem:'plain',pid:'B6939',ship:'days'},'wide-straight':{waist:'beltloops',pleat:'pleat',hem:'plain',pid:'B3769',ship:'weeks'}};
 const TWO_LEGS=f=>f==='slim'||f==='wide';
 const fitKey=c=>TWO_LEGS(c.fit)?c.fit+'-'+c.leg:c.fit;
@@ -736,7 +736,7 @@ function planHtml(){
    '<b>Ask the tailors to review the stylist rules.</b> I wrote them from trend and tailoring sources. The tailors should own them (US14).',
    '<b>Get today\'s real numbers:</b> how many people open the panel, how many skip the fit question, how many order, cancel and return, and why. These replace my guesses above and tell us how long the test must run.'])}</div>
   <div class="note"><b>Questions for each team.</b>${li([
-   '<b>Production:</b> can every mix of fit and details be made? Can they still deliver Custom Made in 1-2 weeks with more orders?',
+   '<b>Production:</b> can every mix of fit and details be made? How long does a pair made with your choices really take? The 1-2 weeks used everywhere here is my assumption.',
    '<b>Legal and Customer Service:</b> do these pairs follow the Custom Made return rule shown in the prototype (30 days, unworn and unaltered) in every EU country?',
    '<b>Pricing and Finance:</b> should the options cost extra? How much do we lose on each Custom Made pair that comes back? The prototype keeps the price at €179.',
    '<b>Data:</b> today\'s real numbers above, and are there enough shoppers to see a 10% change in orders within 8 weeks? If not, we watch "added to bag" first, because it happens more often.',
@@ -754,7 +754,7 @@ function planHtml(){
   <b>What we must record from day one, or step 4 can\'t happen:</b> link every stylist use to the order and to any return and its reason (the prototype does this) · when someone changes a suggestion, record which rule they disagreed with · height and waist are personal data, so ask permission first, keep them only as long as needed, and never store them with the shopping data · an optional one-tap "why did you change this?" would help a lot for little effort.
   <b>How long it takes:</b> step 1 needs a few hundred uses for each kind of answer. Step 4 needs about a year of stylist use across all countries before AI does better than the rules. <b>Why not use AI now:</b> we have no results to learn from yet, and there are only three fits and three details to choose from. The rules are what the future AI will learn from, and this test tells us whether a stylist is worth building at all.</div>
   <div class="note" style="color:#9a9a95"><b>For the analysts.</b> Question 1 is a relative change because only a few percent of panel opens become orders; questions 2 and 3 are in percentage points. "Sure it is not chance" means 95% confidence with 80% power. At a 3% order rate, seeing a 10% drop needs about 48,000 panel opens in each half; Data checks whether two weeks is enough, otherwise "added to bag" is the early sign. Events: step_viewed and panel_closed for drop-off; product_added and option_changed for option choice. Every event carries path, so each number splits by keep, pick and stylist; the stylist is read against version 1, not against today.</div>
-  <div class="note" style="color:#9a9a95">Assumptions not in the brief: delivery times and the return rule come from the live site; the price stays at €179; the live size guide applies to the new pairs.</div>`;
+  <div class="note" style="color:#9a9a95">Assumptions not in the brief: a pair made with your choices arrives in 1-2 weeks (my estimate, Production to confirm); the return rule comes from the live site; the price stays at €179; the live size guide applies to the new pairs.</div>`;
 }
 function treeHtml(){
   const layer=(k,t)=>`<div class="note"><b>${t}</b>${Object.entries(TREE[k]).map(([v,n])=>{const sets=[n.fit?LABEL.fit[n.fit[0]]+(TWO_LEGS(n.fit[0])?' '+LABEL.leg[n.fit[1]].toLowerCase():''):'',...Object.entries(n.set).map(([kk,vv])=>LABEL[kk][vv]),n.wideLeg?'Wide → straight leg':''].filter(Boolean).join(', ')||'no change';return `<div class="tr"><span>${esc(n.label)}</span><span>${esc(sets)}</span><i>${esc(n.src)}</i></div>`}).join('')}</div>`;

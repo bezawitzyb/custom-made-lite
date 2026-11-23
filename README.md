@@ -151,3 +151,5 @@ The fit and leg design notes name the live product codes in parentheses (B6934, 
 - v87: the Custom Made notice and help line sit under the size buttons, right before Add to bag.
 
 - v88: the bag item name follows the chosen fit (it always said Straight Leg).
+
+- v89: the 1-2 week delivery for pairs made with your choices is marked as an assumption (Production to confirm).
