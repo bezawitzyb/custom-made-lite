@@ -135,3 +135,5 @@ The fit and leg design notes name the live product codes in parentheses (B6934, 
 - The Events tab opens with an event map: each step, its events, and the question they answer.
 - Tracking stories split: US11 drop-off, US15 option choice, US16 orders to returns, US17 consent and naming (17 stories).
 - Plan tab: "Keeping it short" note with the tap counts and sources (Nielsen Norman Group, Baymard); roadmap puts the stylist test in Next.
+
+- v81: user stories, metrics (Plan tab) and the event map split by way of choosing: Keep, I'll pick, Help me choose (phase 2), Every path. Every event now carries path; the live log filters by path. New stories US18 (track the keep path) and US19 (track the stylist test).

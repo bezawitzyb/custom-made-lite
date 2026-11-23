@@ -158,7 +158,7 @@ table.sum .chg{color:var(--accent);font-size:11px;font-weight:500;margin-left:6p
 .bts{position:fixed;left:16px;bottom:16px;width:min(420px,calc(100vw - 32px));max-height:46vh;background:#1d1e1c;color:#e9e9e6;border-radius:8px;box-shadow:0 10px 30px rgba(0,0,0,.3);display:none;flex-direction:column;z-index:30;font-size:12px}
 .bts.open{display:flex}
 .bts .bh{display:flex;gap:2px;padding:8px 36px 8px 8px;border-bottom:1px solid #333;flex-wrap:wrap;position:relative;flex:0 0 auto}
-.us{padding:8px 0;border-bottom:1px solid #2e2e2e}.us .id{color:#9a9a95;font-size:11px}.us .st{margin:2px 0 4px;line-height:1.4}.us ul{margin:0;padding-left:16px}.us li{margin:2px 0;line-height:1.4}.us li code{color:#cfcfcf;font-size:11px}.us .pr{display:inline-block;margin-left:6px;padding:1px 7px;border-radius:99px;border:1px solid #555;color:#bbb;font-size:10px}.us .pr.must{background:#49FFCB;color:#000;border-color:#49FFCB}
+.us{padding:8px 0;border-bottom:1px solid #2e2e2e}.us .id{color:#9a9a95;font-size:11px}.us .st{margin:2px 0 4px;line-height:1.4}.us ul{margin:0;padding-left:16px}.us li{margin:2px 0;line-height:1.4}.us li code{color:#cfcfcf;font-size:11px}.us .pr{display:inline-block;margin-left:6px;padding:1px 7px;border-radius:99px;border:1px solid #555;color:#bbb;font-size:10px}.us .pr.must{background:#49FFCB;color:#000;border-color:#49FFCB}.us .pt{display:inline-block;margin-left:4px;padding:1px 7px;border-radius:99px;background:#2e2e2c;color:#cfcfcf;font-size:10px}.usg{margin:10px 0 4px;border:1px solid #3a3a37;border-radius:8px;padding:4px 10px 2px}.usg.p2{border-style:dashed}.usg .pt{display:none}.ugh{font-weight:600;color:#fff;padding:6px 0 2px}.ugh span{color:#9a9a95;font-weight:400;font-size:11px;margin-left:6px}.ugk{color:#49FFCB;font-size:10px;text-transform:uppercase;letter-spacing:.06em;margin-top:8px}
 .bts .bh button{background:none;border:0;color:#aaa;padding:4px 8px;border-radius:99px;font-size:12px}
 .bts .bh button[aria-pressed=true]{background:#333;color:#fff}
 .bts .bh .x{position:absolute;right:4px;top:4px;margin:0;padding:8px 10px;min-width:36px;min-height:34px;background:#1d1e1c}
@@ -168,7 +168,8 @@ table.sum .chg{color:var(--accent);font-size:11px;font-weight:500;margin-left:6p
 aside.drawer,.dbody{min-width:0}
 .tr{display:grid;grid-template-columns:1fr 1.3fr;gap:2px 8px;padding:5px 0;border-top:1px solid #2e2e2e}.tr i{grid-column:1/-1;color:#9a9a95;font-style:normal;font-size:11px}.tt{width:100%;border-collapse:collapse;margin-top:6px;font-size:11px}.tt td,.tt th{text-align:left;padding:3px 4px;border-top:1px solid #2e2e2e;vertical-align:top}.tt th{color:#9a9a95;font-weight:500}
 .note{padding:6px 0;border-bottom:1px solid #2e2e2e;line-height:1.45}
-.evmap{padding:6px 0 4px}.evs{border:1px solid #3a3a37;border-radius:6px;padding:6px 8px}.evs.p2{border-style:dashed;opacity:.85}.evn{font-weight:600;color:#fff}.eve{font-family:ui-monospace,monospace;font-size:10.5px;color:#49FFCB;margin-top:2px;word-break:break-word}.evm{font-size:11px;color:#9a9a95;margin-top:2px}.eva{text-align:center;color:#666;font-size:11px;line-height:14px}
+.pp{border:1px solid #3a3a37;border-radius:6px;padding:6px 8px;margin-top:8px}.pp.p2{border-style:dashed}.pp>div{margin:2px 0}.pph{font-weight:600;color:#fff}.ppe{font-family:ui-monospace,monospace;font-size:10.5px;color:#49FFCB;word-break:break-word}
+.evmap{padding:6px 0 4px}.evs{border:1px solid #3a3a37;border-radius:6px;padding:6px 8px}.evs.p2{border-style:dashed;opacity:.85}.evn{font-weight:600;color:#fff}.eve{font-family:ui-monospace,monospace;font-size:10.5px;color:#49FFCB;margin-top:2px;word-break:break-word}.evm{font-size:11px;color:#9a9a95;margin-top:2px}.eva{text-align:center;color:#666;font-size:11px;line-height:14px}.evl{border:1px solid #555;border-radius:8px;padding:6px;margin:8px 0}.evl.p2{border-style:dashed;opacity:.85}.evlh{font-weight:600;color:#49FFCB;font-size:11px;margin:0 0 6px}.evf{background:none;border:1px solid #555;color:#cfcfcf;border-radius:99px;padding:1px 8px;font-size:10px;cursor:pointer}.evf[aria-pressed=true]{background:#49FFCB;color:#000;border-color:#49FFCB}
 .tt.pl td:first-child{width:34%}.tt.pl td:last-child{color:#ffb4a2}.tt.pl td:nth-child(2){color:#49FFCB}
 .note b{color:#f3c98b;font-weight:500}
 .fab{position:fixed;left:16px;bottom:16px;z-index:29;background:var(--ink);color:#fff;border:0;border-radius:99px;padding:10px 16px;font-size:13px;box-shadow:0 4px 14px rgba(0,0,0,.2)}
@@ -318,7 +319,7 @@ function delivery(c){
 function dateIn(n){const d=new Date();d.setDate(d.getDate()+n);return d.toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'});}
 function fitText(c){return LABEL.fit[c.fit]+' fit'+(TWO_LEGS(c.fit)?' · '+LABEL.leg[c.leg]:'');}
 function track(name,props){
-  const e={event:name,...props,feature:'custom_made_lite',device:innerWidth<820?'mobile':'desktop',market:'NL',colour:S.colour,product_id:(PIDS[S.colour]||{})[fitKey(S.cfg)]||'n/a',ts:new Date().toISOString().slice(11,19)};
+  const e={event:name,path:S.path||'none',...props,feature:'custom_made_lite',device:innerWidth<820?'mobile':'desktop',market:'NL',colour:S.colour,product_id:(PIDS[S.colour]||{})[fitKey(S.cfg)]||'n/a',ts:new Date().toISOString().slice(11,19)};
   events.push(e);$('evcount').textContent=events.length;if(btsTab==='events')renderBts();
 }
 function cfgProps(){return {...S.cfg,details_changed:detailsChanged(S.cfg),made_to_order:madeForYou(S.cfg),changed_count:['waist','hem','pleat'].filter(k=>S.cfg[k]!==stockOf(S.cfg)[k]).length};}
@@ -589,27 +590,27 @@ function recommend(){
   track('recommendation_shown',{...cfgProps(),rules_fired:fired.join(',')});
 }
 const STORIES=[
- {id:'US1',pr:'Must',t:'See the options exist',screens:['pdp'],s:'As a customer on the product page, I want to see that these trousers come in more fits and details, so I know before I open the drawer.',ac:[
+ {id:'US1',p:'all',pr:'Must',t:'See the options exist',screens:['pdp'],s:'As a customer on the product page, I want to see that these trousers come in more fits and details, so I know before I open the drawer.',ac:[
   'The product page is otherwise unchanged. The line under Select size and fit reads "Now in more fits and details".',
   'Delivery & Returns opens with the live policy text: free delivery and returns, 30-day return policy.',
   'Price shows €179 and does not change anywhere in the flow, whatever the details.']},
- {id:'US2',pr:'Must',t:'Keep it as shown in one tap',screens:['choose'],s:'As a customer who just wants the trousers as shown, I want one tap to size, so buying stays as fast as today.',ac:[
+ {id:'US2',p:'keep',pr:'Must',t:'Keep it as shown in one tap',screens:['choose'],s:'As a customer who just wants the trousers as shown, I want one tap to size, so buying stays as fast as today.',ac:[
   'The drawer opens on "How do you want to choose?". In version 1 it has two cards: Keep it as shown first, saying it ships in 1-2 days, then I\'ll pick.',
   'Keep goes straight to size with the Straight fit\'s standard details. No screen in between.',
   'I\'ll pick leads to the fit step. Help me choose appears only in its own phase 2 test (US5).']},
- {id:'US3',pr:'Must',t:'Choose my fit',screens:['fit','leg'],s:'As a customer, I want to compare the three fits as photos and, where a fit has two legs, choose the leg, so I pick a shape without knowing tailoring terms.',ac:[
+ {id:'US3',p:'pick',pr:'Must',t:'Choose my fit',screens:['fit','leg'],s:'As a customer, I want to compare the three fits as photos and, where a fit has two legs, choose the leg, so I pick a shape without knowing tailoring terms.',ac:[
   'Fit shows three photo cards with a one-line description each. The chosen fit\'s photo appears on the model.',
   'Slim and Wide then show a leg step: Tapered or Straight, each card with its delivery (In stock, 1-2 days, or Custom Made, 1-2 weeks). Straight fit has no leg step.',
   'Picking a fit loads that fit\'s standard details. If the customer has already changed a detail, their details are kept.',
   'Back returns to the previous step with every choice kept.']},
- {id:'US4',pr:'Must',t:'Choose my details',screens:['details'],s:'As a customer who knows what I want, I want each option as a picture with a plain outcome, so I can choose without knowing what a side adjuster is.',ac:[
+ {id:'US4',p:'pick',pr:'Must',t:'Choose my details',screens:['details'],s:'As a customer who knows what I want, I want each option as a picture with a plain outcome, so I can choose without knowing what a side adjuster is.',ac:[
   'Waistband, hem and front each show two photo cards with a one-line outcome ("Small buckles on each hip. Adjust the waist without a belt").',
   'The fit\'s standard choice is preselected and marked with a green Standard pill. Tapping Choose size without a change keeps the standard pair.',
   'A tap updates the on-model photo immediately, without a page reload; the close-up views (Front, Side, Pleat, Waistband, Hem) match the current choices.',
   'Colour swatches (Sand, Black, Navy) sit at the top of the step; changing colour keeps fit and details and updates every photo.',
   'The copy states the trade once: any change is Custom Made, 1-2 weeks; standard details arrive in 1-2 days. The bottom bar shows the delivery for the current choices.',
   'If a photo fails to load, the card still shows its name and outcome and stays tappable.']},
- {id:'US5',pr:'Should',t:'Help me choose (phase 2 test)',screens:['stylist','rec'],s:'As an unsure customer, I want three quick questions and a recommended pair with reasons, so I don\'t have to understand the options.',ac:[
+ {id:'US5',p:'stylist',pr:'Should',t:'Help me choose (phase 2 test)',screens:['stylist','rec'],s:'As an unsure customer, I want three quick questions and a recommended pair with reasons, so I don\'t have to understand the options.',ac:[
   'Three tapped questions, no typing. Question 2 takes one body answer and one height answer on separate rows; one of each moves on by itself, Next covers a single answer, "Nothing really" skips.',
   'The pick comes from the rule table (Stylist rules tab) and changes at most 2 details from the fit\'s standard. The body answer sets the fit, the height answer sets leg and hem; a wedding keeps a plain hem.',
   'Every detail the stylist chose shows a one-line reason. Details it left alone show no reason.',
@@ -617,78 +618,93 @@ const STORIES=[
   'A Custom Made pick shows "Arrives in 1-2 weeks" and "Use the standard details (1-2 days)", which resets the three details in one tap. A ready-to-ship pick shows no extra box.',
   'Start over returns to the first question and clears the answers.',
   'Phase 2: ships behind its own flag as a separate A/B test once version 1 has a baseline; not part of version 1.']},
- {id:'US6',pr:'Must',t:'Check my choices before I add to bag',screens:['size'],s:'As a customer ordering a pair made for me, I want to see all my choices next to the size buttons, so I catch a mistake before it is made without an extra screen.',ac:[
+ {id:'US6',p:'all',pr:'Must',t:'Check my choices before I add to bag',screens:['size'],s:'As a customer ordering a pair made for me, I want to see all my choices next to the size buttons, so I catch a mistake before it is made without an extra screen.',ac:[
   'The size screen starts with a small photo and one line: colour, fit and leg, front, waistband, hem and price, with "Change something" (except on the keep path).',
   'A Custom Made pair (any changed detail, or Slim straight or Wide straight) shows "Made with your choices", free delivery in 1-2 weeks and "Returns within 30 days." A standard pair shows no notice; the bottom bar says 1-2 business days.',
   'Only a Custom Made pair shows the help line: Get help choosing starts the stylist from the first question and its pick replaces the current choices (stylist_opened); ask a stylist in store opens the store page (store_link_clicked).',
   '"Change something" returns to the path\'s last step with every choice kept. There is no separate summary screen.']},
- {id:'US7',pr:'Should',t:'Find my size',screens:['size'],s:'As a customer, I want my size from my height and waist, so a pair made for me is the right size first time.',ac:[
+ {id:'US7',p:'all',pr:'Should',t:'Find my size',screens:['size'],s:'As a customer, I want my size from my height and waist, so a pair made for me is the right size first time.',ac:[
   'Size buttons lead with the letter (M) and show the length\'s number under it. Length (Short, Regular, Long) is chosen by height: under 168, 168-186, over 186 cm. Changing length keeps the letter and swaps the number.',
   'Find my size asks height and either a usual W size or a tape waist. Example test case: 184 cm and W32 gives M, 48 Regular (live conversion table; re-check when the size guide changes).',
   'The result selects length and size, says "Selected for you", and near the top of a size offers the next size up in one tap.',
   'Both fields empty: "Add your height and waist", no result. Waist above the largest size: "Larger than our biggest size" with the WhatsApp stylist line. Wide fit: the result says it uses the Straight chart.',
   'Add to bag stays disabled until a size is selected. The size chart opens inline for the chosen fit and length.']},
- {id:'US8',pr:'Must',t:'Bag and checkout',screens:['added'],s:'As a customer, I want to see what I added and go straight to checkout, so I can pay without hunting for the bag.',ac:[
+ {id:'US8',p:'all',pr:'Must',t:'Bag and checkout',screens:['added'],s:'As a customer, I want to see what I added and go straight to checkout, so I can pay without hunting for the bag.',ac:[
   'Add to bag opens the bag: the item with photo, colour, fit, details and size, a Custom Made pill when it applies, delivery (1-2 business days or 1-2 weeks) and total.',
   'Proceed to checkout is the main button. Continue shopping returns to the product page and keeps the bag. The header Bag opens the same view from any screen; an empty bag says so.',
   'Checkout itself is unchanged. Depends on US12: the Custom Made details and delivery time carry through to checkout and the order.']},
- {id:'US9',x:true,pr:'Must',t:'Run it as a test with a kill switch',screens:['pdp','choose','added'],s:'As the PM, I want the new drawer behind a feature flag with 50/50 assignment, so I can run the A/B test and switch it off within a day if add-to-bag drops.',ac:[
+ {id:'US9',p:'all',x:true,pr:'Must',t:'Run it as a test with a kill switch',screens:['pdp','choose','added'],s:'As the PM, I want the new drawer behind a feature flag with 50/50 assignment, so I can run the A/B test and switch it off within a day if add-to-bag drops.',ac:[
   'Assignment is 50/50 per customer and sticky: a 12-month cookie for guests, the account for signed-in customers, as with the current A/B tooling. The variant is a property on every event.',
   'Flag off returns the live yes/no flow with no trace of the new screens. Flag on shows the two-way choose screen (keep or pick). The stylist is a separate flag and a separate test (US5).',
   'The flag can be changed per market without a release. Target: off within one working day of the week-2 check (orders down 10% or more).',
   'The size finder and the stylist are separate flags, so either can be switched off without losing the options.']},
- {id:'US10',x:true,pr:'Should',t:'Usable on a phone and with a screen reader',screens:['choose','fit','leg','details','size'],s:'As a customer on a phone or using a screen reader, I want every option reachable and named, so I can order without a mouse or without seeing the pictures.',ac:[
+ {id:'US10',p:'all',x:true,pr:'Should',t:'Usable on a phone and with a screen reader',screens:['choose','fit','leg','details','size'],s:'As a customer on a phone or using a screen reader, I want every option reachable and named, so I can order without a mouse or without seeing the pictures.',ac:[
   'On a phone the drawer is a bottom sheet with the photo above; every step works at 390 px wide with no horizontal scroll and the main button always visible.',
   'Every picture card is a button with a text name and outcome; the selected state uses a border and the Standard pill, not colour alone, and is exposed as aria-pressed.',
   'All steps complete by keyboard alone: Tab reaches every card and button, Enter or Space selects, Escape closes the drawer.',
   'Each on-model and close-up image has alt text that names the current fit and details.']},
- {id:'US11',x:true,pr:'Must',t:'Track where people drop off',screens:['choose','fit','leg','details','stylist','rec','size','added'],s:'As the PM, I want to know on which screen people leave, for each way of choosing, so I fix the screen that loses the most people first.',ac:[
+ {id:'US11',p:'all',x:true,pr:'Must',t:'Track where people drop off',screens:['choose','fit','leg','details','stylist','rec','size','added'],s:'As the PM, I want to know on which screen people leave, for each way of choosing, so I fix the screen that loses the most people first.',ac:[
   'Every screen of the panel sends step_viewed once when it is shown, with step, step_number and path.',
   'Leaving the panel sends panel_closed with from_step and reason: back to the page, restart or left the page.',
-  'A funnel per path (panel_opened, path_selected, step_viewed per step, product_added, checkout_started) can be built from these events alone; the Events tab diagram is the reference.',
+  'Each way of choosing has its own funnel, built from these events alone: keep (choose, size, bag), pick (choose, fit, leg, details, size, bag), stylist (choose, questions, recommendation, size, bag). The Events tab map is the reference.',
   'Test: walking keep, pick and stylist paths in the prototype gives one step_viewed per screen and no duplicates.']},
- {id:'US15',x:true,pr:'Must',t:'Track which options people choose',screens:['details','rec','size','added'],s:'As the PM, I want to see which fit and details people choose and undo, so I know which options earn their place.',ac:[
-  'option_changed fires on every change with option, from_value, to_value and source (fit, leg, details or stylist).',
+ {id:'US15',p:'pick',x:true,pr:'Must',t:'Track which options people pick',screens:['fit','leg','details','size','added'],s:'As the PM, I want to see which fit and details people pick and undo on the I\'ll pick path, so I know which options earn their place.',ac:[
+  'option_changed fires on every change with option, from_value, to_value and source (fit, leg or details), so a change can be traced to the screen it was made on.',
   'product_added carries the full pair: colour, fit, leg, waistband, front, hem, size, length, path and made_to_order.',
   'An option changed and then changed back within the same visit can be counted from option_changed alone.',
-  'recommendation_accepted carries the number of edits, so changes to the stylist\'s pick can be read per rule.']},
- {id:'US16',x:true,pr:'Must',t:'Link orders to returns',screens:['added'],s:'As the analyst, I want every order from the panel linked to its return and return reason, so we can read return rates for Custom Made against normal pairs.',ac:[
+  'Drop-off on the pick path reads fit, leg, details and size in order (step_viewed, panel_closed with path pick).']},
+ {id:'US18',p:'keep',x:true,pr:'Must',t:'Track the keep path',screens:['choose','size','added'],s:'As the PM, I want to see how people who keep the pair as shown move and buy, so I know version 1 is as fast as today for them.',ac:[
+  'Choosing Keep sends path_selected with path keep, then one step_viewed for size and product_added with path keep and made_to_order false. No fit or details events fire on this path.',
+  'Taps from Select size and fit to Add to bag stay at 4, as today; the time from panel_opened to product_added can be read from the timestamps.',
+  'Orders per panel opened on the keep path can be compared with shoppers on today\'s panel who changed nothing. This is the "must not get worse" check.',
+  'Leaving at size sends panel_closed with from_step size and path keep, so size doubt on this path shows on its own.']},
+ {id:'US19',p:'stylist',x:true,pr:'Should',t:'Track the stylist test (phase 2)',screens:['stylist','rec','size','added'],s:'As the PM, I want every stylist step recorded, so the phase 2 test can say whether the stylist sells more pairs than version 1, and which rules people disagree with.',ac:[
+  'Each answer sends stylist_question_answered with question_id, answer and step_number, so drop-off per question can be read.',
+  'recommendation_shown carries the pair and rules_fired; recommendation_accepted carries the pair and edits (0 means kept as suggested).',
+  'option_changed with source stylist shows which suggested detail people change; standard_details_selected shows who swaps to the faster standard pair.',
+  'stylist_opened from the size screen, with path_selected source size, counts people who switch to the stylist midway.',
+  'The stylist has its own flag and variant, so results compare stylist against version 1, not against today.']},
+ {id:'US16',p:'all',x:true,pr:'Must',t:'Link orders to returns',screens:['added'],s:'As the analyst, I want every order from the panel linked to its return and return reason, so we can read return rates for Custom Made against normal pairs.',ac:[
   'product_added carries the order ID once the order is placed.',
   'The order ID joins to the return record and its reason, and to cancellations before shipping.',
   'Return rates can be cut by path, made_to_order, size-finder use and device.']},
- {id:'US17',x:true,pr:'Must',t:'Consent and one naming rule',screens:['pdp','choose','size','added'],s:'As the data team, I want every event named one way and sent only with consent, so the data is clean and lawful in every EU market.',ac:[
+ {id:'US17',p:'all',x:true,pr:'Must',t:'Consent and one naming rule',screens:['pdp','choose','size','added'],s:'As the data team, I want every event named one way and sent only with consent, so the data is clean and lawful in every EU market.',ac:[
   'Event names are object_action in the past tense, in snake_case (panel_opened, product_added). Feature and variant are properties, not part of the name.',
-  'Every event carries feature, variant, device, market, colour, product_id and timestamp.',
+  'Every event carries feature, variant, path (keep, pick, stylist or none before the choice), device, market, colour, product_id and timestamp.',
   'Nothing fires before analytics consent. Height and waist from Find my size are not sent with the shopping events.',
   'QA: the Events tab is the reference; each event there appears in the live build with the same name and properties.']},
- {id:'US12',x:true,pr:'Must',t:'Pass the configuration to the order',screens:['added'],s:'As the operations team, I want every order line to carry the chosen fit and details and a made-to-order flag, so the right pair is made, shipped, confirmed and returned.',ac:[
+ {id:'US12',p:'all',x:true,pr:'Must',t:'Pass the configuration to the order',screens:['added'],s:'As the operations team, I want every order line to carry the chosen fit and details and a made-to-order flag, so the right pair is made, shipped, confirmed and returned.',ac:[
   'The order line carries colour, fit, leg, waistband, front, hem, size and length, plus made_to_order true or false and the delivery promise (1-2 days or 1-2 weeks).',
   'A standard pair is picked from stock as today. A Custom Made pair creates a production order with the same details; nothing is picked from stock.',
   'Checkout and the confirmation email show the details and the delivery time the customer saw. The Custom Made notice wording is the same as on the size screen.',
   'Customer Service sees the details and the flag on the order, so a return request is handled under the Custom Made rule.']},
- {id:'US13',x:true,pr:'Should',t:'Works in every EU market',screens:['pdp','choose','details','stylist','size'],s:'As a customer in any EU market, I want the options, the stylist and the delivery promise in my language and currency, so the flow feels local.',ac:[
+ {id:'US13',p:'all',x:true,pr:'Should',t:'Works in every EU market',screens:['pdp','choose','details','stylist','size'],s:'As a customer in any EU market, I want the options, the stylist and the delivery promise in my language and currency, so the flow feels local.',ac:[
   'All copy, including the stylist\'s questions, answers and reasons, is translatable and ships in every language CM Lite is live in.',
   'Price shows in the market\'s currency; delivery times come from the market\'s delivery settings, not fixed text.',
   'Sizes follow the market\'s size guide; the size finder\'s thresholds and conversions are per market.',
   'The feature flag (US9) can differ per market.']},
- {id:'US14',x:true,pr:'Should',t:'Tailors own the stylist rules',screens:['stylist','rec'],s:'As the tailoring team, I want to change the stylist\'s rules and reasons without a release, so the advice stays ours.',ac:[
+ {id:'US14',p:'stylist',x:true,pr:'Should',t:'Tailors own the stylist rules',screens:['stylist','rec'],s:'As the tailoring team, I want to change the stylist\'s rules and reasons without a release, so the advice stays ours.',ac:[
   'The rule table (occasion, body, height, belt, with set, why and source) lives in a content tool, not in code; a change is live within an hour.',
   'Every change is logged with who and when; the previous version can be restored.',
   'A rule can only choose from the fixed options; it cannot add an option, change a price or promise a delivery time.',
   'recommendation_shown carries the rule-table version, so results can be read per version.']}
 ];
-const storyHtml=u=>`<div class="us"><div class="id">${u.id} · ${esc(u.t)} <span class="pr ${u.pr==='Must'?'must':''}">${u.pr} for v1</span></div><div class="st">${esc(u.s)}</div><ul>${u.ac.map(a=>`<li>${a}</li>`).join('')}</ul></div>`;
+const PATHS={keep:'Keep it as shown',pick:'I\'ll pick',stylist:'Help me choose · phase 2',all:'Every path'};
+const storyHtml=u=>`<div class="us"><div class="id">${u.id} · ${esc(u.t)} <span class="pr ${u.pr==='Must'?'must':''}">${u.pr} for v1</span> <span class="pt">${PATHS[u.p]}</span></div><div class="st">${esc(u.s)}</div><ul>${u.ac.map(a=>`<li>${a}</li>`).join('')}</ul></div>`;
 let showAllStories=false;
 function storiesHtml(key){
   const here=STORIES.filter(u=>u.screens.includes(key)&&!u.x),also=STORIES.filter(u=>u.screens.includes(key)&&u.x);
-  if(showAllStories)return `<div class="note">All seventeen stories, in flow order. Must = v1 cannot ship without it; Should = ship in v1 if the sprint allows, otherwise next. Customer stories describe what the customer sees; events live in US11. Each acceptance criterion maps to a screen in this prototype or to an event in the Events tab, so QA can test against the prototype. Out of scope for v1: checkout, store booking, a surcharge, real Black and Navy photos. <button class="link" id="allStories" style="color:#fff">Show this screen only</button></div>`+STORIES.map(storyHtml).join('');
-  return `<div class="note" style="color:#9a9a95">User stor${here.length>1?'ies':'y'} for this screen. Each acceptance criterion maps to what you see here or to an event in the Events tab. <button class="link" id="allStories" style="color:#fff">Show all 17</button></div>`+here.map(storyHtml).join('')+(also.length?`<div class="note" style="color:#9a9a95;font-size:11px;border-bottom:0">Also applies here: ${also.map(u=>u.id+' '+esc(u.t)).join(' · ')}. See Show all 17.</div>`:'');
+  if(showAllStories){
+    const kind=u=>/^Track|^Link orders|^Consent/.test(u.t)?'Tracking':u.x?'Platform':'Customer';
+    const grp=k=>{const us=STORIES.filter(u=>u.p===k);return `<div class="usg${k==='stylist'?' p2':''}"><div class="ugh">${PATHS[k]} <span>${us.length} stories</span></div>${['Customer','Platform','Tracking'].map(t=>{const x=us.filter(u=>kind(u)===t);return x.length?`<div class="ugk">${t}</div>`+x.map(storyHtml).join(''):''}).join('')}</div>`;};
+    return `<div class="note">All nineteen stories, grouped by way of choosing. Keep and I'll pick are version 1; Help me choose is its own phase 2 test. Every path holds what all three share. Must = v1 cannot ship without it; Should = ship in v1 if the sprint allows, otherwise next. Each acceptance criterion maps to a screen in this prototype or to an event in the Events tab. Out of scope for v1: checkout, store booking, a surcharge, real Black and Navy photos. <button class="link" id="allStories" style="color:#fff">Show this screen only</button></div>`+['keep','pick','stylist','all'].map(grp).join('');}
+  return `<div class="note" style="color:#9a9a95">User stor${here.length>1?'ies':'y'} for this screen. Each acceptance criterion maps to what you see here or to an event in the Events tab. <button class="link" id="allStories" style="color:#fff">Show all 19, by path</button></div>`+here.map(storyHtml).join('')+(also.length?`<div class="note" style="color:#9a9a95;font-size:11px;border-bottom:0">Also applies here: ${also.map(u=>u.id+' '+esc(u.t)).join(' · ')}. See Show all 19.</div>`:'');
 }
 function planHtml(){
   const rows=[
    ['<b>1. Do more people buy?</b> Of everyone who opens the size and fit panel, how many end up ordering. New version against today\'s.','Tracked: panel opened (panel_opened), added to bag (product_added), order placed (order ID)','About the same or better: at most 5% fewer orders than today','5-10% fewer orders: make the Details screen simpler','10% or more fewer orders, two weeks running'],
    ['<b>2. Do people use the new options?</b> Of the orders from the panel, how many have at least one changed detail: waistband, hem or pleat. Counted in weeks 5-8, once the first curiosity has worn off.','Tracked: which detail was changed (option_changed), added to bag (product_added)','15 or more in every 100 orders','5 to 15 in 100: people see the options but don\'t want them; try better photos and words','Fewer than 5 in 100'],
-   ['<b>3. Do more pairs come back?</b> Of Custom Made pairs, how many are returned within 30 days, and why, compared with normal pairs. A returned Custom Made pair can\'t be sold again, so this is the cost. Early warning: orders cancelled before they ship.','Tracked: order (product_added with order ID), return and return reason, cancellation','At most 3 extra returns per 100 pairs','3 to 8 extra per 100: check the photos and the summary screen','More than 8 extra per 100'],
+   ['<b>3. Do more pairs come back?</b> Of Custom Made pairs, how many are returned within 30 days, and why, compared with normal pairs. A returned Custom Made pair can\'t be sold again, so this is the cost. Early warning: orders cancelled before they ship.','Tracked: order (product_added with order ID), return and return reason, cancellation','At most 3 extra returns per 100 pairs','3 to 8 extra per 100: check the photos and the check on the size screen','More than 8 extra per 100'],
   ];
   const tbl=`<table class="tt pl"><tr><th>What we ask</th><th>Worked</th><th>Change course</th><th>Pull it back</th></tr>${rows.map(([m,ev,...r])=>`<tr><td>${m}<br><span style="color:#9a9a95;font-size:10px">${ev}</span></td>${r.map((c,i)=>`<td data-l="${['Worked','Change course','Pull it back'][i]}">${c}</td>`).join('')}</tr>`).join('')}</table>`;
   const li=a=>`<ul style="margin:4px 0 0;padding-left:16px">${a.map(x=>`<li style="margin:3px 0;line-height:1.4">${x}</li>`).join('')}</ul>`;
@@ -697,10 +713,28 @@ function planHtml(){
   <div class="note"><b>Off switch.</b> After 2 weeks, if the new panel brings 10% or more fewer orders and we are sure it is not chance, we turn it off and everyone sees today\'s panel again (US9).</div>
   <div class="note"><b>Keeping it short.</b> Taps from "Select size and fit" to Add to bag: today 4 · keep as shown 4 · pick, nothing changed 6 · pick, one detail changed 7 · stylist (phase 2) 8-9. No study ties a number of clicks to conversion: Nielsen Norman Group says the three-click rule has no published support. The closest benchmark is checkout length: Baymard finds an average checkout of 5.1 steps, and 17% of shoppers have left one for being too long or complicated. So the default path stays as short as today, and the test checks whether the extra taps on the pick path cost orders.</div>
   <div class="note"><b>Two things that must not get worse.</b> Custom Made pairs still arrive within 2 weeks. Shoppers who change nothing buy as easily as they do today.</div>
+  <div class="note"><b>Each way of choosing, measured on its own.</b> Every event carries the path (keep, pick or stylist), so each question above can be read per path. Starting numbers are first guesses, like the ones above.
+   <div class="pp"><div class="pph">Keep it as shown · version 1</div>
+    <div><b>What we ask:</b> do people who want the pair as shown still buy as easily as today?</div>
+    <div><b>We measure:</b> how many choose Keep; orders per panel opened on Keep, against shoppers on today's panel who changed nothing; how many leave at size.</div>
+    <div><b>Good sign:</b> about the same as today, still 4 taps. <b>Warning:</b> clearly fewer orders than today's no-change shoppers, which counts towards the off switch.</div>
+    <div class="ppe">path_selected (keep) · step_viewed (size) · size_finder_opened · product_added (path keep) · panel_closed (from_step size)</div></div>
+   <div class="pp"><div class="pph">I'll pick · version 1</div>
+    <div><b>What we ask:</b> do people who pick actually change a detail, and where do they give up?</div>
+    <div><b>We measure:</b> orders with a changed detail (question 2 comes mostly from here); how many reach fit, leg, details and size; the most chosen and most undone options; returns of Custom Made pairs (question 3).</div>
+    <div><b>Good sign:</b> 15 or more in 100 orders with a changed detail, no single screen losing most people. <b>Warning:</b> many leave at Details, or options picked and then undone, which points to unclear photos or words.</div>
+    <div class="ppe">path_selected (pick) · step_viewed (fit, leg, details, size) · option_changed (source fit, leg, details) · product_added (made_to_order) · order ID to returns · panel_closed (from_step)</div></div>
+   <div class="pp p2"><div class="pph">Help me choose · phase 2, its own A/B test</div>
+    <div><b>What we ask:</b> compared with version 1, does the stylist bring more orders and fewer returns?</div>
+    <div><b>We measure:</b> orders per panel opened, stylist variant against version 1; drop-off per question; how many keep the suggestion as it is; which suggested detail people change; switches to the faster standard details; returns of stylist pairs against picked pairs.</div>
+    <div><b>Good sign:</b> more orders than version 1 and no more returns than picked pairs. <b>Warning:</b> people leave during the questions, or change most suggestions. Targets are set from the version 1 results.</div>
+    <div class="ppe">path_selected (stylist) · stylist_question_answered · recommendation_shown (rules_fired) · option_changed (source stylist) · standard_details_selected · recommendation_accepted (edits) · stylist_opened · product_added (path stylist)</div></div>
+   <div class="pp"><div class="pph">Every path</div>
+    <div>Panel opened (panel_opened), the split between ways (path_selected), size help (size_chart_opened, size_finder_applied, store_link_clicked), bag and checkout (bag_opened, checkout_started), leaving the panel (panel_closed) and returns through the order ID.</div></div></div>
   <div class="note"><b>What we watch, to understand why a number moved.</b> ${li([
    '<b>Where people give up.</b> For each way of choosing (keep as shown, pick myself, stylist), we count how many people reach each screen: panel opened, fit, details, size, bag, checkout. Each screen shown is recorded (step_viewed) and so is leaving the panel (panel_closed). The screen where most people leave is the one to fix first.',
    '<b>Which options people like.</b> For each detail, how many orders have belt loops or side adjusters, a plain hem or a turn-up, a flat front or a pleat. We also count options people pick and then undo, which can mean the photo or the words are unclear (product_added, option_changed).',
-   '<b>What people change after the stylist\'s suggestion.</b> Which suggested detail people change most. That tells the tailors which rule to look at first (recommendation_accepted, option_changed).'])}</div>
+   '<b>What people change after the stylist\'s suggestion (phase 2).</b> Which suggested detail people change most. That tells the tailors which rule to look at first (recommendation_accepted, option_changed).'])}</div>
   <div class="note"><b>Other numbers we check if something looks wrong.</b> Questions to customer service about delivery, returns or "what is this option" · how often people switch a Custom Made suggestion back to the standard details to get it faster (standard_details_selected) · how often people keep the stylist\'s suggestion exactly as it is (recommendation_accepted) · clicks on the store link (store_link_clicked) · time spent in the panel · money lost on Custom Made pairs that come back. We look at every number separately for phone and computer, new and returning customers, each country, and each way of choosing.</div>
   <div class="note"><b>Check before we build.</b>${li([
    '<b>Test with real people:</b> 8-10 shoppers try the prototype on their own. Do they find the options? Do they understand a side adjuster from the photo alone? Do they trust the stylist\'s suggestion more than picking from photos?',
@@ -724,7 +758,7 @@ function planHtml(){
    '<b>4. AI that learns which pairs people keep.</b> After tens of thousands of uses, linked to orders and returns, it learns which pair a customer is least likely to send back. The rules stay as a backup and to explain the choice. This comes last because we only know if a pair was kept about six weeks after the order.'])}
   <b>What we must record from day one, or step 4 can\'t happen:</b> link every stylist use to the order and to any return and its reason (the prototype does this) · when someone changes a suggestion, record which rule they disagreed with · height and waist are personal data, so ask permission first, keep them only as long as needed, and never store them with the shopping data · an optional one-tap "why did you change this?" would help a lot for little effort.
   <b>How long it takes:</b> step 1 needs a few hundred uses for each kind of answer. Step 4 needs about a year of stylist use across all countries before AI does better than the rules. <b>Why not use AI now:</b> we have no results to learn from yet, and there are only three fits and three details to choose from. The rules are what the future AI will learn from, and this test tells us whether a stylist is worth building at all.</div>
-  <div class="note" style="color:#9a9a95"><b>For the analysts.</b> Question 1 is a relative change because only a few percent of panel opens become orders; questions 2 and 3 are in percentage points. "Sure it is not chance" means 95% confidence with 80% power. At a 3% order rate, seeing a 10% drop needs about 48,000 panel opens in each half; Data checks whether two weeks is enough, otherwise "added to bag" is the early sign. Events: step_viewed and panel_closed for drop-off; product_added and option_changed for option choice.</div>
+  <div class="note" style="color:#9a9a95"><b>For the analysts.</b> Question 1 is a relative change because only a few percent of panel opens become orders; questions 2 and 3 are in percentage points. "Sure it is not chance" means 95% confidence with 80% power. At a 3% order rate, seeing a 10% drop needs about 48,000 panel opens in each half; Data checks whether two weeks is enough, otherwise "added to bag" is the early sign. Events: step_viewed and panel_closed for drop-off; product_added and option_changed for option choice. Every event carries path, so each number splits by keep, pick and stylist; the stylist is read against version 1, not against today.</div>
   <div class="note" style="color:#9a9a95">Assumptions not in the brief: delivery times and the return rule come from the live site; the price stays at €179; the live size guide applies to the new pairs.</div>`;
 }
 function treeHtml(){
@@ -775,20 +809,22 @@ setOpt=function(k,v,src){if(src==='stylist')S.recEdits=(S.recEdits||0)+1;origSet
 
 // ---------- behind the scenes
 let btsTab='notes';
+let evFilter='all';
 function evMapHtml(){
-  const st=[
-   ['Product page','accordion_opened, colour_changed','—'],
-   ['Panel opened','panel_opened','Q1 base: every order is counted per panel opened'],
-   ['Way chosen','path_selected (keep, pick, stylist)','Splits every number by path'],
-   ['Fit and leg','step_viewed, option_changed','Drop-off'],
-   ['Details','step_viewed, option_changed','Q2: orders with a changed detail'],
-   ['Stylist · phase 2','stylist_question_answered, recommendation_shown, recommendation_accepted, standard_details_selected','Stylist test'],
-   ['Size','step_viewed, length_selected, size_chart_opened, size_finder_opened, size_finder_completed, size_finder_applied, stylist_opened, store_link_clicked','Drop-off, size doubt'],
-   ['Bag','product_added (with order ID), bag_opened','Q1 orders, Q2 options, Q3 returns via order ID'],
-   ['Checkout','checkout_started','End of the funnel']];
-  return `<div class="note"><b>Event map.</b> Each step of the panel, the events it sends, and the question they answer. Leaving at any step sends panel_closed (from_step, reason). Names follow one rule: object_action, past tense, snake_case; feature and variant are properties.</div>
-  <div class="evmap">${st.map(([n,e,m],i)=>`<div class="evs${n.includes('phase 2')?' p2':''}"><div class="evn">${i+1}. ${n}</div><div class="eve">${e}</div><div class="evm">${m}</div></div>${i<st.length-1?'<div class="eva">↓</div>':''}`).join('')}</div>
-  <div class="note" style="color:#9a9a95">Live log of what this session sent, newest first:</div>`;
+  const box=([n,e,m],cls='')=>`<div class="evs${cls}"><div class="evn">${n}</div><div class="eve">${e}</div><div class="evm">${m}</div></div>`;
+  const arrow='<div class="eva">↓</div>';
+  const start=[['Product page','accordion_opened, colour_changed','—'],['Panel opened','panel_opened','Q1 base: every order is counted per panel opened'],['Way chosen','path_selected (keep, pick, stylist)','Splits every number by path']];
+  const lanes=[
+   ['Keep it as shown · version 1','keep','',[['Size','step_viewed (size), length_selected, size_chart_opened, size_finder_opened, size_finder_completed, size_finder_applied','Leaves at size?'],['Bag','product_added (path keep, made_to_order false)','Keep orders against today']]],
+   ["I'll pick · version 1",'pick','',[['Fit and leg','step_viewed (fit, leg), option_changed (source fit, leg)','Which fit; drop-off'],['Details','step_viewed (details), option_changed (source details)','Q2 options, undo'],['Size + check','step_viewed (size), size events, stylist_opened, store_link_clicked','Drop-off, size doubt, help'],['Bag','product_added (made_to_order, order ID)','Q1, Q2, Q3 returns']]],
+   ['Help me choose · phase 2','stylist',' p2',[['Questions','step_viewed (stylist), stylist_question_answered','Drop-off per question'],['Recommendation','recommendation_shown (rules_fired), option_changed (source stylist), standard_details_selected, recommendation_accepted (edits)','Rules people disagree with'],['Size + check','step_viewed (size), size events, store_link_clicked','Drop-off'],['Bag','product_added (path stylist)','Stylist against version 1']]]];
+  const end=[['Bag and checkout, every path','bag_opened, checkout_started','End of the funnel'],['Leaving, every path','panel_closed (from_step, path, reason)','Where each path loses people']];
+  const f=k=>`<button class="evf" data-f="${k}" aria-pressed="${evFilter===k}">${{all:'All',keep:'Keep',pick:'Pick',stylist:'Stylist'}[k]}</button>`;
+  return `<div class="note"><b>Event map, by way of choosing.</b> Every path starts the same, then splits. Every event carries path, so each funnel can be read on its own. Names follow one rule: object_action, past tense, snake_case; feature and variant are properties.</div>
+  <div class="evmap">${start.map(x=>box(x)).join(arrow)}${arrow}
+   ${lanes.map(([t,k,cls,st])=>`<div class="evl${cls}"><div class="evlh">${t}</div>${st.map(x=>box(x)).join(arrow)}</div>`).join('')}
+   ${arrow}${end.map(x=>box(x)).join(arrow)}</div>
+  <div class="note" style="color:#9a9a95">Live log of what this session sent, newest first. Show: ${['all','keep','pick','stylist'].map(f).join(' ')}</div>`;
 }
 function renderBts(){
   const b=$('btsBody');
@@ -796,7 +832,7 @@ function renderBts(){
   else if(btsTab==='tree'){b.innerHTML=treeHtml();}
   else if(btsTab==='plan'){b.innerHTML=planHtml();}
   else if(btsTab==='stories'){const key=S.step==='stylist'&&S.recReady?'rec':S.step;b.innerHTML=storiesHtml(key);const t=$('allStories');if(t)t.onclick=()=>{showAllStories=!showAllStories;renderBts();};}
-  else{b.innerHTML=evMapHtml()+(events.length?events.slice().reverse().map(e=>{const {event,ts,...p}=e;return `<div class="ev"><b>${esc(event)}</b>  ${ts}\n${esc(JSON.stringify(p))}</div>`}).join(''):'<div class="note">No events yet. Click through the flow.</div>');}
+  else{const ev=events.filter(e=>evFilter==='all'||e.path===evFilter);b.innerHTML=evMapHtml()+(ev.length?ev.slice().reverse().map(e=>{const {event,ts,...p}=e;return `<div class="ev"><b>${esc(event)}</b>  ${ts}\n${esc(JSON.stringify(p))}</div>`}).join(''):`<div class="note">${events.length?'No events on this path yet.':'No events yet. Click through the flow.'}</div>`);b.querySelectorAll('.evf').forEach(x=>x.onclick=()=>{evFilter=x.dataset.f;renderBts();});}
 }
 function openBts(o){$('bts').classList.toggle('open',o);$('fab').hidden=o;renderBts();}
 $('fab').onclick=()=>openBts(true);$('btsClose').onclick=()=>openBts(false);
