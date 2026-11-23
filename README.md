@@ -141,3 +141,5 @@ The fit and leg design notes name the live product codes in parentheses (B6934, 
 - v82: fit and leg on one screen. Tapping Slim or Wide shows the leg choice under the photos, with the in-stock tapered leg preselected; the separate leg step is gone. Step numbers: choose 1, fit 2, details 3, size 4, bag 5.
 
 - v83: full funnel diagram per path (funnel.html, also linked from the Events tab).
+
+- v84: the funnel diagram link is a button at the top of the Events tab.
