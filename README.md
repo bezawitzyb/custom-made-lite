@@ -94,3 +94,6 @@ Metrics audited as a retail product analyst (23 Nov): primary is orders per draw
 
 ### Numbers audit (Plan tab)
 Conversion thresholds and the week-2 kill switch are now relative (within 5%, 5-10%, 10%+), because at a base of a few percent one point is a third or more of all orders. Adoption, cancellations and returns stay in percentage points. Cancellations compare against today's Custom Made orders, not stock. Returns read at week 15 (1-2 weeks delivery plus 30 days means the last week-8 order is fully returnable at week 14.3). Significance is stated as 95% confidence with 80% power, with the rough sample sizes a 10% and 20% relative read need.
+
+### Mobile check (390 px wide)
+Walked every screen at phone size: no horizontal overflow or clipped text anywhere. Fixes: the Behind the scenes tab bar no longer wraps "Plan" onto a second line (scrolls sideways instead), the Plan metrics table stacks per metric on narrow screens, and tap targets were enlarged: header Bag, Restart, the image-view pills, text links such as "Change something" and the panel's close button.

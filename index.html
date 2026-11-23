@@ -19,11 +19,11 @@ body{background:var(--paper);color:var(--ink);font-family:var(--f);font-size:15p
 button{font:inherit;color:inherit;cursor:pointer}
 button:focus-visible,a:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
 .banner{background:var(--ink);color:#fff;font-size:12px;text-align:center;padding:6px 16px;letter-spacing:.02em}
-.banner button{background:none;border:1px solid rgba(255,255,255,.5);color:#fff;border-radius:99px;padding:1px 10px;margin-left:10px;font-size:12px}
+.banner button{background:none;border:1px solid rgba(255,255,255,.5);color:#fff;border-radius:99px;padding:4px 12px;margin-left:10px;font-size:12px;min-height:28px}
 header{height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;border-bottom:1px solid var(--line)}
 .logo{font-weight:600;letter-spacing:.12em;font-size:16px}
 .hicons{display:flex;gap:18px;font-size:13px;color:var(--muted)}
-.bag{position:relative;background:none;border:0;padding:0;font:inherit;color:inherit;cursor:pointer}
+.bag{position:relative;background:none;border:0;padding:10px 8px;margin:-10px -8px;font:inherit;color:inherit;cursor:pointer}
 .bag b[hidden]{display:none}
 .bag b{position:absolute;top:-8px;right:-10px;background:var(--ink);color:#fff;border-radius:99px;font-size:10px;min-width:16px;height:16px;display:grid;place-items:center;font-weight:500}
 main{display:grid;grid-template-columns:minmax(0,1fr) 460px;height:calc(100vh - 56px - 30px)}
@@ -47,7 +47,7 @@ aside.drawer{display:flex;flex-direction:column;border-left:1px solid var(--line
 .primary{background:var(--ink);color:#fff;border:0;border-radius:2px;padding:13px 22px;font-weight:500;margin-left:auto;min-height:46px;white-space:nowrap;flex-shrink:0}
 .primary:disabled{background:var(--disabled);cursor:not-allowed}
 .secondary{background:#fff;border:1px solid var(--line);border-radius:2px;padding:11px 18px;min-height:44px}
-.link{background:none;border:0;padding:0;text-decoration:underline;font-size:13px;color:var(--ink)}
+.link{background:none;border:0;padding:8px 0;text-decoration:underline;font-size:13px;color:var(--ink)}
 .muted{color:var(--muted)}
 .small{font-size:13px}
 h3{font-size:20px;font-weight:600;margin:0 0 6px}
@@ -154,11 +154,11 @@ table.sum .chg{color:var(--accent);font-size:11px;font-weight:500;margin-left:6p
 /* behind the scenes */
 .bts{position:fixed;left:16px;bottom:16px;width:min(420px,calc(100vw - 32px));max-height:46vh;background:#1d1e1c;color:#e9e9e6;border-radius:8px;box-shadow:0 10px 30px rgba(0,0,0,.3);display:none;flex-direction:column;z-index:30;font-size:12px}
 .bts.open{display:flex}
-.bts .bh{display:flex;gap:2px;padding:8px 36px 8px 8px;border-bottom:1px solid #333;flex-wrap:wrap;position:relative}
+.bts .bh{display:flex;gap:2px;padding:8px 36px 8px 8px;border-bottom:1px solid #333;flex-wrap:wrap;position:relative;flex:0 0 auto}
 .us{padding:8px 0;border-bottom:1px solid #2e2e2e}.us .id{color:#9a9a95;font-size:11px}.us .st{margin:2px 0 4px;line-height:1.4}.us ul{margin:0;padding-left:16px}.us li{margin:2px 0;line-height:1.4}.us li code{color:#cfcfcf;font-size:11px}.us .pr{display:inline-block;margin-left:6px;padding:1px 7px;border-radius:99px;border:1px solid #555;color:#bbb;font-size:10px}.us .pr.must{background:#49FFCB;color:#000;border-color:#49FFCB}
 .bts .bh button{background:none;border:0;color:#aaa;padding:4px 8px;border-radius:99px;font-size:12px}
 .bts .bh button[aria-pressed=true]{background:#333;color:#fff}
-.bts .bh .x{position:absolute;right:8px;top:8px;margin:0}
+.bts .bh .x{position:absolute;right:4px;top:4px;margin:0;padding:8px 10px;min-width:36px;min-height:34px}
 .bts .bb{overflow:auto;padding:10px 12px}
 .ev{font-family:ui-monospace,Menlo,monospace;border-bottom:1px solid #2e2e2e;padding:6px 0;white-space:pre-wrap;word-break:break-word}
 .ev b{color:#f3c98b;font-weight:500}
@@ -178,14 +178,17 @@ aside.drawer,.dbody{min-width:0}
   body.cfg .stage{height:36vh}
   body.cfg .stage img{top:40px;height:calc(100% - 82px)}
   body.cfg .stage .views{bottom:4px;max-width:calc(100% - 16px);overflow-x:auto;gap:2px}
-  body.cfg .stage .views button{padding:5px 8px;font-size:12px}
+  body.cfg .stage .views button{padding:8px 8px;font-size:12px}
   body.cfg .stage .tag{top:6px;padding:4px 10px}
   .dfoot[hidden]{display:none}
   .stage .imgnote{display:none}
   .hicons span:not(.bag){display:none}
   .fab{position:absolute;left:auto;right:12px;bottom:auto;top:112px;padding:7px 12px;font-size:12px}
   .dbody{overflow:visible}
-  .stage .views button{padding:6px 10px}
+  .stage .views button{padding:9px 10px}
+  .bts .bh{flex-wrap:nowrap;overflow-x:auto;gap:0;padding-right:34px;-webkit-overflow-scrolling:touch}
+  .bts .bh button{padding:6px 7px;font-size:11px;white-space:nowrap}
+  .tt.pl tr{display:block;padding:6px 0;border-top:1px solid #2e2e2e}.tt.pl tr:first-child{display:none}.tt.pl td{display:block;width:auto!important;border:0;padding:2px 0}.tt.pl td[data-l]::before{content:attr(data-l);display:block;color:#9a9a95;font-size:10px;text-transform:uppercase;letter-spacing:.04em;margin-top:4px}
   .stage .tag{font-size:11px;left:12px;right:150px;top:12px}
   body.fm-typing.cfg main{grid-template-rows:0 auto}
   body.fm-typing .stage{height:0;min-height:0;overflow:hidden;border:0}
@@ -681,7 +684,7 @@ function planHtml(){
    ['Return rate and reasons, Custom Made vs stock, 30 days after delivery; cut by size-finder use','order ID join, return reason','Within 3 points of stock; "not what I expected" no higher than stock','3-8 points over, or "not expected" rising: review photos and the summary','8+ points over'],
    ['Write-off value per 100 drawer orders (a Custom Made return cannot be resold)','returns x cost','Covered by the extra orders the options bring','Not covered: Pricing tests a surcharge','Loss per order grows two months running'],
   ];
-  const tbl=`<table class="tt pl"><tr><th>Metric</th><th>Worked</th><th>Change course</th><th>Pull it back</th></tr>${rows.map(([m,ev,...r])=>`<tr><td>${m}<br><span style="color:#9a9a95;font-family:ui-monospace,monospace;font-size:10px">${ev}</span></td>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</table>`;
+  const tbl=`<table class="tt pl"><tr><th>Metric</th><th>Worked</th><th>Change course</th><th>Pull it back</th></tr>${rows.map(([m,ev,...r])=>`<tr><td>${m}<br><span style="color:#9a9a95;font-family:ui-monospace,monospace;font-size:10px">${ev}</span></td>${r.map((c,i)=>`<td data-l="${['Worked','Change course','Pull it back'][i]}">${c}</td>`).join('')}</tr>`).join('')}</table>`;
   const li=a=>`<ul style="margin:4px 0 0;padding-left:16px">${a.map(x=>`<li style="margin:3px 0;line-height:1.4">${x}</li>`).join('')}</ul>`;
   return `<div class="note"><b>Success metrics.</b> A/B test, new drawer against today\'s, 50/50, all EU markets. Conversion is read as a relative change, because at a base of a few percent one point is a third or more of all orders. Adoption, cancellations and returns are read in percentage points, because their bases are high enough for a point to mean what it says. The thresholds are first guesses; the Data baselines below reset them before launch.${tbl}</div>
   <div class="note"><b>Two decision points.</b> Week 8: conversion, adoption, exit and cancellations. Week 15: returns, because a Custom Made pair takes 1-2 weeks to arrive and 30 days to come back, so the first return read is 5-6 weeks after the order and the last week-8 order is fully returnable at week 14.3.</div>
