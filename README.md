@@ -118,3 +118,6 @@ Every section of the Plan tab rewritten so anyone can follow it: what we watch, 
 
 ### Tab order
 Behind the scenes tabs now run Design notes, User stories, Plan, Stylist rules, Events. "Stories" is renamed "User stories". On a phone all five fit on one line beside the close button.
+
+### Design notes in plain language
+Every screen's design notes rewritten for any reader: same decisions, sources and trade-offs, without event names or terms like copy, path, preselected, meta-analysis, surcharge or ease.
