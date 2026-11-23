@@ -127,3 +127,11 @@ The plain-language design notes and Plan tab now name the event behind each trac
 
 ### Product codes kept in parentheses
 The fit and leg design notes name the live product codes in parentheses (B6934, B6935, B6936, B6939, B3769).
+
+### Mentor's notes applied
+- Version 1 is Keep it as shown plus I'll pick. Help me choose stays in the prototype as a dashed third card labelled "Phase 2", with its own A/B test later.
+- The summary screen is folded into the size screen: a small photo and one-line check, "Change something", the Custom Made notice and the help line sit above the size buttons. Taps to Add to bag: keep 4 (as today), pick 6 with no change, 7 with one change, stylist 8-9.
+- Events renamed to one rule, object_action in the past tense in snake_case, with feature as a property (21 events, e.g. panel_opened, path_selected, product_added, checkout_started, standard_details_selected).
+- The Events tab opens with an event map: each step, its events, and the question they answer.
+- Tracking stories split: US11 drop-off, US15 option choice, US16 orders to returns, US17 consent and naming (17 stories).
+- Plan tab: "Keeping it short" note with the tap counts and sources (Nielsen Norman Group, Baymard); roadmap puts the stylist test in Next.
