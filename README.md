@@ -143,3 +143,5 @@ The fit and leg design notes name the live product codes in parentheses (B6934, 
 - v83: full funnel diagram per path (funnel.html, also linked from the Events tab).
 
 - v84: the funnel diagram link is a button at the top of the Events tab.
+
+- v85: bigger leg photos on the fit screen (full-width cards, cropped to show the leg shape).
