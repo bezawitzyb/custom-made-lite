@@ -154,10 +154,11 @@ table.sum .chg{color:var(--accent);font-size:11px;font-weight:500;margin-left:6p
 /* behind the scenes */
 .bts{position:fixed;left:16px;bottom:16px;width:min(420px,calc(100vw - 32px));max-height:46vh;background:#1d1e1c;color:#e9e9e6;border-radius:8px;box-shadow:0 10px 30px rgba(0,0,0,.3);display:none;flex-direction:column;z-index:30;font-size:12px}
 .bts.open{display:flex}
-.bts .bh{display:flex;gap:4px;padding:8px;border-bottom:1px solid #333}
-.bts .bh button{background:none;border:0;color:#aaa;padding:4px 10px;border-radius:99px}
+.bts .bh{display:flex;gap:2px;padding:8px 36px 8px 8px;border-bottom:1px solid #333;flex-wrap:wrap;position:relative}
+.us{padding:8px 0;border-bottom:1px solid #2e2e2e}.us .id{color:#9a9a95;font-size:11px}.us .st{margin:2px 0 4px;line-height:1.4}.us ul{margin:0;padding-left:16px}.us li{margin:2px 0;line-height:1.4}.us li code{color:#cfcfcf;font-size:11px}
+.bts .bh button{background:none;border:0;color:#aaa;padding:4px 8px;border-radius:99px;font-size:12px}
 .bts .bh button[aria-pressed=true]{background:#333;color:#fff}
-.bts .bh .x{margin-left:auto}
+.bts .bh .x{position:absolute;right:8px;top:8px;margin:0}
 .bts .bb{overflow:auto;padding:10px 12px}
 .ev{font-family:ui-monospace,Menlo,monospace;border-bottom:1px solid #2e2e2e;padding:6px 0;white-space:pre-wrap;word-break:break-word}
 .ev b{color:#f3c98b;font-weight:500}
@@ -209,7 +210,7 @@ aside.drawer,.dbody{min-width:0}
 </main>
 <button class="fab" id="fab" type="button">Behind the scenes</button>
 <div class="bts" id="bts" role="region" aria-label="Behind the scenes">
-  <div class="bh"><button id="tabNotes" aria-pressed="true">Design notes</button><button id="tabEvents" aria-pressed="false">Tracking events <span id="evcount">0</span></button><button id="tabTree" aria-pressed="false">Stylist rules</button><button class="x" id="btsClose" aria-label="Close">&times;</button></div>
+  <div class="bh"><button id="tabNotes" aria-pressed="true">Design notes</button><button id="tabEvents" aria-pressed="false">Events <span id="evcount">0</span></button><button id="tabTree" aria-pressed="false">Stylist rules</button><button id="tabStories" aria-pressed="false">Stories</button><button class="x" id="btsClose" aria-label="Close">&times;</button></div>
   <div class="bb" id="btsBody"></div>
 </div>
 
@@ -290,7 +291,7 @@ const NOTES={
   rec:['One finished pair, with a picture per detail and a reason for each detail the stylist chose. Details it left alone show no reason, so nothing reads as filler.','Each choice can be changed in place. The image and the bottom bar follow the last change.','A Custom Made pick shows its 1-2 week delivery, with "Use the standard details (1-2 days)" for anyone with a deadline (event rec_standard_details). A ready-to-ship pick shows no extra box: the bottom bar already says 1-2 days.','No store link here: it would undercut the pick.'],
   summary:['New: today there is no summary before size. A Custom Made pair is made for one customer, so they check their choices here before ordering.','A Custom Made pair says so plainly: made with your choices, 1-2 weeks, and the return rule. "Can\'t be resold" is the company\'s cost, not the customer\'s concern, so it is left out. A standard pair shows no notice; like the live flow, the bottom bar carries delivery.','Return line uses Suitsupply\'s own Custom Made rule (UK FAQ: returns within 30 days of delivery, unworn, unaltered). Whether it applies to CM Lite in the EU is a question for Legal and Customer Service.','One way out, only for Custom Made pairs: "Get help choosing" first, so the decision can still happen online, then "ask a stylist in store" (events summary_to_stylist, store_handoff_clicked). Showrooms lift total sales, but a store link mid-flow invites putting the decision off.','Price stays at €179 whatever the details. Whether options carry a surcharge is an open question for Pricing.'],
   size:['Today\'s size step, now with a back arrow and a one-line recap of every choice, colour included.','Letter first: each button shows the letter, with the length\'s own number under it (M is 48 in Regular, 24 in Short, 94 in Long), as on the live size guide. The numbers update when the length changes, so no extra line explains it.','Find my size asks two things: height picks the length (live thresholds), the waist picks the size. A usual W size uses the live UK/US conversion; a tape measurement uses the chart plus 2 cm ease, our assumption, which agrees with that conversion. The result selects the size for them.','Opening the chart or the finder are signals of size doubt; finder result and applied show whether it helped.'],
-  added:['A small bag view instead of a bare confirmation: the item with colour, fit, details and size, a Custom Made pill when it applies, delivery and total. "Proceed to checkout" is the main action (event checkout_clicked); checkout itself is out of scope.','"Continue shopping" takes them back to the product page and keeps the bag. The Bag link in the header opens this view from any screen (event bag_opened); Restart empties it.','Open the Tracking events tab to see what this order fired.','Copy audit (23 Nov): every customer line was checked. Lines that repeated the screen, or were written for us rather than the customer, were cut.']
+  added:['A small bag view instead of a bare confirmation: the item with colour, fit, details and size, a Custom Made pill when it applies, delivery and total. "Proceed to checkout" is the main action (event checkout_clicked); checkout itself is out of scope.','"Continue shopping" takes them back to the product page and keeps the bag. The Bag link in the header opens this view from any screen (event bag_opened); Restart empties it.','Open the Events tab to see what this order fired.','Copy audit (23 Nov): every customer line was checked. Lines that repeated the screen, or were written for us rather than the customer, were cut.']
 };
 
 let S,events=[];
@@ -588,6 +589,46 @@ function recommend(){
   S.cfg=c;S.recCfg={...c};S.why=why;S.view='model';S.recEdits=0;
   track('stylist_recommendation_shown',{...cfgProps(),rules_fired:fired.join(',')});
 }
+const STORIES=[
+ {id:'US1',t:'Choose a path',s:'As a customer, I want to keep the trousers as shown in one tap, so buying stays as fast as today.',ac:[
+  'The drawer opens on "How do you want to choose?" with three cards; Keep it as shown is first and says it ships in 1-2 days.',
+  'Keep goes straight to size with the Straight fit\'s standard details; no other screen in between.',
+  '<code>cml_drawer_opened</code> fires on opening; <code>cml_path_selected</code> fires with path keep, pick or stylist.']},
+ {id:'US2',t:'Pick my fit and details',s:'As a customer who knows what I want, I want fit and each option as a picture, so I can choose without tailoring words.',ac:[
+  'Fit shows three photo cards; Slim and Wide then show a leg step (tapered or straight) with each leg\'s delivery (1-2 days or Custom Made, 1-2 weeks).',
+  'Picking a fit loads that fit\'s standard details, unless the customer already changed a detail.',
+  'Waistband, hem and front show as picture pairs with a one-line outcome each; the standard choice is preselected and marked with a green Standard pill.',
+  'A tap updates the on-model photo and fires <code>option_changed</code> with option, from, to and source.',
+  'The bottom bar shows the delivery for the current choices: 1-2 business days with standard details, Custom Made 1-2 weeks after any change.']},
+ {id:'US3',t:'Help me choose',s:'As an unsure customer, I want three quick questions and a recommended pair, so I don\'t have to know the options.',ac:[
+  'Three tapped questions, no typing. Question 2 takes one body answer and one height answer on separate rows; picking one of each moves on, Next covers a single answer.',
+  'The pick comes from the rule table; it changes at most 2 details from the fit\'s standard. The body answer sets the fit, the height answer sets leg and hem.',
+  'Every detail the stylist chose shows a reason; editing a detail in place shows "Your choice" and updates the photo.',
+  'A Custom Made pick shows "Arrives in 1-2 weeks" with "Use the standard details (1-2 days)", which fires <code>rec_standard_details</code>.',
+  '<code>stylist_question_answered</code> fires per answer; <code>stylist_recommendation_shown</code> carries the rules fired; <code>recommendation_accepted</code> carries the number of edits.']},
+ {id:'US4',t:'Review before size',s:'As a customer ordering a pair made for me, I want to see all my choices before size, so I can catch mistakes.',ac:[
+  'The summary lists colour, fit and leg, front, waistband, hem and price; changed details are tagged "your choice".',
+  'A Custom Made pair shows "Made with your choices", free delivery in 1-2 weeks and "Returns within 30 days." A standard pair shows no notice.',
+  'Only a Custom Made pair shows the help line: Get help choosing (fires <code>summary_to_stylist</code>) or ask a stylist in store (fires <code>store_handoff_clicked</code>).',
+  '"Change something" returns to the path\'s last step; <code>summary_viewed</code> fires with the configuration.']},
+ {id:'US5',t:'Find my size',s:'As a customer, I want a size from my height and waist, so I order the right size first time.',ac:[
+  'Size buttons lead with the letter and show the length\'s number under it; Short, Regular and Long are picked by height (under 168, 168-186, over 186 cm).',
+  'Find my size asks height and either a usual W size or a tape waist; W32 at 184 cm gives M, 48 Regular, from the live conversion.',
+  'The result selects length and size, says "Selected for you", and offers the next size up near a boundary.',
+  '<code>size_finder_opened</code>, <code>size_finder_result</code> and <code>size_finder_applied</code> fire; <code>size_chart_opened</code> fires on the chart.']},
+ {id:'US6',t:'Bag and checkout',s:'As a customer, I want to see what I added and go to checkout in one tap, so the order feels done.',ac:[
+  'Add to bag opens the bag: the item with colour, fit, details and size, a Custom Made pill when it applies, delivery and total.',
+  'Proceed to checkout is the main button and fires <code>checkout_clicked</code>; Continue shopping returns to the product page and keeps the bag.',
+  'The header Bag link opens the same view from any screen and fires <code>bag_opened</code>; an empty bag says so.']},
+ {id:'US7',t:'Track the flow',s:'As the PM, I want every step tracked, so I can read adoption, drop-off, delivery choice and returns per path.',ac:[
+  'All 20 spec events fire with the listed properties; every event carries device, market, colour, product_id and a timestamp.',
+  '<code>cml_add_to_bag</code> carries the configuration, size, length, path and made_to_order, and joins to the order ID for returns.',
+  'The Events tab in this panel shows each event as it fires, newest first.']}
+];
+function storiesHtml(){
+  return `<div class="note">Seven stories, one per part of the flow. Each acceptance criterion maps to a screen in this prototype or to an event in the Events tab, so QA can test against the prototype. Out of scope for v1: checkout, store booking, a surcharge, real Black and Navy photos.</div>`+
+  STORIES.map(u=>`<div class="us"><div class="id">${u.id} · ${esc(u.t)}</div><div class="st">${esc(u.s)}</div><ul>${u.ac.map(a=>`<li>${a}</li>`).join('')}</ul></div>`).join('');
+}
 function treeHtml(){
   const layer=(k,t)=>`<div class="note"><b>${t}</b>${Object.entries(TREE[k]).map(([v,n])=>{const sets=[n.fit?LABEL.fit[n.fit[0]]+(TWO_LEGS(n.fit[0])?' '+LABEL.leg[n.fit[1]].toLowerCase():''):'',...Object.entries(n.set).map(([kk,vv])=>LABEL[kk][vv]),n.wideLeg?'Wide → straight leg':''].filter(Boolean).join(', ')||'no change';return `<div class="tr"><span>${esc(n.label)}</span><span>${esc(sets)}</span><i>${esc(n.src)}</i></div>`}).join('')}</div>`;
   let rows='',cm=0,tot=0;
@@ -632,11 +673,12 @@ function renderBts(){
   const b=$('btsBody');
   if(btsTab==='notes'){const key=S.step==='stylist'&&S.recReady?'rec':S.step;b.innerHTML=(NOTES[key]||[]).map((n,i)=>`<div class="note"><b>${i+1}.</b> ${esc(n)}</div>`).join('');}
   else if(btsTab==='tree'){b.innerHTML=treeHtml();}
+  else if(btsTab==='stories'){b.innerHTML=storiesHtml();}
   else{b.innerHTML=events.length?events.slice().reverse().map(e=>{const {event,ts,...p}=e;return `<div class="ev"><b>${esc(event)}</b>  ${ts}\n${esc(JSON.stringify(p))}</div>`}).join(''):'<div class="note">No events yet. Click through the flow.</div>';}
 }
 function openBts(o){$('bts').classList.toggle('open',o);$('fab').hidden=o;renderBts();}
 $('fab').onclick=()=>openBts(true);$('btsClose').onclick=()=>openBts(false);
-['Notes','Events','Tree'].forEach(t=>$('tab'+t).onclick=()=>{btsTab=t.toLowerCase();['Notes','Events','Tree'].forEach(u=>$('tab'+u).setAttribute('aria-pressed',u===t));renderBts();});
+['Notes','Events','Tree','Stories'].forEach(t=>$('tab'+t).onclick=()=>{btsTab=t.toLowerCase();['Notes','Events','Tree','Stories'].forEach(u=>$('tab'+u).setAttribute('aria-pressed',u===t));renderBts();});
 $('views').onclick=e=>{const v=e.target.dataset.view;if(v){S.view=v;renderStage();}};
 $('dbody').addEventListener('click',e=>{const b=e.target.closest('[data-col]');if(b)setColour(b.dataset.col);});
 $('back').onclick=back;
