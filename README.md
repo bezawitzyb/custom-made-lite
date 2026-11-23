@@ -97,3 +97,6 @@ Conversion thresholds and the week-2 kill switch are now relative (within 5%, 5-
 
 ### Mobile check (390 px wide)
 Walked every screen at phone size: no horizontal overflow or clipped text anywhere. Fixes: the Behind the scenes tab bar no longer wraps "Plan" onto a second line (scrolls sideways instead), the Plan metrics table stacks per metric on narrow screens, and tap targets were enlarged: header Bag, Restart, the image-view pills, text links such as "Change something" and the panel's close button.
+
+### Recommendation thumbnails switch the main image
+On the stylist's recommendation card, tapping a detail's picture (fit, front, waistband, hem) shows that detail on the main image; the pressed thumbnail gets a dark border and the view pills follow. Noted in the rec design notes and US5.
