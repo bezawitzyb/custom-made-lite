@@ -139,3 +139,5 @@ The fit and leg design notes name the live product codes in parentheses (B6934, 
 - v81: user stories, metrics (Plan tab) and the event map split by way of choosing: Keep, I'll pick, Help me choose (phase 2), Every path. Every event now carries path; the live log filters by path. New stories US18 (track the keep path) and US19 (track the stylist test).
 
 - v82: fit and leg on one screen. Tapping Slim or Wide shows the leg choice under the photos, with the in-stock tapered leg preselected; the separate leg step is gone. Step numbers: choose 1, fit 2, details 3, size 4, bag 5.
+
+- v83: full funnel diagram per path (funnel.html, also linked from the Events tab).

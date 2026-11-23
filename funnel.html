@@ -1,0 +1,210 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Custom Made Lite Funnel Map</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one wide swimlane grid, stages left to right, one lane per path; shared steps span all lanes */
+:root{
+  --bg:#f6f6f3; --panel:#ffffff; --fg:#151513; --muted:#6b6b64; --line:#d9d9d2;
+  --keep:#2fd9a6; --keep-soft:#dcf8ee; --pick:#f2c500; --pick-soft:#fff5c8; --sty:#e48ad8; --sty-soft:#fbe6f8;
+  --drop:#e2541b; --drop-soft:#fde7dc; --code:#0f6b52;
+  --display:"Space Grotesk",system-ui,sans-serif; --body:"Inter",system-ui,sans-serif; --mono:"JetBrains Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#121311; --panel:#1b1c1a; --fg:#ededea; --muted:#9a9a93; --line:#33342f;
+  --keep:#2fd9a6; --keep-soft:#173a30; --pick:#f2c500; --pick-soft:#3a3315; --sty:#e48ad8; --sty-soft:#3a2338;
+  --drop:#ff7a45; --drop-soft:#3c2217; --code:#5fe3b9; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#121311; --panel:#1b1c1a; --fg:#ededea; --muted:#9a9a93; --line:#33342f;
+  --keep:#2fd9a6; --keep-soft:#173a30; --pick:#f2c500; --pick-soft:#3a3315; --sty:#e48ad8; --sty-soft:#3a2338;
+  --drop:#ff7a45; --drop-soft:#3c2217; --code:#5fe3b9; color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:14px;line-height:1.45}
+.wrap{max-width:1720px;margin:0 auto;padding-block:28px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:22px}
+h1{font-family:var(--display);font-size:clamp(26px,4vw,40px);line-height:1.05;margin:0;text-wrap:balance}
+h2{font-family:var(--display);font-size:20px;margin:0}
+.lede{max-width:72ch;color:var(--muted);margin:6px 0 0}
+.legend{display:flex;flex-wrap:wrap;gap:8px 16px;font-size:12.5px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.sw{width:14px;height:14px;border-radius:3px;display:inline-block;border:1px solid var(--line)}
+code,.ev{font-family:var(--mono);font-size:12px}
+.scroller{overflow-x:auto;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px}
+.map{display:grid;grid-template-columns:120px repeat(8,minmax(172px,1fr));column-gap:26px;row-gap:14px;min-width:1640px;align-items:stretch}
+.stage{font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:600;padding-bottom:4px;border-bottom:1px solid var(--line)}
+.stage b{display:block;color:var(--fg);font-size:12.5px;text-transform:none;letter-spacing:0}
+.lane{display:flex;flex-direction:column;justify-content:center;gap:4px;padding:10px;border-radius:8px;font-weight:600}
+.lane small{font-weight:400;color:var(--muted);font-size:11.5px}
+.lane.keep{background:var(--keep-soft);border-left:4px solid var(--keep)}
+.lane.pick{background:var(--pick-soft);border-left:4px solid var(--pick)}
+.lane.sty{background:var(--sty-soft);border-left:4px dashed var(--sty)}
+.node{position:relative;background:var(--panel);border:1.5px solid var(--fg);border-radius:8px;padding:10px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.node.shared{background:var(--bg)}
+.node.keep{border-color:var(--keep);box-shadow:inset 0 3px 0 var(--keep)}
+.node.pick{border-color:var(--pick);box-shadow:inset 0 3px 0 var(--pick)}
+.node.sty{border-color:var(--sty);border-style:dashed;box-shadow:inset 0 3px 0 var(--sty)}
+.node h3{margin:0;font-size:13.5px;font-family:var(--body);font-weight:700}
+.node .no{font-size:11px;color:var(--muted)}
+.node ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:3px}
+.node li{font-family:var(--mono);font-size:11px;color:var(--code);word-break:break-word}
+.node li i{font-style:normal;color:var(--muted)}
+.node li.opt{opacity:.75}
+.node .q{font-size:11.5px;color:var(--muted);border-top:1px dashed var(--line);padding-top:5px;margin-top:auto}
+.node:not(.first)::before{content:"→";position:absolute;left:-21px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:15px}
+.drop{font-family:var(--mono);font-size:11px;color:var(--drop);background:var(--drop-soft);border-radius:5px;padding:3px 6px}
+.skip{grid-column:span 2;border:1.5px dashed var(--keep);border-radius:8px;display:flex;align-items:center;justify-content:center;text-align:center;color:var(--muted);font-size:12.5px;padding:10px;position:relative}
+.skip::before{content:"→";position:absolute;left:-21px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:15px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.card.keep{border-top:4px solid var(--keep)}.card.pick{border-top:4px solid var(--pick)}.card.sty{border-top:4px dashed var(--sty)}.card.all{border-top:4px solid var(--fg)}
+.card h3{margin:0;font-size:15px;font-family:var(--display)}
+.card p{margin:0}
+.ladder{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:3px}
+.ladder li{font-family:var(--mono);font-size:12px}
+.ladder li span{font-family:var(--body);color:var(--muted);font-size:12px}
+.muted{color:var(--muted)}
+.props{display:flex;flex-wrap:wrap;gap:6px}
+.props code{background:var(--bg);border:1px solid var(--line);border-radius:4px;padding:2px 6px}
+.hint{font-size:12px;color:var(--muted)}
+@media (max-width:700px){.hint{display:block}}
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>Funnel event tracking, per path</h1>
+    <p class="lede">Custom Made Lite trousers: every screen of the size and fit panel, the events it sends, and where people can leave. Everyone starts the same way, then splits into three paths. Keep it as shown and I'll pick are version 1; Help me choose is a phase 2 test of its own. Every event carries <code>path</code>, so each lane is its own funnel.</p>
+  </header>
+
+  <div class="legend" aria-label="Legend">
+    <span><i class="sw" style="background:var(--keep)"></i>Keep it as shown · v1</span>
+    <span><i class="sw" style="background:var(--pick)"></i>I'll pick · v1</span>
+    <span><i class="sw" style="background:var(--sty)"></i>Help me choose · phase 2 (dashed)</span>
+    <span><i class="sw" style="background:var(--drop)"></i>Drop-off: <code>panel_closed</code></span>
+    <span><code style="color:var(--code)">event_name</code> (key properties)</span>
+  </div>
+
+  <div class="scroller" role="region" aria-label="Funnel map, scrolls sideways on small screens" tabindex="0">
+    <div class="map">
+      <div></div>
+      <div class="stage">Start<b>Product page</b></div>
+      <div class="stage">Step 1<b>Panel opened</b></div>
+      <div class="stage">Step 1<b>Way chosen</b></div>
+      <div class="stage">Step 2<b>Fit + leg / questions</b></div>
+      <div class="stage">Step 3<b>Details / suggestion</b></div>
+      <div class="stage">Step 4<b>Size + check</b></div>
+      <div class="stage">Step 5<b>Bag</b></div>
+      <div class="stage">End<b>Checkout</b></div>
+
+      <!-- lane labels -->
+      <div class="lane keep" style="grid-column:1;grid-row:2">Keep it as shown<small>Version 1 · 4 taps</small></div>
+      <div class="lane pick" style="grid-column:1;grid-row:3">I'll pick<small>Version 1 · 6 to 7 taps</small></div>
+      <div class="lane sty" style="grid-column:1;grid-row:4">Help me choose<small>Phase 2 · 8 to 9 taps</small></div>
+
+      <!-- shared start -->
+      <div class="node shared first" style="grid-column:2;grid-row:2 / span 3">
+        <h3>Product page</h3><span class="no">Unchanged; "Select size and fit" opens the panel</span>
+        <ul><li>accordion_opened <i>(section)</i></li><li>colour_changed <i>(from, to)</i></li></ul>
+        <div class="q">Context only, not a funnel step</div>
+      </div>
+      <div class="node shared" style="grid-column:3;grid-row:2 / span 3">
+        <h3>Panel opened</h3><span class="no">"How do you want to choose?"</span>
+        <ul><li>panel_opened <i>(base_fit, colour)</i></li><li>step_viewed <i>(step: choose, 1)</i></li></ul>
+        <div class="q">Funnel base: every order is counted per panel opened</div>
+        <span class="drop">panel_closed · from_step: choose</span>
+      </div>
+      <div class="node shared" style="grid-column:4;grid-row:2 / span 3">
+        <h3>Way chosen</h3><span class="no">One tap on a card</span>
+        <ul><li>path_selected <i>(path: keep, pick, stylist)</i></li></ul>
+        <div class="q">Splits every number by path; share of each way</div>
+      </div>
+
+      <!-- keep lane -->
+      <div class="skip" style="grid-column:5 / span 2;grid-row:2">Straight to size with the standard pair. No fit, details or stylist events on this path.</div>
+      <div class="node keep" style="grid-column:7;grid-row:2">
+        <h3>Size</h3><span class="no">Recap line, no "Change something"</span>
+        <ul><li>step_viewed <i>(size, 4, path keep)</i></li><li class="opt">length_selected</li><li class="opt">size_chart_opened</li><li class="opt">size_finder_opened · completed · applied</li></ul>
+        <div class="q">Does keeping stay as easy as today?</div>
+        <span class="drop">panel_closed · from_step: size</span>
+      </div>
+
+      <!-- pick lane -->
+      <div class="node pick" style="grid-column:5;grid-row:3">
+        <h3>Fit + leg</h3><span class="no">One screen; leg shows for Slim and Wide</span>
+        <ul><li>step_viewed <i>(fit, 2)</i></li><li>option_changed <i>(source fit · leg)</i></li></ul>
+        <div class="q">Which fit and leg people choose</div>
+        <span class="drop">panel_closed · from_step: fit</span>
+      </div>
+      <div class="node pick" style="grid-column:6;grid-row:3">
+        <h3>Details</h3><span class="no">Waistband, hem, front</span>
+        <ul><li>step_viewed <i>(details, 3)</i></li><li>option_changed <i>(option, from, to, source details)</i></li><li class="opt">colour_changed</li></ul>
+        <div class="q">Q2: do people use the options? Which are undone?</div>
+        <span class="drop">panel_closed · from_step: details</span>
+      </div>
+      <div class="node pick" style="grid-column:7;grid-row:3">
+        <h3>Size + check</h3><span class="no">Recap, Custom Made notice, help line</span>
+        <ul><li>step_viewed <i>(size, 4, path pick)</i></li><li class="opt">size_finder_* · size_chart_opened</li><li class="opt">stylist_opened <i>(phase 2 link)</i></li><li class="opt">store_link_clicked</li></ul>
+        <div class="q">Do changed pairs make people doubt?</div>
+        <span class="drop">panel_closed · from_step: size</span>
+      </div>
+
+      <!-- stylist lane -->
+      <div class="node sty" style="grid-column:5;grid-row:4">
+        <h3>Three questions</h3><span class="no">Occasion, body and height, belt</span>
+        <ul><li>step_viewed <i>(stylist, 2)</i></li><li>stylist_question_answered <i>(question_id, answer) ×3</i></li></ul>
+        <div class="q">Drop-off per question</div>
+        <span class="drop">panel_closed · from_step: stylist</span>
+      </div>
+      <div class="node sty" style="grid-column:6;grid-row:4">
+        <h3>Suggested pair</h3><span class="no">Reasons, edit in place</span>
+        <ul><li>recommendation_shown <i>(pair, rules_fired)</i></li><li class="opt">option_changed <i>(source stylist)</i></li><li class="opt">standard_details_selected</li><li>recommendation_accepted <i>(pair, edits)</i></li></ul>
+        <div class="q">Which rules people disagree with. Reaching this screen = recommendation_shown</div>
+        <span class="drop">panel_closed · from_step: stylist</span>
+      </div>
+      <div class="node sty" style="grid-column:7;grid-row:4">
+        <h3>Size + check</h3><span class="no">Store link only</span>
+        <ul><li>step_viewed <i>(size, 4, path stylist)</i></li><li class="opt">size_finder_* · size_chart_opened</li><li class="opt">store_link_clicked</li></ul>
+        <div class="q">Stylist against version 1</div>
+        <span class="drop">panel_closed · from_step: size</span>
+      </div>
+
+      <!-- shared end -->
+      <div class="node shared" style="grid-column:8;grid-row:2 / span 3">
+        <h3>Bag</h3><span class="no">Item, delivery, total</span>
+        <ul><li>product_added <i>(full pair, size, path, made_to_order, order ID)</i></li><li>step_viewed <i>(added, 5)</i></li><li class="opt">bag_opened <i>(from header)</i></li></ul>
+        <div class="q">Q1 orders · Q2 options in orders · Q3 returns via order ID</div>
+      </div>
+      <div class="node shared" style="grid-column:9;grid-row:2 / span 3">
+        <h3>Checkout</h3><span class="no">Existing checkout, unchanged</span>
+        <ul><li>checkout_started <i>(pair, size, from)</i></li></ul>
+        <div class="q">End of the panel funnel. Orders, returns and cancellations join on the order ID</div>
+      </div>
+    </div>
+  </div>
+  <p class="hint">On a phone, swipe the map sideways. Lighter events are optional actions, not funnel steps.</p>
+
+  <section style="display:flex;flex-direction:column;gap:12px">
+    <h2>Each funnel, step by step</h2>
+    <div class="cards">
+      <div class="card keep"><h3>Keep it as shown</h3>
+        <ol class="ladder"><li>panel_opened</li><li>path_selected <span>path = keep</span></li><li>step_viewed <span>size</span></li><li>product_added <span>path = keep</span></li><li>checkout_started</li></ol>
+        <p class="muted">Read against shoppers on today's panel who changed nothing. Must not get worse.</p></div>
+      <div class="card pick"><h3>I'll pick</h3>
+        <ol class="ladder"><li>panel_opened</li><li>path_selected <span>path = pick</span></li><li>step_viewed <span>fit</span></li><li>step_viewed <span>details</span></li><li>step_viewed <span>size</span></li><li>product_added <span>made_to_order</span></li><li>checkout_started</li></ol>
+        <p class="muted">The biggest drop between two steps is the screen to fix first. option_changed shows which options earn their place.</p></div>
+      <div class="card sty"><h3>Help me choose · phase 2</h3>
+        <ol class="ladder"><li>panel_opened</li><li>path_selected <span>path = stylist</span></li><li>stylist_question_answered <span>×3</span></li><li>recommendation_shown</li><li>recommendation_accepted <span>edits</span></li><li>step_viewed <span>size</span></li><li>product_added <span>path = stylist</span></li><li>checkout_started</li></ol>
+        <p class="muted">Its own A/B test, read against version 1, not against today.</p></div>
+      <div class="card all"><h3>Leaving, on every path</h3>
+        <p><code>panel_closed</code> fires once when someone leaves the panel, with <code>from_step</code>, <code>step_number</code>, <code>path</code> and <code>reason</code>:</p>
+        <div class="props"><code>back_to_page</code><code>restart</code><code>left_page</code></div>
+        <p class="muted">Together with step_viewed it shows exactly where each path loses people.</p></div>
+    </div>
+  </section>
+
+  <section class="card all" style="gap:10px">
+    <h2>One naming rule</h2>
+    <p>object_action, past tense, snake_case (<code>panel_opened</code>, <code>product_added</code>). The feature and test variant are properties, not part of the name. Nothing fires before analytics consent; height and waist from Find my size are never sent with the shopping events.</p>
+    <p class="muted">Every event carries:</p>
+    <div class="props"><code>path</code><code>feature</code><code>variant</code><code>device</code><code>market</code><code>colour</code><code>product_id</code><code>timestamp</code></div>
+  </section>
+</div>
+</html>
