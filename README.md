@@ -109,3 +109,6 @@ Six metrics cut to three that decide: conversion (relative), adoption, and retur
 
 ### Metrics in plain language (Plan tab)
 The three metrics are now three questions anyone can read: Do more people buy? Do people use the new options? Do more pairs come back? Each says what is tracked, and the thresholds are in everyday terms ("15 in every 100 orders", "10% fewer orders"). The statistics sit in one small "For the analysts" line.
+
+### Drop-off and option use
+Two new events, 22 in all: cml_step_viewed (every screen of the panel, with step, step number and path) and cml_drawer_closed (leaving the panel, with the screen and the reason: back to the page, restart or left the page). The Plan tab gains a "What we watch" note: a drop-off funnel per way of choosing, the share of each option in orders, options changed and changed back, and which stylist detail people change most. US11 has a drop-off criterion.

@@ -649,8 +649,9 @@ const STORIES=[
   'All steps complete by keyboard alone: Tab reaches every card and button, Enter or Space selects, Escape closes the drawer.',
   'Each on-model and close-up image has alt text that names the current fit and details.']},
  {id:'US11',x:true,pr:'Must',t:'Track the flow',screens:['pdp','choose','fit','leg','details','stylist','rec','summary','size','added'],s:'As the PM, I want every step tracked, so I can read adoption, drop-off, delivery choice and returns per path and per variant.',ac:[
-  'The 20 events in the Events tab fire with the listed properties, once per action, at the moment the action happens. Base properties on every event: device, market, colour, product_id, variant, timestamp.',
+  'The 22 events in the Events tab fire with the listed properties, once per action, at the moment the action happens. Base properties on every event: device, market, colour, product_id, variant, timestamp.',
   'The five that feed the success metrics: cml_path_selected (path), option_changed (option, from, to), summary_viewed (made_to_order), cml_add_to_bag (configuration, size, path, made_to_order), checkout_clicked. The full list, with properties, is in the Events tab and the tracking plan.',
+  'Drop-off: every screen of the panel sends cml_step_viewed (step, step_number, path), and leaving it sends cml_drawer_closed (from_step, reason: back to page, restart or left the page), so each step\'s exit rate can be read per path.',
   'cml_add_to_bag carries the order ID once the order is placed, so returns join back to the configuration.',
   'Nothing fires before the customer has given analytics consent; events respect the consent choice in every EU market.',
   'QA: the prototype\'s Events tab is the reference; each event there must appear in the live implementation with the same name and properties.']},
@@ -689,6 +690,10 @@ function planHtml(){
   <div class="note"><b>When we decide.</b> Week 8: questions 1 and 2, plus cancellations. Week 15: returns. A Custom Made pair takes 1-2 weeks to arrive and the customer has 30 days to send it back, so returns are the last thing we can read.</div>
   <div class="note"><b>Off switch.</b> After 2 weeks, if the new panel brings 10% or more fewer orders and we are sure it is not chance, we switch it off and everyone sees today\'s panel again (US9).</div>
   <div class="note"><b>Two things that must not get worse.</b> Custom Made pairs still arrive within 2 weeks. Shoppers who change nothing buy as easily as they do today.</div>
+  <div class="note"><b>What we watch, to see why a number moved.</b> ${li([
+   '<b>Where people drop off.</b> A funnel for each way of choosing (keep, pick, stylist): panel opened, way chosen, fit, leg, details, summary, size, bag, checkout. Every screen sends cml_step_viewed and leaving sends cml_drawer_closed with the screen it was closed on, so the biggest drop between two screens is the one to fix first.',
+   '<b>Which options people choose.</b> For each detail, the share of orders with each value (belt loops or side adjusters, plain hem or turn-up, flat or pleat, and the fit), from cml_add_to_bag. Also which option is changed and then changed back (option_changed, from and to), a sign the picture or words are unclear.',
+   '<b>What people change after the stylist\'s pick.</b> Which recommended detail is changed most, by answer. That is the first rule the tailors should look at.'])}</div>
   <div class="note"><b>Extra numbers, only to explain a change.</b> Where people leave the Details screen · questions to customer service about delivery, returns or "what is this option" · how often people swap a Custom Made pick back to the standard details to get it faster · how often people keep the stylist\'s pick as is · clicks on the store link · time spent in the panel · money lost on returned Custom Made pairs. Each is split by phone vs computer, new vs returning customer, country, and how they chose (keep, pick, stylist).</div>
   <div class="note" style="color:#9a9a95"><b>For the analysts.</b> Question 1 is a relative change because the base is a few percent; 2 and 3 are percentage points. "Sure it is not chance" means 95% confidence with 80% power. At a 3% base a 10% drop needs roughly 48,000 panel opens per group to read; Data confirms whether week 2 has that traffic, otherwise add to bag is the early read.</div>
   <div class="note"><b>Validate before building.</b>${li([
@@ -706,7 +711,7 @@ function planHtml(){
    '<b>Now:</b> test the MVP. Three paths, three options, the summary and Find my size, behind the 50/50 flag. Answer Legal, Production and Pricing in parallel. Gate: orders per drawer open within 5% of control and adoption at 15%.',
    '<b>Next:</b> roll out and harden. All Custom Made Lite trousers, tailors own the rule table, real renders for every mix, confirmed return rule per market. Gate: returns within 3 points of stock.',
    '<b>Later:</b> widen the reach. Link Size Passport, test a surcharge if Finance wants one, apply the same pattern to jackets, and start the stylist vision below.'])}</div>
-  <div class="note"><b>Future vision: from a scripted stylist to a virtual one.</b> The 20 events are enough to make the rules smarter; a language model needs outcome data the test only starts to collect. Four stages, each earning the next. ${li([
+  <div class="note"><b>Future vision: from a scripted stylist to a virtual one.</b> The 22 events are enough to make the rules smarter; a language model needs outcome data the test only starts to collect. Four stages, each earning the next. ${li([
    '<b>1. Rules that learn.</b> Every stylist run records the answers, the pick, each edit, the order and later the return reason: a labelled example. With a few thousand runs the tailors see which rules customers overrule and which picks come back, and update the table from evidence. No AI needed.',
    '<b>2. Language model for the conversation, rules for the decision.</b> Replace the three scripted questions with a short free-text chat; the model only maps what the customer says onto the same answer slots and writes the reason in brand voice, per market. The rule table still picks, so nothing unmakeable is recommended and every reason stays traceable.',
    '<b>3. Retrieval over Suitsupply\'s own knowledge.</b> The retrieval set is the fit guide, size guide, Custom Made FAQ, return rules, fabric pages and the tailors\' rule table with sources. The stylist can then answer "what is a side adjuster", "does a turn-up work with boots" or "can I return a pleated pair" with a cited answer in every EU language, and call store booking and Size Passport as tools.',
@@ -742,7 +747,14 @@ function recCard(){
 }
 
 // ---------- render
+let lastStep='pdp';
+const STEP_NO={choose:1,fit:2,stylist:2,leg:3,rec:3,details:4,summary:5,size:6,added:7};
 function render(){
+  if(S.step!==lastStep){
+    if(STEP_NO[S.step])track('cml_step_viewed',{step:S.step,step_number:STEP_NO[S.step],path:S.path||'none',from_step:lastStep});
+    else if(S.step==='pdp'&&STEP_NO[lastStep]&&lastStep!=='added')track('cml_drawer_closed',{from_step:lastStep,step_number:STEP_NO[lastStep],path:S.path||'none',reason:'back_to_page'});
+    lastStep=S.step;
+  }
   IMG='img/'+(S.colour==='sand'?'':S.colour+'/');
   if(S.step==='pdp'||S.step==='choose')S.view='model';
   document.body.classList.toggle('cfg',!['pdp','choose'].includes(S.step));
@@ -770,7 +782,8 @@ $('fab').onclick=()=>openBts(true);$('btsClose').onclick=()=>openBts(false);
 $('views').onclick=e=>{const v=e.target.dataset.view;if(v){S.view=v;renderStage();}};
 $('dbody').addEventListener('click',e=>{const b=e.target.closest('[data-col]');if(b)setColour(b.dataset.col);});
 $('back').onclick=back;
-function restart(){fresh();BAG=null;$('bagcount').hidden=true;render();}
+addEventListener('pagehide',()=>{if(STEP_NO[S.step]&&S.step!=='added')track('cml_drawer_closed',{from_step:S.step,step_number:STEP_NO[S.step],path:S.path||'none',reason:'left_page'});});
+function restart(){if(STEP_NO[S.step]&&S.step!=='added')track('cml_drawer_closed',{from_step:S.step,step_number:STEP_NO[S.step],path:S.path||'none',reason:'restart'});fresh();lastStep='pdp';BAG=null;$('bagcount').hidden=true;render();}
 $('bagbtn').onclick=()=>{if(S.step==='added')return;track('bag_opened',{items:BAG?1:0,from_step:S.step});S.hist.push(S.step);S.step='added';S.bagOpened=true;render();};
 $('restart').onclick=()=>{events=[];$('evcount').textContent=0;restart();};
 render();
