@@ -165,3 +165,5 @@ The fit and leg design notes name the live product codes in parentheses (B6934, 
 - v89: the 1-2 week delivery for pairs made with your choices is marked as an assumption (Production to confirm).
 
 - v90: tracking audit. Every event carries panel_session_id (one per panel opening) and variant; path resets when the panel reopens; stylist answers use question_number; the order ID moves to order_completed from checkout (product_added cannot carry it); funnel diagram gains "How to count".
+
+- v91: pleat evidence corrected (Lyst figure is demand, not searches) and extended (Trendalytics searches, Proper Cloth and Art of Manliness on comfort, competitors, Suitsupply relaxed range).
