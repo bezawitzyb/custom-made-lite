@@ -86,6 +86,17 @@ p{margin:0 0 12px}
 .opt span{font-size:12px;color:var(--muted);line-height:1.35}
 .opt[aria-pressed=true]{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
 .opt:disabled{opacity:.45;cursor:not-allowed}
+.bagok{color:var(--ok);font-weight:600;margin:0 0 12px}
+.bagitem{display:grid;grid-template-columns:72px 1fr auto;gap:12px;padding:12px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.bagitem img{width:72px;aspect-ratio:3/4;object-fit:cover;object-position:50% 20%;background:var(--ground);border-radius:2px}
+.bagitem>div{display:flex;flex-direction:column;gap:3px;min-width:0}
+.bagitem b{font-size:14px;font-weight:600}
+.bagitem span{font-size:12px;color:var(--muted)}
+.bagitem .tagmfy{align-self:flex-start;font-size:11px;font-weight:600;line-height:1;color:#5a3a12;background:var(--accent-bg);border-radius:999px;padding:4px 8px;margin-top:4px}
+.bagprice{font-size:14px}
+.bagrow{display:flex;justify-content:space-between;font-size:13px;padding:10px 0 0}
+.bagrow.total{border-top:1px solid var(--line);margin-top:10px;font-size:15px}
+.mfytext{color:#5a3a12}
 .opt .std{align-self:flex-start;font-size:11px;font-weight:600;line-height:1;color:var(--ok);background:var(--ok-bg);border-radius:999px;padding:4px 8px;margin-top:2px}
 /* chat */
 .chat{display:flex;flex-direction:column;gap:10px}
@@ -276,7 +287,7 @@ const NOTES={
   rec:['One finished pair, with a picture per detail and a reason for each detail the stylist chose. Details it left alone show no reason, so nothing reads as filler.','Each choice can be changed in place. The image and the bottom bar follow the last change.','A Custom Made pick shows its 1-2 week delivery, with "Use the standard details (1-2 days)" for anyone with a deadline (event rec_standard_details). A ready-to-ship pick shows no extra box: the bottom bar already says 1-2 days.','No store link here: it would undercut the pick.'],
   summary:['New: today there is no summary before size. A Custom Made pair is made for one customer, so they check their choices here before ordering.','A Custom Made pair says so plainly: made with your choices, 1-2 weeks, and the return rule. "Can\'t be resold" is the company\'s cost, not the customer\'s concern, so it is left out. A standard pair shows no notice; like the live flow, the bottom bar carries delivery.','Return line uses Suitsupply\'s own Custom Made rule (UK FAQ: returns within 30 days of delivery, unworn, unaltered). Whether it applies to CM Lite in the EU is a question for Legal and Customer Service.','One way out, only for Custom Made pairs: "Get help choosing" first, so the decision can still happen online, then "ask a stylist in store" (events summary_to_stylist, store_handoff_clicked). Showrooms lift total sales, but a store link mid-flow invites putting the decision off.','Price stays at €179 whatever the details. Whether options carry a surcharge is an open question for Pricing.'],
   size:['Today\'s size step, now with a back arrow and a one-line recap of every choice, colour included.','Letter first: each button shows the letter, with the length\'s own number under it (M is 48 in Regular, 24 in Short, 94 in Long), as on the live size guide. The numbers update when the length changes, so no extra line explains it.','Find my size asks two things: height picks the length (live thresholds), the waist picks the size. A usual W size uses the live UK/US conversion; a tape measurement uses the chart plus 2 cm ease, our assumption, which agrees with that conversion. The result selects the size for them.','Opening the chart or the finder are signals of size doubt; finder result and applied show whether it helped.'],
-  added:['End of flow. "Continue shopping" takes them back to the product page. Open the Tracking events tab to see what was captured.','Copy audit (23 Nov): every customer line was checked. Lines that repeated the screen, or were written for us rather than the customer, were cut.']
+  added:['A small bag view instead of a bare confirmation: the item with colour, fit, details and size, a Custom Made pill when it applies, delivery and total. "Proceed to checkout" is the main action (event checkout_clicked); checkout itself is out of scope. "Continue shopping" takes them back to the product page. Open the Tracking events tab to see what was captured.','Copy audit (23 Nov): every customer line was checked. Lines that repeated the screen, or were written for us rather than the customer, were cut.']
 };
 
 let S,events=[];
@@ -452,14 +463,26 @@ size(){
   foot('Add to bag',()=>{track('cml_add_to_bag',{...cfgProps(),size:S.size,letter_size:cur&&cur[1],length:L,path:S.path});$('bagcount').hidden=false;go('added');},{disabled:!S.size});
 },
 added(){
-  head('Added to bag');
-  const d=delivery(S.cfg);
-  $('dbody').innerHTML=`<div class="notice ok"><b>Added to your bag</b>${esc(fitText(S.cfg))}, ${LABEL.pleat[S.cfg.pleat].toLowerCase()}, ${LABEL.waist[S.cfg.waist].toLowerCase()}, ${LABEL.hem[S.cfg.hem].toLowerCase()}. Size ${(sizesFor(S.len||'regular').find(([n])=>n===S.size)||[,''])[1]} (${S.size}, ${S.len||'regular'} length).</div>
-  <p class="small muted">${esc(d.text)}</p>
-  <button class="secondary" id="again" style="width:100%">Continue shopping</button>`;
+  head('Your bag');
+  const c=S.cfg,d=delivery(c),L=S.len||'regular',letter=(sizesFor(L).find(([n])=>n===S.size)||[,''])[1];
+  $('dbody').innerHTML=`<p class="small bagok">✓ Added to your bag</p>
+  <div class="bagitem"><img src="${IMG+MODEL(c)}.jpg" alt=""><div>
+    <b>Straight Leg Suit Trousers</b>
+    <span>${esc(COL[S.colour].label)} · ${esc(fitText(c))}</span>
+    <span>${LABEL.pleat[c.pleat]} · ${LABEL.waist[c.waist]} · ${LABEL.hem[c.hem]}</span>
+    <span>Size ${letter} (${S.size}, ${L[0].toUpperCase()+L.slice(1)})</span>
+    ${d.mfy?'<span class="tagmfy">Custom Made</span>':''}
+  </div><b class="bagprice">€179</b></div>
+  <div class="bagrow"><span>Delivery</span><span class="${d.mfy?'mfytext':''}">Free, ${d.mfy?'1-2 weeks':'1-2 business days'}</span></div>
+  <div class="bagrow total"><span>Total</span><b>€179</b></div>
+  <button class="primary" id="checkout" style="width:100%;margin:16px 0 8px">Proceed to checkout</button>
+  <button class="secondary" id="again" style="width:100%">Continue shopping</button>
+  <p class="small muted" id="coNote" hidden style="margin-top:10px">Checkout isn't part of this prototype. The flow ends here.</p>`;
+  $('checkout').onclick=()=>{track('checkout_clicked',{...cfgProps(),size:S.size,length:L});$('coNote').hidden=false;};
   $('again').onclick=restart;
   $('dfoot').innerHTML='<span class="small muted">Open "Behind the scenes" to see the events this order fired.</span>';
 }
+
 };
 function bindStore(){document.querySelectorAll('[data-store]').forEach(b=>b.onclick=()=>{track('store_handoff_clicked',{step:S.step});b.outerHTML='<span class="small">Store booking would open here.</span>';});}
 
