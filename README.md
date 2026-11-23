@@ -147,3 +147,5 @@ The fit and leg design notes name the live product codes in parentheses (B6934, 
 - v85: bigger leg photos on the fit screen (full-width cards, cropped to show the leg shape).
 
 - v86: design notes trimmed to the decisions and their reasons (40 notes down to 21).
+
+- v87: the Custom Made notice and help line sit under the size buttons, right before Add to bag.
