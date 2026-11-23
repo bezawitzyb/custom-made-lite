@@ -470,7 +470,7 @@ added(){
   const c=b.cfg,d=delivery(c),L=b.len||'regular',letter=(sizesFor(L).find(([n])=>n===b.size)||[,''])[1];
   $('dbody').innerHTML=`${S.bagOpened?'':'<p class="small bagok">✓ Added to your bag</p>'}
   <div class="bagitem"><img src="${b.img}.jpg" alt=""><div>
-    <b>Straight Leg Suit Trousers</b>
+    <b>${c.fit==='straight'?'Straight Leg Suit Trousers':'Suit Trousers, '+LABEL.fit[c.fit]+' fit'}</b>
     <span>${esc(COL[b.colour].label)} · ${esc(fitText(c))}</span>
     <span>${LABEL.pleat[c.pleat]} · ${LABEL.waist[c.waist]} · ${LABEL.hem[c.hem]}</span>
     <span>Size ${letter} (${b.size}, ${L[0].toUpperCase()+L.slice(1)})</span>
