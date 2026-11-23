@@ -1,13 +1,23 @@
-# Help me choose: clickable prototype
+# Custom Made Lite: design options case
 
-Open `index.html` in any browser. It runs offline, so keep the `img/` folder next to it. Use **Restart** in the top banner to begin again.
+## Files
+| File | What it is |
+|---|---|
+| `index.html` | Clickable prototype. Runs offline; keep the `img/` folder next to it. **Restart** in the top banner starts again. |
+| `funnel.html` | Tracking and funnel diagram: every screen per path (Keep, I'll pick, Help me choose), the events each sends, and where people drop off. |
+| `one-pager.html` | One-page reasoning: why this placement, what I left out, what I'd check, what I'm least sure about. |
+
+If GitHub Pages is on for this repo, they open at `https://bezawitzyb.github.io/custom-made-lite/`, `/funnel.html` and `/one-pager.html`.
 
 ## Paths to demo
-1. **Keep it as shown** goes straight to size, which is today's fastest path.
-2. **Help me choose** opens the scripted stylist: occasion, fit worry and belt. It then shows a recommendation with reasons and lets the customer change any part before the summary.
-3. **I'll pick my fit and details** goes through fit (photo cards), leg (Wide only) and a Details step with three picture pairs, then the summary.
+1. **Keep it as shown** goes straight to size: 4 taps to the bag, as today.
+2. **I'll pick my fit and details** goes through fit and leg (one screen), Details with three picture pairs, then size, where the choices are recapped and a pair made for you shows "Made with your choices" under the size buttons.
+3. **Help me choose** (phase 2, its own test) asks three quick questions and suggests a pair with reasons, then goes to size.
 
-## Edge states built in
+## Build notes
+The notes below are the build history, oldest first. Where they disagree, the newest entry and the files above are what is current.
+
+### Edge states built in
 - Each fit has its own standard details on the live site (22 Nov 2026): Slim tapered B6934 has side adjusters, a single pleat and a 4 cm turn-up; Slim straight B6936 (live drawer, 23 Nov 2026, delivery 1-2 weeks) has belt loops, a flat front and a plain hem; Straight B6935 has belt loops, a flat front and a plain hem; Wide tapered B6939 and Wide straight B3769 have belt loops, a single pleat and a plain hem. Picking a fit loads that fit's standard details, as on the live site, unless the customer has already changed a detail (then their details are kept).
 - Delivery follows the live site: a fit that is in stock (Straight, Slim tapered, Wide tapered) with its standard details ships in 1-2 days. Any changed detail, or a made-to-order fit (Slim straight, Wide straight), shows "Custom Made · free delivery in 1-2 weeks" and the "Made with your choices" notice. The leg step shows each leg's delivery, as the live drawer does. Events carry made_to_order. Slim and Wide both get a leg step (tapered or straight), as on the live site, and the stylist's pick shows the leg choice in its own box. The Details step marks each fit's standard options.
 - When any detail differs from that fit's standard, the summary says "Made with your choices": made with your choices, so check them before picking a size. The note leaves out "can't be resold" (our cost, not the customer's concern) and shows Suitsupply's own Custom Made return rule (UK FAQ: 30 days, unworn and unaltered), which still needs confirming for CM Lite. It makes no claim about returns.
