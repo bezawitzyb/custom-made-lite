@@ -382,10 +382,10 @@ pdp(){
 },
 choose(){
   head('How would you like your trousers?');
-  $('dbody').innerHTML=`<p class="muted small">Buy them as they are, or make them your way.</p>
+  $('dbody').innerHTML=`<p class="muted small">These trousers come in 3 fits and can be made with your choice of details.</p>
   <div class="cards">
-   <button class="card main" data-p="keep"><img class="cthumb" src="${IMG+MODEL(fitPreview(S.cfg,'straight','tapered'))}.jpg" alt=""><span><b>Keep it as shown</b><span class="s">Straight fit, exactly as in the photos. Delivered in 1-2 days.</span></span></button>
-   <button class="card" data-p="pick"><img class="cthumb" src="${IMG}thumb-pleat.jpg" alt=""><span><b>I'll pick my fit and details</b><span class="s">Choose the fit, waistband, hem and front. Most changes are made just for you and delivered in 1-2 weeks.</span></span></button>
+   <button class="card main" data-p="keep"><img class="cthumb" src="${IMG+MODEL(fitPreview(S.cfg,'straight','tapered'))}.jpg" alt=""><span><b>Keep it as shown</b><span class="s">Straight fit, flat front, belt loops, plain hem. Delivered in 1-2 days.</span></span></button>
+   <button class="card" data-p="pick"><img class="cthumb" src="${IMG}thumb-pleat.jpg" alt=""><span><b>I'll pick my fit and details</b><span class="s">Choose the fit, waistband, hem and front. You see the delivery time for each choice.</span></span></button>
    <button class="card phase2" data-p="stylist"><img class="cthumb" src="${IMG+MODEL(fitPreview(S.cfg,'wide','tapered'))}.jpg" alt=""><span><b>Help me choose</b><span class="s">Answer 3 quick questions and our stylist suggests the right pair.</span><span class="p2">Phase 2 · its own A/B test, not in version 1</span></span></button>
   </div>`;
   foot(null);
@@ -588,7 +588,7 @@ function recommend(){
 }
 const STORIES=[
  {id:'US1',p:'keep',pr:'Must',t:'Keep it as shown in one tap',screens:['choose'],s:'As a customer who just wants the trousers as shown, I want one tap to size, so buying stays as fast as today.',ac:[
-  'The drawer opens on "How would you like your trousers?". In version 1 it has two cards, each with a small photo. Keep it as shown comes first with a stronger border, saying it ships in 1-2 days. I\'ll pick says up front that most changes are made for you and take 1-2 weeks.',
+  'The drawer opens on "How would you like your trousers?". In version 1 it has two cards, each with a small photo. Keep it as shown comes first with a stronger border, saying it ships in 1-2 days. I\'ll pick says the delivery time is shown for each choice.',
   'Keep goes straight to size with the Straight fit\'s standard details. No screen in between.','A size that is out of stock shows as out of stock and cannot be added, as today. It is never quietly turned into a made-for-you pair.',
   'I\'ll pick leads to the fit step. Help me choose appears only in its own phase 2 test (US6).']},
  {id:'US2',p:'keep',x:true,pr:'Must',t:'Track the keep path',screens:['choose','size','added'],s:'As the PM, I want to see how people who keep the pair as shown move and buy, so I know version 1 is as fast as today for them.',ac:[
