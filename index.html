@@ -68,6 +68,8 @@ p{margin:0 0 12px}
 .cards{display:grid;gap:10px;margin-top:14px}
 .card{display:flex;gap:14px;align-items:center;text-align:left;width:100%;background:#fff;border:1px solid var(--line);border-radius:4px;padding:16px;min-height:72px}
 .card:hover{border-color:var(--ink)}
+.card.main{border:2px solid var(--ink);padding:15px}
+.card .cthumb{width:48px;height:64px;object-fit:cover;border-radius:3px;flex:none;background:var(--ground)}
 .card .ico{width:40px;height:40px;border-radius:50%;background:var(--ground);display:grid;place-items:center;flex:none;font-size:18px}
 .card b{display:block;font-weight:600}
 .card span.s{font-size:13px;color:var(--muted)}
@@ -293,7 +295,7 @@ const VIEW_LABEL={front:'Front',side:'Side',pleat:'Front detail',waist:'Waistban
 const VIEW_FOR={pleat:'pleat',waist:'waist',hem:'hem'};
 const NOTES={
   pdp:['Same product page as today, plus one line: "Now in more fits and details". People who never open the panel see no change.'],
-  choose:['Today\'s yes/no "Want a different fit?" becomes "How do you want to choose?". Version 1 has two answers: keep it as shown, or pick my fit and details (path_selected).','Keep comes first and stays as fast as today: one tap to size, 4 taps to the bag. Picking adds one screen; the test checks whether those taps cost orders.','Help me choose is dashed: it is phase 2, tested on its own against version 1.'],
+  choose:['Today\'s yes/no "Want a different fit?" becomes "How would you like your trousers?". Version 1 has two answers: keep it as shown, or pick my fit and details (path_selected).','Keep comes first and stays as fast as today: one tap to size, 4 taps to the bag. Picking adds one screen; the test checks whether those taps cost orders.','Help me choose is dashed: it is phase 2, tested on its own against version 1.'],
   fit:['Fit and leg share one screen, with photos of each fit from the live product page (Slim B6934, Straight B6935, Wide B6939).','Slim and Wide show the leg choice under the photos. The in-stock tapered leg is preselected, so every fit costs the same taps (option_changed).','A fit loads its usual details unless the customer already changed one. Any changed detail, or a made-to-order leg (Slim straight B6936, Wide straight B3769), makes the pair Custom Made: 1-2 weeks instead of 1-2 days. The bottom bar always shows the delivery.'],
   details:['Three photo pairs with the fit\'s usual details preselected, so Choose size without a change gives today\'s pair (option_changed).','The trade-off is said once: any change is Custom Made, 1-2 weeks. A green Standard label marks the 1-2 day choice.','Why a pleat: the only option with demand data. demand for pleated trousers on Lyst is up 110% since 2025 (FashionUnited, June 2026), searches were up 97% a year earlier (Trendalytics, 2023), and a pleat gives room at the hips and thighs when sitting. Suitsupply already makes it on Slim and Wide.','Two choices per option, because people stall when choices are hard to tell apart (Chernev, Böckenholt and Goodman, 2015).'],
   stylist:['Phase 2, not in version 1. Three tapped questions and fixed rules, not live AI, so it can only suggest pairs that exist (stylist_question_answered).','The body answer sets the fit; the height answer sets the leg and hem. Suitsupply\'s tailors should own the rules (Stylist rules tab).'],
@@ -379,12 +381,12 @@ pdp(){
   $('sel').onclick=()=>{S.path=null;S.psid=Math.random().toString(36).slice(2,10);track('panel_opened',{base_fit:'straight',colour:S.colour});go('choose');};
 },
 choose(){
-  head('How do you want to choose?');
-  $('dbody').innerHTML=`<p class="muted small">These trousers come in 3 fits and can be made with your choice of details.</p>
+  head('How would you like your trousers?');
+  $('dbody').innerHTML=`<p class="muted small">Buy them as they are, or make them your way.</p>
   <div class="cards">
-   <button class="card" data-p="keep"><span class="ico">✓</span><span><b>Keep it as shown</b><span class="s">Straight fit, flat front, belt loops, plain hem. Pick your size. Ships in 1-2 days.</span></span></button>
-   <button class="card" data-p="pick"><span class="ico">⇄</span><span><b>I'll pick my fit and details</b><span class="s">Choose fit, waistband, hem and front yourself.</span></span></button>
-   <button class="card phase2" data-p="stylist"><span class="ico">✦</span><span><b>Help me choose <span class="badge">3 quick questions</span></b><span class="s">Tell us what they're for. Our stylist suggests the fit and details.</span><span class="p2">Phase 2 · its own A/B test, not in version 1</span></span></button>
+   <button class="card main" data-p="keep"><img class="cthumb" src="${IMG+MODEL(fitPreview(S.cfg,'straight','tapered'))}.jpg" alt=""><span><b>Keep it as shown</b><span class="s">Straight fit, exactly as in the photos. Delivered in 1-2 days.</span></span></button>
+   <button class="card" data-p="pick"><img class="cthumb" src="${IMG}thumb-pleat.jpg" alt=""><span><b>I'll pick my fit and details</b><span class="s">Choose the fit, waistband, hem and front. Most changes are made just for you and delivered in 1-2 weeks.</span></span></button>
+   <button class="card phase2" data-p="stylist"><img class="cthumb" src="${IMG+MODEL(fitPreview(S.cfg,'wide','tapered'))}.jpg" alt=""><span><b>Help me choose</b><span class="s">Answer 3 quick questions and our stylist suggests the right pair.</span><span class="p2">Phase 2 · its own A/B test, not in version 1</span></span></button>
   </div>`;
   foot(null);
   document.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{S.path=b.dataset.p;track('path_selected',{path:S.path});
@@ -586,7 +588,7 @@ function recommend(){
 }
 const STORIES=[
  {id:'US1',p:'keep',pr:'Must',t:'Keep it as shown in one tap',screens:['choose'],s:'As a customer who just wants the trousers as shown, I want one tap to size, so buying stays as fast as today.',ac:[
-  'The drawer opens on "How do you want to choose?". In version 1 it has two cards: Keep it as shown first, saying it ships in 1-2 days, then I\'ll pick.',
+  'The drawer opens on "How would you like your trousers?". In version 1 it has two cards, each with a small photo. Keep it as shown comes first with a stronger border, saying it ships in 1-2 days. I\'ll pick says up front that most changes are made for you and take 1-2 weeks.',
   'Keep goes straight to size with the Straight fit\'s standard details. No screen in between.','A size that is out of stock shows as out of stock and cannot be added, as today. It is never quietly turned into a made-for-you pair.',
   'I\'ll pick leads to the fit step. Help me choose appears only in its own phase 2 test (US6).']},
  {id:'US2',p:'keep',x:true,pr:'Must',t:'Track the keep path',screens:['choose','size','added'],s:'As the PM, I want to see how people who keep the pair as shown move and buy, so I know version 1 is as fast as today for them.',ac:[

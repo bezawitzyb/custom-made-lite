@@ -191,3 +191,5 @@ The 10 slides as images, in order, are in [deck/](deck/) (slide-01.png to slide-
 - Funnel diagram audited: plain-language labels, step 1 screen and tap told apart, stylist path ladder includes its screen view.
 
 - Event accordion_opened renamed to delivery_returns_opened.
+
+- Choose screen: "How would you like your trousers?", plain card text with the delivery time on each way, small photos instead of icons, Keep it as shown highlighted.
