@@ -177,3 +177,5 @@ The 10 slides as images, in order, are in [deck/](deck/) (slide-01.png to slide-
 - v93: "For the analysts" note in the Plan tab rewritten in plain words.
 
 - v94: Plan tab checks reordered (cheap and fast first), money and systems checks added, Lite vs full Custom Made added to least sure.
+
+- v95: product page design note on Delivery and Returns wording removed.
