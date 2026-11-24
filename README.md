@@ -179,3 +179,5 @@ The 10 slides as images, in order, are in [deck/](deck/) (slide-01.png to slide-
 - v94: Plan tab checks reordered (cheap and fast first), money and systems checks added, Lite vs full Custom Made added to least sure.
 
 - v95: product page design note on Delivery and Returns wording removed.
+
+- v96: user story review. Twenty stories, numbered in the order shown. Fixes: version 1 size-screen help line, off switch on orders, question_number, Custom Made defined once with the 1-2 weeks as an assumption. Added: cancel a made-for-you pair (US15), full Custom Made orders tracked, out-of-stock sizes, photo speed. Accessibility and Find my size are now Must.

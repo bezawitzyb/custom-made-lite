@@ -585,14 +585,15 @@ function recommend(){
   track('recommendation_shown',{...cfgProps(),rules_fired:fired.join(',')});
 }
 const STORIES=[
- {id:'US1',p:'all',pr:'Must',t:'See the options exist',screens:['pdp'],s:'As a customer on the product page, I want to see that these trousers come in more fits and details, so I know before I open the drawer.',ac:[
-  'The product page is otherwise unchanged. The line under Select size and fit reads "Now in more fits and details".',
-  'Delivery & Returns opens with the live policy text: free delivery and returns, 30-day return policy.',
-  'Price shows €179 and does not change anywhere in the flow, whatever the details.']},
- {id:'US2',p:'keep',pr:'Must',t:'Keep it as shown in one tap',screens:['choose'],s:'As a customer who just wants the trousers as shown, I want one tap to size, so buying stays as fast as today.',ac:[
+ {id:'US1',p:'keep',pr:'Must',t:'Keep it as shown in one tap',screens:['choose'],s:'As a customer who just wants the trousers as shown, I want one tap to size, so buying stays as fast as today.',ac:[
   'The drawer opens on "How do you want to choose?". In version 1 it has two cards: Keep it as shown first, saying it ships in 1-2 days, then I\'ll pick.',
-  'Keep goes straight to size with the Straight fit\'s standard details. No screen in between.',
-  'I\'ll pick leads to the fit step. Help me choose appears only in its own phase 2 test (US5).']},
+  'Keep goes straight to size with the Straight fit\'s standard details. No screen in between.','A size that is out of stock shows as out of stock and cannot be added, as today. It is never quietly turned into a made-for-you pair.',
+  'I\'ll pick leads to the fit step. Help me choose appears only in its own phase 2 test (US6).']},
+ {id:'US2',p:'keep',x:true,pr:'Must',t:'Track the keep path',screens:['choose','size','added'],s:'As the PM, I want to see how people who keep the pair as shown move and buy, so I know version 1 is as fast as today for them.',ac:[
+  'Choosing Keep sends path_selected with path keep, then one step_viewed for size and product_added with path keep and made_to_order false. No fit or details events fire on this path.',
+  'Taps from Select size and fit to Add to bag stay at 4, as today; the time from panel_opened to product_added can be read from the timestamps.',
+  'Orders per panel opened on the keep path can be compared with shoppers on today\'s panel who changed nothing. This is the "must not get worse" check.',
+  'Leaving at size sends panel_closed with from_step size and path keep, so size doubt on this path shows on its own.']},
  {id:'US3',p:'pick',pr:'Must',t:'Choose my fit and leg',screens:['fit'],s:'As a customer, I want to compare the three fits as photos and, where a fit has two legs, choose the leg, so I pick a shape without knowing tailoring terms.',ac:[
   'Fit shows three photo cards with a one-line description each. The chosen fit\'s photo appears on the model.',
   'Fit and leg are one screen. Tapping Slim or Wide shows Tapered or Straight under the fit photos, each with its delivery (In stock, 1-2 days, or Custom Made, 1-2 weeks), and scrolls it into view on a phone. Straight fit shows no leg choice.','The in-stock leg (tapered) is preselected, so Next works without a leg tap; Slim, Straight and Wide take the same number of taps.',
@@ -604,8 +605,13 @@ const STORIES=[
   'A tap updates the on-model photo immediately, without a page reload; the close-up views (Front, Side, Pleat, Waistband, Hem) match the current choices.',
   'Colour swatches (Sand, Black, Navy) sit at the top of the step; changing colour keeps fit and details and updates every photo.',
   'The copy states the trade once: any change is Custom Made, 1-2 weeks; standard details arrive in 1-2 days. The bottom bar shows the delivery for the current choices.',
-  'If a photo fails to load, the card still shows its name and outcome and stays tappable.']},
- {id:'US5',p:'stylist',pr:'Should',t:'Help me choose (phase 2 test)',screens:['stylist','rec'],s:'As an unsure customer, I want three quick questions and a recommended pair with reasons, so I don\'t have to understand the options.',ac:[
+  'If a photo fails to load, the card still shows its name and outcome and stays tappable.','A photo change shows within 1 second on a phone on 4G; photos for the chosen fit load in advance. The exact target is agreed with Engineering.']},
+ {id:'US5',p:'pick',x:true,pr:'Must',t:'Track which options people pick',screens:['fit','details','size','added'],s:'As the PM, I want to see which fit and details people pick and undo on the I\'ll pick path, so I know which options earn their place.',ac:[
+  'option_changed fires on every change with option, from_value, to_value and source (fit, leg or details), so a change can be traced to the screen it was made on.',
+  'product_added carries the full pair: colour, fit, leg, waistband, front, hem, size, length, path and made_to_order.',
+  'An option changed and then changed back within the same visit can be counted from option_changed alone.',
+  'Drop-off on the pick path reads fit and leg, details and size in order (step_viewed, panel_closed with path pick).']},
+ {id:'US6',p:'stylist',pr:'Should',t:'Help me choose (phase 2 test)',screens:['stylist','rec'],s:'As an unsure customer, I want three quick questions and a recommended pair with reasons, so I don\'t have to understand the options.',ac:[
   'Three tapped questions, no typing. Question 2 takes one body answer and one height answer on separate rows; one of each moves on by itself, Next covers a single answer, "Nothing really" skips.',
   'The pick comes from the rule table (Stylist rules tab) and changes at most 2 details from the fit\'s standard. The body answer sets the fit, the height answer sets leg and hem; a wedding keeps a plain hem.',
   'Every detail the stylist chose shows a one-line reason. Details it left alone show no reason.',
@@ -613,76 +619,74 @@ const STORIES=[
   'A Custom Made pick shows "Arrives in 1-2 weeks" and "Use the standard details (1-2 days)", which resets the three details in one tap. A ready-to-ship pick shows no extra box.',
   'Start over returns to the first question and clears the answers.',
   'Phase 2: ships behind its own flag as a separate A/B test once version 1 has a baseline; not part of version 1.']},
- {id:'US6',p:'all',pr:'Must',t:'Check my choices before I add to bag',screens:['size'],s:'As a customer ordering a pair made for me, I want to see all my choices next to the size buttons, so I catch a mistake before it is made without an extra screen.',ac:[
-  'The size screen starts with a small photo and one line: colour, fit and leg, front, waistband, hem and price, with "Change something" (except on the keep path).',
-  'A Custom Made pair (any changed detail, or Slim straight or Wide straight) shows "Made with your choices" under the size buttons, free delivery in 1-2 weeks and "Returns within 30 days." A standard pair shows no notice; the bottom bar says 1-2 business days.',
-  'Only a Custom Made pair shows the help line: Get help choosing starts the stylist from the first question and its pick replaces the current choices (stylist_opened); ask a stylist in store opens the store page (store_link_clicked).',
-  '"Change something" returns to the path\'s last step with every choice kept. There is no separate summary screen.']},
- {id:'US7',p:'all',pr:'Should',t:'Find my size',screens:['size'],s:'As a customer, I want my size from my height and waist, so a pair made for me is the right size first time.',ac:[
-  'Size buttons lead with the letter (M) and show the length\'s number under it. Length (Short, Regular, Long) is chosen by height: under 168, 168-186, over 186 cm. Changing length keeps the letter and swaps the number.',
-  'Find my size asks height and either a usual W size or a tape waist. Example test case: 184 cm and W32 gives M, 48 Regular (live conversion table; re-check when the size guide changes).',
-  'The result selects length and size, says "Selected for you", and near the top of a size offers the next size up in one tap.',
-  'Both fields empty: "Add your height and waist", no result. Waist above the largest size: "Larger than our biggest size" with the WhatsApp stylist line. Wide fit: the result says it uses the Straight chart.',
-  'Add to bag stays disabled until a size is selected. The size chart opens inline for the chosen fit and length.']},
- {id:'US8',p:'all',pr:'Must',t:'Bag and checkout',screens:['added'],s:'As a customer, I want to see what I added and go straight to checkout, so I can pay without hunting for the bag.',ac:[
-  'Add to bag opens the bag: the item with photo, colour, fit, details and size, a Custom Made pill when it applies, delivery (1-2 business days or 1-2 weeks) and total.',
-  'Proceed to checkout is the main button. Continue shopping returns to the product page and keeps the bag. The header Bag opens the same view from any screen; an empty bag says so.',
-  'Checkout itself is unchanged. Depends on US12: the Custom Made details and delivery time carry through to checkout and the order.']},
- {id:'US9',p:'all',x:true,pr:'Must',t:'Run it as a test with a kill switch',screens:['pdp','choose','added'],s:'As the PM, I want the new drawer behind a feature flag with 50/50 assignment, so I can run the A/B test and switch it off within a day if add-to-bag drops.',ac:[
-  'Assignment is 50/50 per customer and sticky: a 12-month cookie for guests, the account for signed-in customers, as with the current A/B tooling. The variant is a property on every event.',
-  'Flag off returns the live yes/no flow with no trace of the new screens. Flag on shows the two-way choose screen (keep or pick). The stylist is a separate flag and a separate test (US5).',
-  'The flag can be changed per market without a release. Target: off within one working day of the week-2 check (orders down 10% or more).',
-  'The size finder and the stylist are separate flags, so either can be switched off without losing the options.']},
- {id:'US10',p:'all',x:true,pr:'Should',t:'Usable on a phone and with a screen reader',screens:['choose','fit','details','size'],s:'As a customer on a phone or using a screen reader, I want every option reachable and named, so I can order without a mouse or without seeing the pictures.',ac:[
-  'On a phone the drawer is a bottom sheet with the photo above; every step works at 390 px wide with no horizontal scroll and the main button always visible.',
-  'Every picture card is a button with a text name and outcome; the selected state uses a border and the Standard pill, not colour alone, and is exposed as aria-pressed.',
-  'All steps complete by keyboard alone: Tab reaches every card and button, Enter or Space selects, Escape closes the drawer.',
-  'Each on-model and close-up image has alt text that names the current fit and details.']},
- {id:'US11',p:'all',x:true,pr:'Must',t:'Track where people drop off',screens:['choose','fit','details','stylist','rec','size','added'],s:'As the PM, I want to know on which screen people leave, for each way of choosing, so I fix the screen that loses the most people first.',ac:[
-  'Every screen of the panel sends step_viewed once when it is shown, with step, step_number and path.',
-  'Leaving the panel sends panel_closed with from_step and reason: back to the page, restart or left the page.',
-  'Each way of choosing has its own funnel, built from these events alone: keep (choose, size, bag), pick (choose, fit and leg, details, size, bag), stylist (choose, questions, recommendation, size, bag). The Events tab map is the reference.',
-  'Going back fires step_viewed again, so funnels count unique panel_session_id per step, not events. Someone who switches to the stylist from size keeps their first path for the funnel (path_selected with source size marks the switch).','Test: walking keep, pick and stylist paths in the prototype gives one step_viewed per screen shown.']},
- {id:'US15',p:'pick',x:true,pr:'Must',t:'Track which options people pick',screens:['fit','details','size','added'],s:'As the PM, I want to see which fit and details people pick and undo on the I\'ll pick path, so I know which options earn their place.',ac:[
-  'option_changed fires on every change with option, from_value, to_value and source (fit, leg or details), so a change can be traced to the screen it was made on.',
-  'product_added carries the full pair: colour, fit, leg, waistband, front, hem, size, length, path and made_to_order.',
-  'An option changed and then changed back within the same visit can be counted from option_changed alone.',
-  'Drop-off on the pick path reads fit and leg, details and size in order (step_viewed, panel_closed with path pick).']},
- {id:'US18',p:'keep',x:true,pr:'Must',t:'Track the keep path',screens:['choose','size','added'],s:'As the PM, I want to see how people who keep the pair as shown move and buy, so I know version 1 is as fast as today for them.',ac:[
-  'Choosing Keep sends path_selected with path keep, then one step_viewed for size and product_added with path keep and made_to_order false. No fit or details events fire on this path.',
-  'Taps from Select size and fit to Add to bag stay at 4, as today; the time from panel_opened to product_added can be read from the timestamps.',
-  'Orders per panel opened on the keep path can be compared with shoppers on today\'s panel who changed nothing. This is the "must not get worse" check.',
-  'Leaving at size sends panel_closed with from_step size and path keep, so size doubt on this path shows on its own.']},
- {id:'US19',p:'stylist',x:true,pr:'Should',t:'Track the stylist test (phase 2)',screens:['stylist','rec','size','added'],s:'As the PM, I want every stylist step recorded, so the phase 2 test can say whether the stylist sells more pairs than version 1, and which rules people disagree with.',ac:[
-  'Each answer sends stylist_question_answered with question_id, answer and step_number, so drop-off per question can be read.',
+ {id:'US7',p:'stylist',x:true,pr:'Should',t:'Tailors own the stylist rules',screens:['stylist','rec'],s:'As the tailoring team, I want to change the stylist\'s rules and reasons without a release, so the advice stays ours.',ac:[
+  'The rule table (occasion, body, height, belt, with set, why and source) lives in a content tool, not in code; a change is live within an hour.',
+  'Every change is logged with who and when; the previous version can be restored.',
+  'A rule can only choose from the fixed options; it cannot add an option, change a price or promise a delivery time.',
+  'recommendation_shown carries the rule-table version, so results can be read per version.']},
+ {id:'US8',p:'stylist',x:true,pr:'Should',t:'Track the stylist test (phase 2)',screens:['stylist','rec','size','added'],s:'As the PM, I want every stylist step recorded, so the phase 2 test can say whether the stylist sells more pairs than version 1, and which rules people disagree with.',ac:[
+  'Each answer sends stylist_question_answered with question_id, answer and question_number, so drop-off per question can be read.',
   'recommendation_shown carries the pair and rules_fired; recommendation_accepted carries the pair and edits (0 means kept as suggested).',
   'option_changed with source stylist shows which suggested detail people change; standard_details_selected shows who swaps to the faster standard pair.',
   'stylist_opened from the size screen, with path_selected source size, counts people who switch to the stylist midway.',
   'The stylist has its own flag and variant, so results compare stylist against version 1, not against today.']},
- {id:'US16',p:'all',x:true,pr:'Must',t:'Link orders to returns',screens:['added'],s:'As the analyst, I want every order from the panel linked to its return and return reason, so we can read return rates for Custom Made against normal pairs.',ac:[
-  'Checkout sends order_completed (server side, not in this prototype) with order_id, the full pair, path, made_to_order and panel_session_id. product_added cannot carry the order ID because the order does not exist yet.',
-  'The order ID joins to the return record and its reason, and to cancellations before shipping.',
-  'Return rates can be cut by path, made_to_order, size-finder use and device.']},
- {id:'US17',p:'all',x:true,pr:'Must',t:'Consent and one naming rule',screens:['pdp','choose','size','added'],s:'As the data team, I want every event named one way and sent only with consent, so the data is clean and lawful in every EU market.',ac:[
-  'Event names are object_action in the past tense, in snake_case (panel_opened, product_added). Feature and variant are properties, not part of the name.',
-  'Every event carries panel_session_id (one per panel opening, so a funnel counts people, not repeat views), feature, variant, path (keep, pick, stylist or none before the choice), device, market, colour, product_id and timestamp.',
-  'Nothing fires before analytics consent. Height and waist from Find my size are not sent with the shopping events.',
-  'QA: the Events tab is the reference; each event there appears in the live build with the same name and properties.']},
- {id:'US12',p:'all',x:true,pr:'Must',t:'Pass the configuration to the order',screens:['added'],s:'As the operations team, I want every order line to carry the chosen fit and details and a made-to-order flag, so the right pair is made, shipped, confirmed and returned.',ac:[
+ {id:'US9',p:'all',pr:'Must',t:'See the options exist',screens:['pdp'],s:'As a customer on the product page, I want to see that these trousers come in more fits and details, so I know before I open the drawer.',ac:[
+  'The product page is otherwise unchanged. The line under Select size and fit reads "Now in more fits and details".',
+  'Delivery & Returns opens with the live policy text: free delivery and returns, 30-day return policy.',
+  'Price shows €179 and does not change anywhere in the flow, whatever the details.']},
+ {id:'US10',p:'all',pr:'Must',t:'Check my choices before I add to bag',screens:['size'],s:'As a customer ordering a pair made for me, I want to see all my choices next to the size buttons, so I catch a mistake before it is made without an extra screen.',ac:[
+  'The size screen starts with a small photo and one line: colour, fit and leg, front, waistband, hem and price, with "Change something" (except on the keep path).',
+  'Custom Made means any changed detail, or Slim or Wide with a straight leg. Such a pair shows "Made with your choices" under the size buttons, free delivery in the Custom Made time from Production (1-2 weeks is my assumption) and "Returns within 30 days." A standard pair shows no notice; the bottom bar says 1-2 business days.',
+  'Only a Custom Made pair shows the help line. In version 1 it offers only "ask a stylist in store", which opens the store page (store_link_clicked). Get help choosing appears only when the phase 2 stylist flag is on: it starts the stylist from the first question and its pick replaces the current choices (stylist_opened).',
+  '"Change something" returns to the path\'s last step with every choice kept. There is no separate summary screen.']},
+ {id:'US11',p:'all',pr:'Must',t:'Find my size',screens:['size'],s:'As a customer, I want my size from my height and waist, so a pair made for me is the right size first time.',ac:[
+  'Size buttons lead with the letter (M) and show the length\'s number under it. Length (Short, Regular, Long) is chosen by height: under 168, 168-186, over 186 cm. Changing length keeps the letter and swaps the number.',
+  'Find my size asks height and either a usual W size or a tape waist. Example test case: 184 cm and W32 gives M, 48 Regular (live conversion table; re-check when the size guide changes).',
+  'The result selects length and size, says "Selected for you", and near the top of a size offers the next size up in one tap.',
+  'Both fields empty: "Add your height and waist", no result. Waist above the largest size: "Larger than our biggest size" with the WhatsApp stylist line. Wide fit: the result says it uses the Straight chart.',
+  'Add to bag stays disabled until a size is selected. The size chart opens inline for the chosen fit and length.','Must, not Should: a wrong size on a made-for-you pair cannot be resold.']},
+ {id:'US12',p:'all',pr:'Must',t:'Bag and checkout',screens:['added'],s:'As a customer, I want to see what I added and go straight to checkout, so I can pay without hunting for the bag.',ac:[
+  'Add to bag opens the bag: the item with photo, colour, fit, details and size, a Custom Made pill when it applies, delivery (1-2 business days or 1-2 weeks) and total.',
+  'Proceed to checkout is the main button. Continue shopping returns to the product page and keeps the bag. The header Bag opens the same view from any screen; an empty bag says so.',
+  'Checkout itself is unchanged. Depends on US16: the Custom Made details and delivery time carry through to checkout and the order.']},
+ {id:'US13',p:'all',x:true,pr:'Must',t:'Run it as a test with a kill switch',screens:['pdp','choose','added'],s:'As the PM, I want the new drawer behind a feature flag with 50/50 assignment, so I can run the A/B test and switch it off within a day if orders drop 10% or more.',ac:[
+  'Assignment is 50/50 per customer and sticky: a 12-month cookie for guests, the account for signed-in customers, as with the current A/B tooling. The variant is a property on every event.',
+  'Flag off returns the live yes/no flow with no trace of the new screens. Flag on shows the two-way choose screen (keep or pick). The stylist is a separate flag and a separate test (US6).',
+  'The flag can be changed per market without a release. Target: off within one working day of the week-2 check (orders down 10% or more).',
+  'The size finder and the stylist are separate flags, so either can be switched off without losing the options.']},
+ {id:'US14',p:'all',x:true,pr:'Must',t:'Usable on a phone and with a screen reader',screens:['choose','fit','details','size'],s:'As a customer on a phone or using a screen reader, I want every option reachable and named, so I can order without a mouse or without seeing the pictures.',ac:[
+  'On a phone the drawer is a bottom sheet with the photo above; every step works at 390 px wide with no horizontal scroll and the main button always visible.',
+  'Meets WCAG 2.1 AA, the standard behind the EU Accessibility Act, which has applied to online shops since June 2025.','Every picture card is a button with a text name and outcome; the selected state uses a border and the Standard pill, not colour alone, and is exposed as aria-pressed.',
+  'All steps complete by keyboard alone: Tab reaches every card and button, Enter or Space selects, Escape closes the drawer.',
+  'Each on-model and close-up image has alt text that names the current fit and details.']},
+ {id:'US15',p:'all',x:true,pr:'Must',t:'Cancel a made-for-you pair',screens:['added'],s:'As a customer who ordered a pair made for me, I want to know until when I can cancel, so I do not feel locked in before it is made.',ac:[
+  'Until production starts, a Custom Made order can be cancelled in My account or through Customer Service, with a full refund. Production sets the cut-off.',
+  'The bag, the order confirmation email and the order page say until when the order can be cancelled.',
+  'Cancellations are recorded on the order, so they join to order_id with returns (US19) and count as the early warning in plan question 3.']},
+ {id:'US16',p:'all',x:true,pr:'Must',t:'Pass the configuration to the order',screens:['added'],s:'As the operations team, I want every order line to carry the chosen fit and details and a made-to-order flag, so the right pair is made, shipped, confirmed and returned.',ac:[
   'The order line carries colour, fit, leg, waistband, front, hem, size and length, plus made_to_order true or false and the delivery promise (1-2 days or 1-2 weeks).',
   'A standard pair is picked from stock as today. A Custom Made pair creates a production order with the same details; nothing is picked from stock.',
   'Checkout and the confirmation email show the details and the delivery time the customer saw. The Custom Made notice wording is the same as on the size screen.',
   'Customer Service sees the details and the flag on the order, so a return request is handled under the Custom Made rule.']},
- {id:'US13',p:'all',x:true,pr:'Should',t:'Works in every EU market',screens:['pdp','choose','details','stylist','size'],s:'As a customer in any EU market, I want the options, the stylist and the delivery promise in my language and currency, so the flow feels local.',ac:[
+ {id:'US17',p:'all',x:true,pr:'Should',t:'Works in every EU market',screens:['pdp','choose','details','stylist','size'],s:'As a customer in any EU market, I want the options, the stylist and the delivery promise in my language and currency, so the flow feels local.',ac:[
   'All copy, including the stylist\'s questions, answers and reasons, is translatable and ships in every language CM Lite is live in.',
   'Price shows in the market\'s currency; delivery times come from the market\'s delivery settings, not fixed text.',
   'Sizes follow the market\'s size guide; the size finder\'s thresholds and conversions are per market.',
-  'The feature flag (US9) can differ per market.']},
- {id:'US14',p:'stylist',x:true,pr:'Should',t:'Tailors own the stylist rules',screens:['stylist','rec'],s:'As the tailoring team, I want to change the stylist\'s rules and reasons without a release, so the advice stays ours.',ac:[
-  'The rule table (occasion, body, height, belt, with set, why and source) lives in a content tool, not in code; a change is live within an hour.',
-  'Every change is logged with who and when; the previous version can be restored.',
-  'A rule can only choose from the fixed options; it cannot add an option, change a price or promise a delivery time.',
-  'recommendation_shown carries the rule-table version, so results can be read per version.']}
+  'The feature flag (US13) can differ per market.']},
+ {id:'US18',p:'all',x:true,pr:'Must',t:'Track where people drop off',screens:['choose','fit','details','stylist','rec','size','added'],s:'As the PM, I want to know on which screen people leave, for each way of choosing, so I fix the screen that loses the most people first.',ac:[
+  'Every screen of the panel sends step_viewed once when it is shown, with step, step_number and path.',
+  'Leaving the panel sends panel_closed with from_step and reason: back to the page, restart or left the page.',
+  'Each way of choosing has its own funnel, built from these events alone: keep (choose, size, bag), pick (choose, fit and leg, details, size, bag), stylist (choose, questions, recommendation, size, bag). The Events tab map is the reference.',
+  'Going back fires step_viewed again, so funnels count unique panel_session_id per step, not events. Someone who switches to the stylist from size keeps their first path for the funnel (path_selected with source size marks the switch).','Test: walking keep, pick and stylist paths in the prototype gives one step_viewed per screen shown.']},
+ {id:'US19',p:'all',x:true,pr:'Must',t:'Link orders to returns',screens:['added'],s:'As the analyst, I want every order from the panel linked to its return and return reason, so we can read return rates for Custom Made against normal pairs.',ac:[
+  'Checkout sends order_completed (server side, not in this prototype) with order_id, the full pair, path, made_to_order and panel_session_id. product_added cannot carry the order ID because the order does not exist yet.',
+  'The order ID joins to the return record and its reason, and to cancellations before shipping.',
+  'Return rates can be cut by path, made_to_order, size-finder use and device.','Full Custom Made orders for trousers are counted in both halves of the test, so we see whether Lite brings new sales or takes them from full Custom Made.']},
+ {id:'US20',p:'all',x:true,pr:'Must',t:'Consent and one naming rule',screens:['pdp','choose','size','added'],s:'As the data team, I want every event named one way and sent only with consent, so the data is clean and lawful in every EU market.',ac:[
+  'Event names are object_action in the past tense, in snake_case (panel_opened, product_added). Feature and variant are properties, not part of the name.',
+  'Every event carries panel_session_id (one per panel opening, so a funnel counts people, not repeat views), feature, variant, path (keep, pick, stylist or none before the choice), device, market, colour, product_id and timestamp.',
+  'Nothing fires before analytics consent. Height and waist from Find my size are not sent with the shopping events.',
+  'QA: the Events tab is the reference; each event there appears in the live build with the same name and properties.']},
 ];
 const PATHS={keep:'Keep it as shown',pick:'I\'ll pick',stylist:'Help me choose · phase 2',all:'Every path'};
 const storyHtml=u=>`<div class="us"><div class="id">${u.id} · ${esc(u.t)} <span class="pr ${u.pr==='Must'?'must':''}">${u.pr} for v1</span> <span class="pt">${PATHS[u.p]}</span></div><div class="st">${esc(u.s)}</div><ul>${u.ac.map(a=>`<li>${a}</li>`).join('')}</ul></div>`;
@@ -692,8 +696,8 @@ function storiesHtml(key){
   if(showAllStories){
     const kind=u=>/^Track|^Link orders|^Consent/.test(u.t)?'Tracking':u.x?'Platform':'Customer';
     const grp=k=>{const us=STORIES.filter(u=>u.p===k);return `<div class="usg${k==='stylist'?' p2':''}"><div class="ugh">${PATHS[k]} <span>${us.length} stories</span></div>${['Customer','Platform','Tracking'].map(t=>{const x=us.filter(u=>kind(u)===t);return x.length?`<div class="ugk">${t}</div>`+x.map(storyHtml).join(''):''}).join('')}</div>`;};
-    return `<div class="note">All nineteen stories, grouped by way of choosing. Keep and I'll pick are version 1; Help me choose is its own phase 2 test. Every path holds what all three share. Must = v1 cannot ship without it; Should = ship in v1 if the sprint allows, otherwise next. Each acceptance criterion maps to a screen in this prototype or to an event in the Events tab. Out of scope for v1: checkout, store booking, a surcharge, real Black and Navy photos. <button class="link" id="allStories" style="color:#fff">Show this screen only</button></div>`+['keep','pick','stylist','all'].map(grp).join('');}
-  return `<div class="note" style="color:#9a9a95">User stor${here.length>1?'ies':'y'} for this screen. Each acceptance criterion maps to what you see here or to an event in the Events tab. <button class="link" id="allStories" style="color:#fff">Show all 19, by path</button></div>`+here.map(storyHtml).join('')+(also.length?`<div class="note" style="color:#9a9a95;font-size:11px;border-bottom:0">Also applies here: ${also.map(u=>u.id+' '+esc(u.t)).join(' · ')}. See Show all 19.</div>`:'');
+    return `<div class="note">All twenty stories, grouped by way of choosing. Keep and I'll pick are version 1; Help me choose is its own phase 2 test. Every path holds what all three share. Must = v1 cannot ship without it; Should = ship in v1 if the sprint allows, otherwise next. Each acceptance criterion maps to a screen in this prototype or to an event in the Events tab. Custom Made means any changed detail, or Slim or Wide with a straight leg; its delivery time comes from Production, and the 1-2 weeks used throughout is my assumption. Out of scope for v1: checkout, store booking, a surcharge, real Black and Navy photos. <button class="link" id="allStories" style="color:#fff">Show this screen only</button></div>`+['keep','pick','stylist','all'].map(grp).join('');}
+  return `<div class="note" style="color:#9a9a95">User stor${here.length>1?'ies':'y'} for this screen. Each acceptance criterion maps to what you see here or to an event in the Events tab. <button class="link" id="allStories" style="color:#fff">Show all 20, by path</button></div>`+here.map(storyHtml).join('')+(also.length?`<div class="note" style="color:#9a9a95;font-size:11px;border-bottom:0">Also applies here: ${also.map(u=>u.id+' '+esc(u.t)).join(' · ')}. See Show all 20.</div>`:'');
 }
 function planHtml(){
   const rows=[
@@ -705,7 +709,7 @@ function planHtml(){
   const li=a=>`<ul style="margin:4px 0 0;padding-left:16px">${a.map(x=>`<li style="margin:3px 0;line-height:1.4">${x}</li>`).join('')}</ul>`;
   return `<div class="note"><b>How we\'ll know it worked.</b> Half of shoppers see the new panel, half see today\'s, in every EU market. Three questions decide. The numbers are first guesses; real figures from today\'s site replace them before launch.${tbl}</div>
   <div class="note"><b>When we decide.</b> Week 8: questions 1 and 2, plus cancellations. Week 15: returns. A Custom Made pair takes 1-2 weeks to arrive and the customer has 30 days to send it back, so returns are the last thing we can read.</div>
-  <div class="note"><b>Off switch.</b> After 2 weeks, if the new panel brings 10% or more fewer orders and we are sure it is not chance, we turn it off and everyone sees today\'s panel again (US9).</div>
+  <div class="note"><b>Off switch.</b> After 2 weeks, if the new panel brings 10% or more fewer orders and we are sure it is not chance, we turn it off and everyone sees today\'s panel again (US13).</div>
   <div class="note"><b>Keeping it short.</b> Taps from "Select size and fit" to Add to bag: today 4 · keep as shown 4 · pick, nothing changed 6 · pick, one detail changed 7 · stylist (phase 2) 8-9. Fit and leg share one screen, so choosing Slim or Wide costs the same as any other single change. No study ties a number of clicks to conversion: Nielsen Norman Group says the three-click rule has no published support. The closest benchmark is checkout length: Baymard finds an average checkout of 5.1 steps, and 17% of shoppers have left one for being too long or complicated. So the default path stays as short as today, and the test checks whether the extra taps on the pick path cost orders.</div>
   <div class="note"><b>Two things that must not get worse.</b> Custom Made pairs still arrive within 2 weeks. Shoppers who change nothing buy as easily as they do today.</div>
   <div class="note"><b>Each way of choosing, measured on its own.</b> Every event carries the path (keep, pick or stylist), so each question above can be read per path. Starting numbers are first guesses, like the ones above.
@@ -748,7 +752,7 @@ function planHtml(){
    '<b>Pricing and Finance:</b> should the options cost extra? How much do we lose on each Custom Made pair that comes back? The prototype keeps the price at €179.',
    '<b>Data:</b> today\'s real numbers above, and are there enough shoppers to see a 10% change in orders within 8 weeks? If not, we watch "added to bag" first, because it happens more often.',
    '<b>Tailoring (phase 2):</b> will you own the stylist rules, and which would you change first?',
-   '<b>Brand and content:</b> is "Custom Made" the right name for these pairs, and who writes the words for each country (US13)?'])}</div>
+   '<b>Brand and content:</b> is "Custom Made" the right name for these pairs, and who writes the words for each country (US17)?'])}</div>
   <div class="note"><b>Roadmap.</b> We move to the next step when the numbers say so, not on a fixed date. ${li([
    '<b>Now: test the first version.</b> Two ways of choosing (keep as shown, or pick), three options, the check on the size screen and Find my size, shown to half of shoppers. Answer Legal, Production and Pricing at the same time. Move on when orders stay within 5% of today and 15 in 100 orders use an option.',
    '<b>Next: test the stylist, open it to everyone, make it solid.</b> Help me choose gets its own A/B test against version 1. It comes second because it is a new kind of flow for existing customers and a bigger build: tailors and designers must own and update the rules. I\'ll pick comes first because it is close to today\'s fit step, a small build, and shows whether people want the choices at all. All Custom Made Lite trousers, tailors own the stylist rules, real product photos for every mix, return rule confirmed in every country. Move on when returns stay within 3 extra per 100 pairs.',
