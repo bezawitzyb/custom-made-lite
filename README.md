@@ -181,3 +181,5 @@ The 10 slides as images, in order, are in [deck/](deck/) (slide-01.png to slide-
 - v95: product page design note on Delivery and Returns wording removed.
 
 - v96: user story review. Twenty stories, numbered in the order shown. Fixes: version 1 size-screen help line, off switch on orders, question_number, Custom Made defined once with the 1-2 weeks as an assumption. Added: cancel a made-for-you pair (US15), full Custom Made orders tracked, out-of-stock sizes, photo speed. Accessibility and Find my size are now Must.
+
+- v97: the A/B test starts in two or three markets, then widens to every EU market once the numbers hold.
