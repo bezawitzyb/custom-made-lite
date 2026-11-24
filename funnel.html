@@ -70,15 +70,15 @@ code,.ev{font-family:var(--mono);font-size:12px}
 
 <div class="wrap">
   <header>
-    <h1>Funnel event tracking, per path</h1>
-    <p class="lede">Custom Made Lite trousers: every screen of the size and fit panel, the events it sends, and where people can leave. 21 events fire in the prototype; order_completed comes from checkout. Everyone starts the same way, then splits into three paths. Keep it as shown and I'll pick are version 1; Help me choose is a phase 2 test of its own. Every event carries <code>path</code>, so each lane is its own funnel.</p>
+    <h1>What we track on each path</h1>
+    <p class="lede">This map shows every screen of the size and fit panel, what we record on each one (an "event"), and where people can leave. Everyone starts the same way, then picks one of three ways to choose. Keep it as shown and I'll pick come first (version 1). Help me choose comes later, as its own test. Every event says which way the person chose (<code>path</code>), so each row below can be read on its own. The prototype records 21 events; the 22nd, order_completed, comes from the checkout.</p>
   </header>
 
   <div class="legend" aria-label="Legend">
     <span><i class="sw" style="background:var(--keep)"></i>Keep it as shown · v1</span>
     <span><i class="sw" style="background:var(--pick)"></i>I'll pick · v1</span>
     <span><i class="sw" style="background:var(--sty)"></i>Help me choose · phase 2 (dashed)</span>
-    <span><i class="sw" style="background:var(--drop)"></i>Drop-off: <code>panel_closed</code></span>
+    <span><i class="sw" style="background:var(--drop)"></i>Person leaves: <code>panel_closed</code></span>
     <span><code style="color:var(--code)">event_name</code> (key properties)</span>
   </div>
 
@@ -86,8 +86,8 @@ code,.ev{font-family:var(--mono);font-size:12px}
     <div class="map">
       <div></div>
       <div class="stage">Start<b>Product page</b></div>
-      <div class="stage">Step 1<b>Panel opened</b></div>
-      <div class="stage">Step 1<b>Way chosen</b></div>
+      <div class="stage">Step 1<b>Panel opens</b></div>
+      <div class="stage">Step 1, tap<b>Way chosen</b></div>
       <div class="stage">Step 2<b>Fit + leg / questions</b></div>
       <div class="stage">Step 3<b>Details / suggestion</b></div>
       <div class="stage">Step 4<b>Size + check</b></div>
@@ -101,48 +101,48 @@ code,.ev{font-family:var(--mono);font-size:12px}
 
       <!-- shared start -->
       <div class="node shared first" style="grid-column:2;grid-row:2 / span 3">
-        <h3>Product page</h3><span class="no">Unchanged; "Select size and fit" opens the panel</span>
+        <h3>Product page</h3><span class="no">Same as today. Tapping "Select size and fit" opens the panel</span>
         <ul><li>accordion_opened <i>(section)</i></li><li>colour_changed <i>(from_value, to_value)</i></li></ul>
-        <div class="q">Context only, not a funnel step</div>
+        <div class="q">Background only. Not counted as a step</div>
       </div>
       <div class="node shared" style="grid-column:3;grid-row:2 / span 3">
         <h3>Panel opened</h3><span class="no">"How do you want to choose?"</span>
         <ul><li>panel_opened <i>(base_fit, colour)</i></li><li>step_viewed <i>(step: choose, 1)</i></li></ul>
-        <div class="q">Funnel base: every order is counted per panel opened</div>
+        <div class="q">The starting count: we compare orders with how many people opened the panel</div>
         <span class="drop">panel_closed · from_step: choose</span>
       </div>
       <div class="node shared" style="grid-column:4;grid-row:2 / span 3">
         <h3>Way chosen</h3><span class="no">One tap on a card</span>
         <ul><li>path_selected <i>(path: keep, pick, stylist)</i></li></ul>
-        <div class="q">Splits every number by path; share of each way</div>
+        <div class="q">How many people choose each way</div>
       </div>
 
       <!-- keep lane -->
       <div class="skip" style="grid-column:5 / span 2;grid-row:2">Straight to size with the standard pair. No fit, details or stylist events on this path.</div>
       <div class="node keep" style="grid-column:7;grid-row:2">
-        <h3>Size</h3><span class="no">Recap line, no "Change something"</span>
+        <h3>Size</h3><span class="no">One line showing the pair. No "Change something" link</span>
         <ul><li>step_viewed <i>(size, 4, path keep)</i></li><li class="opt">length_selected</li><li class="opt">size_chart_opened</li><li class="opt">size_finder_opened · completed · applied</li></ul>
-        <div class="q">Does keeping stay as easy as today?</div>
+        <div class="q">Do these people still buy as easily as today?</div>
         <span class="drop">panel_closed · from_step: size</span>
       </div>
 
       <!-- pick lane -->
       <div class="node pick" style="grid-column:5;grid-row:3">
-        <h3>Fit + leg</h3><span class="no">One screen; leg shows for Slim and Wide</span>
+        <h3>Fit + leg</h3><span class="no">One screen. The leg choice only shows for Slim and Wide</span>
         <ul><li>step_viewed <i>(fit, 2)</i></li><li>option_changed <i>(source fit · leg)</i></li></ul>
-        <div class="q">Which fit and leg people choose</div>
+        <div class="q">Which fit and leg people pick</div>
         <span class="drop">panel_closed · from_step: fit</span>
       </div>
       <div class="node pick" style="grid-column:6;grid-row:3">
         <h3>Details</h3><span class="no">Waistband, hem, front</span>
         <ul><li>step_viewed <i>(details, 3)</i></li><li>option_changed <i>(option, from_value, to_value, source details)</i></li><li class="opt">colour_changed</li></ul>
-        <div class="q">Q2: do people use the options? Which are undone?</div>
+        <div class="q">Do people use the new choices, and which do they change back?</div>
         <span class="drop">panel_closed · from_step: details</span>
       </div>
       <div class="node pick" style="grid-column:7;grid-row:3">
-        <h3>Size + check</h3><span class="no">Recap, Custom Made notice, help line</span>
+        <h3>Size + check</h3><span class="no">Shows all choices, the "made for you" notice and a help line</span>
         <ul><li>step_viewed <i>(size, 4, path pick)</i></li><li class="opt">size_finder_* · size_chart_opened</li><li class="opt">stylist_opened <i>(phase 2 link)</i></li><li class="opt">store_link_clicked</li></ul>
-        <div class="q">Do changed pairs make people doubt?</div>
+        <div class="q">Do people stop here when their pair is made for them?</div>
         <span class="drop">panel_closed · from_step: size</span>
       </div>
 
@@ -150,52 +150,52 @@ code,.ev{font-family:var(--mono);font-size:12px}
       <div class="node sty" style="grid-column:5;grid-row:4">
         <h3>Three questions</h3><span class="no">Occasion, body and height, belt</span>
         <ul><li>step_viewed <i>(stylist, 2)</i></li><li>stylist_question_answered <i>(question_id, answer, question_number) ×3</i></li></ul>
-        <div class="q">Drop-off per question</div>
+        <div class="q">How many people stop at each question</div>
         <span class="drop">panel_closed · from_step: stylist</span>
       </div>
       <div class="node sty" style="grid-column:6;grid-row:4">
-        <h3>Suggested pair</h3><span class="no">Reasons, edit in place</span>
+        <h3>Suggested pair</h3><span class="no">A reason for each choice. People can change any of them</span>
         <ul><li>recommendation_shown <i>(pair, rules_fired)</i></li><li class="opt">option_changed <i>(source stylist)</i></li><li class="opt">standard_details_selected</li><li>recommendation_accepted <i>(pair, edits)</i></li></ul>
-        <div class="q">Which rules people disagree with. Reaching this screen = recommendation_shown</div>
+        <div class="q">Which suggestions people change. This screen has no step_viewed; recommendation_shown counts who got here</div>
         <span class="drop">panel_closed · from_step: stylist</span>
       </div>
       <div class="node sty" style="grid-column:7;grid-row:4">
-        <h3>Size + check</h3><span class="no">Store link only</span>
+        <h3>Size + check</h3><span class="no">Shows all choices. Only the "ask a stylist in store" link</span>
         <ul><li>step_viewed <i>(size, 4, path stylist)</i></li><li class="opt">size_finder_* · size_chart_opened</li><li class="opt">store_link_clicked</li></ul>
-        <div class="q">Stylist against version 1</div>
+        <div class="q">Compared with version 1, not with today</div>
         <span class="drop">panel_closed · from_step: size</span>
       </div>
 
       <!-- shared end -->
       <div class="node shared" style="grid-column:8;grid-row:2 / span 3">
-        <h3>Bag</h3><span class="no">Item, delivery, total</span>
+        <h3>Bag</h3><span class="no">The pair, delivery time and price</span>
         <ul><li>product_added <i>(full pair, size, length, path, made_to_order)</i></li><li>step_viewed <i>(added, 5)</i></li><li class="opt">bag_opened <i>(from header)</i></li></ul>
-        <div class="q">Add-to-bag rate · Q2 options in the bag</div>
+        <div class="q">How many add to bag, and how many pairs have a changed detail</div>
       </div>
       <div class="node shared" style="grid-column:9;grid-row:2 / span 3">
-        <h3>Checkout and order</h3><span class="no">Existing checkout, unchanged</span>
+        <h3>Checkout and order</h3><span class="no">Today's checkout, not changed</span>
         <ul><li>checkout_started <i>(pair, size, from)</i></li><li>order_completed <i>(order_id, pair, path, made_to_order, panel_session_id)</i></li></ul>
-        <span class="no">order_completed is sent by checkout, server side. It is not in the prototype, because checkout is not.</span>
-        <div class="q">Q1 orders. Returns and cancellations join on order_id (Q3)</div>
+        <span class="no">order_completed is sent by the checkout itself, so it is not in the prototype.</span>
+        <div class="q">Counts orders. The order number (order_id) links each order to any return or cancellation</div>
       </div>
     </div>
   </div>
-  <p class="hint">On a phone, swipe the map sideways. Lighter events are optional actions, not funnel steps.</p>
+  <p class="hint">On a phone, swipe the map sideways. Lighter events are things people may or may not do; they are not steps.</p>
 
   <section style="display:flex;flex-direction:column;gap:12px">
-    <h2>Each funnel, step by step</h2>
+    <h2>Each path, step by step</h2>
     <div class="cards">
       <div class="card keep"><h3>Keep it as shown</h3>
         <ol class="ladder"><li>panel_opened</li><li>path_selected <span>path = keep</span></li><li>step_viewed <span>size</span></li><li>product_added <span>path = keep</span></li><li>checkout_started</li><li>order_completed <span>order_id</span></li></ol>
-        <p class="muted">Read against shoppers on today's panel who changed nothing. Must not get worse.</p></div>
+        <p class="muted">Compared with people on today's panel who changed nothing. It must not get worse.</p></div>
       <div class="card pick"><h3>I'll pick</h3>
         <ol class="ladder"><li>panel_opened</li><li>path_selected <span>path = pick</span></li><li>step_viewed <span>fit</span></li><li>step_viewed <span>details</span></li><li>step_viewed <span>size</span></li><li>product_added <span>made_to_order</span></li><li>checkout_started</li><li>order_completed <span>order_id</span></li></ol>
-        <p class="muted">The biggest drop between two steps is the screen to fix first. option_changed shows which options earn their place.</p></div>
+        <p class="muted">The screen where most people leave is the one to fix first. option_changed shows which choices people actually use.</p></div>
       <div class="card sty"><h3>Help me choose · phase 2</h3>
-        <ol class="ladder"><li>panel_opened</li><li>path_selected <span>path = stylist</span></li><li>stylist_question_answered <span>×3</span></li><li>recommendation_shown</li><li>recommendation_accepted <span>edits</span></li><li>step_viewed <span>size</span></li><li>product_added <span>path = stylist</span></li><li>checkout_started</li><li>order_completed <span>order_id</span></li></ol>
-        <p class="muted">Its own A/B test, read against version 1, not against today.</p></div>
+        <ol class="ladder"><li>panel_opened</li><li>path_selected <span>path = stylist</span></li><li>step_viewed <span>stylist</span></li><li>stylist_question_answered <span>×3</span></li><li>recommendation_shown</li><li>recommendation_accepted <span>edits</span></li><li>step_viewed <span>size</span></li><li>product_added <span>path = stylist</span></li><li>checkout_started</li><li>order_completed <span>order_id</span></li></ol>
+        <p class="muted">Its own A/B test later, compared with version 1, not with today.</p></div>
       <div class="card all"><h3>Leaving, on every path</h3>
-        <p><code>panel_closed</code> fires once when someone leaves the panel, with <code>from_step</code>, <code>step_number</code>, <code>path</code> and <code>reason</code>. It is not sent after Add to bag, because that visit ended in the bag:</p>
+        <p><code>panel_closed</code> is sent once when someone leaves the panel. It says which screen they left from (<code>from_step</code>, <code>step_number</code>), which way they chose (<code>path</code>) and how they left (<code>reason</code>). It is not sent after Add to bag, because that person reached the bag:</p>
         <div class="props"><code>back_to_page</code><code>restart</code><code>left_page</code></div>
         <p class="muted">Together with step_viewed it shows exactly where each path loses people.</p></div>
     </div>
@@ -204,17 +204,17 @@ code,.ev{font-family:var(--mono);font-size:12px}
   <section class="card all" style="gap:10px">
     <h2>How to count</h2>
     <ul class="ladder" style="list-style:disc">
-      <li><span>Count people, not events: one <code>panel_session_id</code> per panel opening. Going back to a screen sends <code>step_viewed</code> again.</span></li>
-      <li><span>Each step counts the sessions that reached it. A step's drop-off is the share of the step before that never reached it.</span></li>
-      <li><span>Someone who switches to Help me choose from the size screen sends <code>path_selected</code> with <code>source: size</code>. Keep them in their first path's funnel and count the switch on its own.</span></li>
-      <li><span>The suggested pair has no screen event of its own. <code>recommendation_shown</code> counts who reached it.</span></li>
+      <li><span>Count people, not events. Each time someone opens the panel they get one visit number (<code>panel_session_id</code>). Going back to a screen sends <code>step_viewed</code> again, so count visits, not views.</span></li>
+      <li><span>For each step, count the visits that reached it. The people lost at a step are those who reached the step before but not this one.</span></li>
+      <li><span>Someone who switches to Help me choose from the size screen sends <code>path_selected</code> with <code>source: size</code>. Keep them in the way they chose first, and count switches separately.</span></li>
+      <li><span>The suggested pair screen has no <code>step_viewed</code>. Use <code>recommendation_shown</code> to count who got there.</span></li>
     </ul>
   </section>
 
   <section class="card all" style="gap:10px">
     <h2>One naming rule</h2>
-    <p>object_action, past tense, snake_case (<code>panel_opened</code>, <code>product_added</code>). The feature and test variant are properties, not part of the name. Nothing fires before analytics consent; height and waist from Find my size are never sent with the shopping events.</p>
-    <p class="muted">Every event carries:</p>
+    <p>Every event is named "thing, then what happened", in the past tense, in lower case with underscores (<code>panel_opened</code>, <code>product_added</code>). Details like the feature and the test group go inside the event, not in its name. Nothing is recorded before the shopper agrees to tracking. Height and waist from Find my size are never sent with the shopping events.</p>
+    <p class="muted">Every event also includes:</p>
     <div class="props"><code>panel_session_id</code><code>path</code><code>feature</code><code>variant</code><code>device</code><code>market</code><code>colour</code><code>product_id</code><code>timestamp</code></div>
   </section>
 </div>
