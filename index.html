@@ -374,7 +374,7 @@ pdp(){
   <button class="primary" id="sel" style="width:100%;margin:0">Select size and fit</button>
   <p class="small muted" style="text-align:center;margin-top:10px">✓ Free delivery in 1 - 2 business days · Now in more fits and details</p>
   <div class="acc"><div>Size &amp; Fit<span>+</span></div><div>Details &amp; Care<span>+</span></div><details id="dlv"><summary>Delivery &amp; Returns<span>+</span></summary><ul class="small"><li><a href="https://suitsupply.com/en-nl/delivery-time-cost.html" target="_blank" rel="noopener">Free delivery</a> and free returns</li><li>30 days <a href="https://suitsupply.com/en-nl/returns-refunds.html" target="_blank" rel="noopener">return policy</a></li></ul></details></div></div>`;
-  $('dlv').ontoggle=()=>{if($('dlv').open)track('accordion_opened',{section:'delivery_returns',colour:S.colour});};
+  $('dlv').ontoggle=()=>{if($('dlv').open)track('delivery_returns_opened',{colour:S.colour});};
   $('dfoot').innerHTML='';
   $('sel').onclick=()=>{S.path=null;S.psid=Math.random().toString(36).slice(2,10);track('panel_opened',{base_fit:'straight',colour:S.colour});go('choose');};
 },
@@ -819,7 +819,7 @@ let evFilter='all';
 function evMapHtml(){
   const box=([n,e,m],cls='')=>`<div class="evs${cls}"><div class="evn">${n}</div><div class="eve">${e}</div><div class="evm">${m}</div></div>`;
   const arrow='<div class="eva">↓</div>';
-  const start=[['Product page','accordion_opened, colour_changed','—'],['Panel opened','panel_opened','Q1 base: every order is counted per panel opened'],['Way chosen','path_selected (keep, pick, stylist)','Splits every number by path']];
+  const start=[['Product page','delivery_returns_opened, colour_changed','—'],['Panel opened','panel_opened','Q1 base: every order is counted per panel opened'],['Way chosen','path_selected (keep, pick, stylist)','Splits every number by path']];
   const lanes=[
    ['Keep it as shown · version 1','keep','',[['Size','step_viewed (size), length_selected, size_chart_opened, size_finder_opened, size_finder_completed, size_finder_applied','Leaves at size?'],['Bag','product_added (path keep, made_to_order false)','Keep orders against today']]],
    ["I'll pick · version 1",'pick','',[['Fit and leg, one screen','step_viewed (fit), option_changed (source fit, leg)','Which fit and leg; drop-off'],['Details','step_viewed (details), option_changed (source details)','Q2 options, undo'],['Size + check','step_viewed (size), size events, stylist_opened, store_link_clicked','Drop-off, size doubt, help'],['Bag','product_added (made_to_order)','Add to bag; orders and returns via order_completed']]],

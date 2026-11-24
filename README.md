@@ -189,3 +189,5 @@ The 10 slides as images, in order, are in [deck/](deck/) (slide-01.png to slide-
 - v99: timelines checked. Off switch is a weekly safety net (10% fewer orders two weeks in a row, no wait for statistical certainty); week 8 decision only if there are enough shoppers; week 15 returns explained from the last orders.
 
 - Funnel diagram audited: plain-language labels, step 1 screen and tap told apart, stylist path ladder includes its screen view.
+
+- Event accordion_opened renamed to delivery_returns_opened.
