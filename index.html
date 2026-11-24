@@ -70,6 +70,7 @@ p{margin:0 0 12px}
 .card:hover{border-color:var(--ink)}
 .card.main{border:2px solid var(--ink);padding:15px}
 .card .cthumb{width:48px;height:64px;object-fit:cover;border-radius:3px;flex:none;background:var(--ground)}
+.card .cico{display:grid;place-items:center;font-size:22px}
 .card .ico{width:40px;height:40px;border-radius:50%;background:var(--ground);display:grid;place-items:center;flex:none;font-size:18px}
 .card b{display:block;font-weight:600}
 .card span.s{font-size:13px;color:var(--muted)}
@@ -386,7 +387,7 @@ choose(){
   <div class="cards">
    <button class="card main" data-p="keep"><img class="cthumb" src="${IMG+MODEL(fitPreview(S.cfg,'straight','tapered'))}.jpg" alt=""><span><b>Keep it as shown</b><span class="s">Straight fit, flat front, belt loops, plain hem. Delivered in 1-2 days.</span></span></button>
    <button class="card" data-p="pick"><img class="cthumb" src="${IMG}thumb-pleat.jpg" alt=""><span><b>I'll pick my fit and details</b><span class="s">Choose the fit, waistband, hem and front. You see the delivery time for each choice.</span></span></button>
-   <button class="card phase2" data-p="stylist"><img class="cthumb" src="${IMG+MODEL(fitPreview(S.cfg,'wide','tapered'))}.jpg" alt=""><span><b>Help me choose</b><span class="s">Answer 3 quick questions and our stylist suggests the right pair.</span><span class="p2">Phase 2 · its own A/B test, not in version 1</span></span></button>
+   <button class="card phase2" data-p="stylist"><span class="cthumb cico" aria-hidden="true">✦</span><span><b>Help me choose</b><span class="s">Answer 3 quick questions and our stylist suggests the right pair.</span><span class="p2">Phase 2 · its own A/B test, not in version 1</span></span></button>
   </div>`;
   foot(null);
   document.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{S.path=b.dataset.p;track('path_selected',{path:S.path});
