@@ -185,3 +185,5 @@ The 10 slides as images, in order, are in [deck/](deck/) (slide-01.png to slide-
 - v97: the A/B test starts in two or three markets, then widens to every EU market once the numbers hold.
 
 - v98: "How we will know it worked" rewritten in plain words.
+
+- v99: timelines checked. Off switch is a weekly safety net (10% fewer orders two weeks in a row, no wait for statistical certainty); week 8 decision only if there are enough shoppers; week 15 returns explained from the last orders.
